@@ -1,0 +1,14 @@
+# Copie para .dev.vars (não versionado) para desenvolvimento local com `wrangler dev`.
+# Em produção, configure cada um como secret: `wrangler secret put NOME`.
+
+# Clerk (https://dashboard.clerk.com > API Keys)
+PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxx
+CLERK_SECRET_KEY=sk_test_xxx
+
+# E-mails (separados por vírgula) autorizados a acessar /admin.
+ADMIN_EMAILS={{ADMIN_EMAILS}}
+
+# Pix (transferência direta, sem taxa)
+PIX_KEY={{PIX_KEY}}
+PIX_MERCHANT_NAME={{PIX_MERCHANT_NAME}}
+PIX_MERCHANT_CITY={{PIX_MERCHANT_CITY}}

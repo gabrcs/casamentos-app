@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+.env
+*.local
+.DS_Store
+
+# Material bruto do ensaio (fotos originais e vídeo — não vai para o deploy)
+Destaques/
+
+# Configs de assistente IA (pessoal, não vai para o repo)
+.clinerules/
+.cursor/
+.opencode/
+.windsurf/
+.github/copilot-instructions.md
+AGENTS.md
+CLAUDE.md

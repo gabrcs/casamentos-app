@@ -1,0 +1,283 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Paleta: creme claro + marsala */
+  --color-cream: #faf6ef;
+  --color-sand: #f0e5d8;
+  --color-marsala: #955251;
+  --color-marsala-dark: #6f3a3c;
+  --color-gold: #c09a5e;
+  --color-gold-light: #e3c893;
+  --color-ink: #43302e;
+}
+
+:root {
+  color-scheme: light;
+
+  /* Aliases dos nomes antigos para não quebrar páginas internas/admin */
+  --color-blush: var(--color-sand);
+  --color-sage: var(--color-marsala);
+  --color-sage-dark: var(--color-marsala-dark);
+
+  --sans: var(--font-sans);
+  --display: var(--font-serif);
+  --gold-light: var(--color-gold-light);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-serif);
+}
+
+/* Botões reutilizáveis */
+.btn,
+.btn-primary,
+.btn-outline {
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium transition-colors;
+}
+.btn-primary {
+  background-color: var(--color-marsala);
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: var(--color-marsala-dark);
+}
+.btn-outline {
+  border: 1px solid var(--color-marsala);
+  color: var(--color-marsala-dark);
+}
+.btn-outline:hover {
+  background-color: var(--color-sand);
+}
+
+/* Campos de formulário reutilizáveis */
+.input,
+.inp {
+  @apply mt-1 w-full rounded-lg border border-sand bg-white/70 px-4 py-2.5 outline-none focus:border-marsala;
+}
+
+/* Formulário RSVP estilo Uiverse (adaptado à paleta marsala) */
+.uv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(111, 58, 60, 0.1);
+}
+
+.uv-title {
+  font-size: 26px;
+  color: var(--color-marsala-dark);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  font-family: var(--font-serif);
+}
+.uv-title::before,
+.uv-title::after {
+  position: absolute;
+  content: '';
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  left: 0;
+  background-color: var(--color-marsala);
+}
+.uv-title::after {
+  animation: uv-pulse 1s linear infinite;
+}
+@keyframes uv-pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.uv-msg {
+  color: rgba(67, 48, 46, 0.65);
+  font-size: 14px;
+  margin: -4px 0 4px;
+}
+
+.uv-field {
+  position: relative;
+  display: block;
+}
+.uv-input {
+  width: 100%;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(149, 82, 81, 0.35);
+  border-radius: 10px;
+  background-color: #fff;
+  color: var(--color-ink);
+}
+.uv-input:focus {
+  border-color: var(--color-marsala);
+}
+.uv-input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: grey;
+  font-size: 0.9em;
+  cursor: text;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+.uv-input:focus + span,
+.uv-input:not(:placeholder-shown) + span {
+  top: 30px;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+.uv-input:not(:placeholder-shown) + span {
+  color: var(--color-marsala);
+}
+textarea.uv-input {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.uv-fieldset {
+  border: 1px solid rgba(149, 82, 81, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.uv-legend {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-marsala-dark);
+  padding: 0 6px;
+}
+/* Opções de confirmação — checkmark animado (Uiverse) adaptado à paleta marsala */
+.uv-check-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+.uv-check {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.uv-check * {
+  box-sizing: border-box;
+  user-select: none;
+}
+.uv-check input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.uv-check .uv-check-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--color-ink);
+}
+.uv-check .uv-check-label svg {
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.uv-check .uv-check-label svg rect {
+  stroke: rgba(149, 82, 81, 0.45);
+}
+.uv-check .path1 {
+  stroke: var(--color-marsala);
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  transition: 0.5s stroke-dashoffset;
+  opacity: 0;
+}
+.uv-check input:checked + .uv-check-label svg g path {
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+.uv-check input:checked + .uv-check-label {
+  color: var(--color-marsala-dark);
+  font-weight: 600;
+}
+
+.uv-submit {
+  border: none;
+  outline: none;
+  background-color: var(--color-marsala);
+  padding: 12px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.uv-submit:hover {
+  background-color: var(--color-marsala-dark);
+}
+
+/* Textos do hero (section #inicio) */
+.hero-text {
+  margin-top: 1rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 400;
+  text-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.9),
+    0 1px 4px rgba(0, 0, 0, 0.8);
+}
+.hero-text:first-child {
+  margin-top: 0;
+}
+
+
+/* Contagem regressiva sobre foto (tone="light") */
+.countdown-num {
+  color: #fff;
+  text-shadow:
+    0 2px 12px rgba(111, 58, 60, 0.9),
+    0 1px 4px rgba(111, 58, 60, 0.85);
+}
+.countdown-label {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 4px rgba(111, 58, 60, 0.85);
+}
+
+/* Galeria com rolagem horizontal sem barra visível */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

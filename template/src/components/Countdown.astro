@@ -1,0 +1,62 @@
+---
+interface Props {
+  date: string;
+  /** 'light' para uso sobre foto/fundo escuro. */
+  tone?: 'dark' | 'light';
+}
+const { date, tone = 'dark' } = Astro.props;
+const light = tone === 'light';
+const containerClass = light
+  ? 'inline-flex gap-3 sm:gap-5 rounded-xl border border-white/10 bg-marsala-dark/30 px-4 sm:px-5 py-2 backdrop-blur-sm'
+  : 'flex gap-4 sm:gap-8';
+const numClass = light ? 'countdown-num text-2xl sm:text-3xl' : 'text-gold text-4xl sm:text-5xl';
+const labelClass = light
+  ? 'countdown-label text-[0.55rem] sm:text-[0.6rem]'
+  : 'text-ink/60 text-xs';
+---
+
+<div
+  id="countdown"
+  data-date={date}
+  class:list={[containerClass, 'justify-center text-center']}
+>
+  {
+    [
+      ['days', 'dias'],
+      ['hours', 'horas'],
+      ['minutes', 'min'],
+      ['seconds', 'seg'],
+    ].map(([key, label]) => (
+      <div class="flex flex-col">
+        <span data-unit={key} class:list={['font-display leading-tight', numClass]}>
+          --
+        </span>
+        <span class:list={['uppercase tracking-widest', labelClass]}>{label}</span>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const el = document.getElementById('countdown');
+  const target = new Date(el?.dataset.date ?? '').getTime();
+
+  function update() {
+    if (!el || Number.isNaN(target)) return;
+    const diff = Math.max(0, target - Date.now());
+    const s = Math.floor(diff / 1000);
+    const units: Record<string, number> = {
+      days: Math.floor(s / 86400),
+      hours: Math.floor((s % 86400) / 3600),
+      minutes: Math.floor((s % 3600) / 60),
+      seconds: s % 60,
+    };
+    for (const [key, value] of Object.entries(units)) {
+      const node = el.querySelector(`[data-unit="${key}"]`);
+      if (node) node.textContent = String(value).padStart(2, '0');
+    }
+  }
+
+  update();
+  setInterval(update, 1000);
+</script>

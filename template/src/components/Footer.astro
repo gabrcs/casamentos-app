@@ -1,0 +1,23 @@
+---
+import { site } from '../config/site';
+
+const eventDate = new Date(site.eventDate);
+const dateLabel = eventDate.toLocaleDateString('pt-BR', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<footer class="border-t border-sand bg-marsala-dark text-cream">
+  <div class="mx-auto max-w-6xl px-4 py-8 text-center">
+    <p class="font-display italic text-4xl">
+      {site.couple.groom} <span class="text-gold">&</span> {site.couple.bride}
+    </p>
+    <p class="mt-3 text-sm uppercase tracking-[0.25em] text-cream/80">{dateLabel}</p>
+
+    <p class="mt-6 text-xs text-cream/40">
+      BG Casamentos &copy; {eventDate.getFullYear()}
+    </p>
+  </div>
+</footer>

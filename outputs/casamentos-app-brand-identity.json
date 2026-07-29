@@ -1,0 +1,318 @@
+{
+  "meta": {
+    "startup": "casamentos.app",
+    "title": "Brand Identity — Yours, Entirely",
+    "subtitle": "A bespoke wedding-site service built for Instagram discovery",
+    "language": "en",
+    "status": "final",
+    "generated_at": "2026-07-27",
+    "prepared_for": "casamentos.app"
+  },
+  "strategy": {
+    "product": "A bespoke wedding-site service with RSVP, fee-free Pix gift lists, and an admin panel for couples.",
+    "audience": "Design-conscious engaged couples in Curitiba and the surrounding region, initially, who are 4–14 months from their wedding and are choosing suppliers who can make the occasion feel personal.",
+    "trigger": "They need invitations, RSVP, guest information, or a gift list and discover that generic wedding-site templates do not reflect their celebration or that platforms take a percentage from gifts.",
+    "problem": "Couples must choose between a generic-looking wedding site and an experience that reduces the money received from their guests; neither feels worthy of a carefully planned celebration.",
+    "category": "Bespoke wedding-site service.",
+    "alternatives": "Template platforms, a manually assembled link page, an invitation without RSVP management, or doing without a wedding site.",
+    "distinctive_value": "Each site is shaped around the couple’s story while their guests can RSVP and send Pix gifts directly, with no payment gateway fee deducted from the gift.",
+    "proof_points": [
+      "The reusable product includes a working RSVP database, Pix BR Code generation, an administrative panel, and gift-list management.",
+      "A real Marcus & Daíse wedding site is authorised for use as the first public case.",
+      "A first paid project at R$500 validates an entry price, not yet the final pricing ceiling."
+    ],
+    "positioning": "For design-conscious engaged couples preparing a wedding, casamentos.app is the bespoke wedding-site service that gives their celebration a personal online home and preserves 100% of Pix gift value, because each site is built around the couple and includes RSVP, direct Pix gifts, and simple self-management—unlike generic template platforms or a patchwork of links.",
+    "salient_idea": "A wedding site that belongs to the couple.",
+    "promise": "Your celebration online, unmistakably yours—and your gifts remain entirely yours.",
+    "personality": [
+      "Warm, not sugary",
+      "Elegant, not precious",
+      "Direct, not transactional",
+      "Personal, not performative"
+    ],
+    "evidence_notes": [
+      "Fact: the project materials document RSVP, Pix gifts without a gateway fee, and an administrative panel.",
+      "Fact: the launch plan identifies Instagram as an owned acquisition channel and the first public case as the strongest marketing asset.",
+      "Founder decision: casamentos.app is the public-facing name; BG Casamentos is legacy/internal language.",
+      "Recommendation: use product proof in the Instagram feed, not just wedding photography or decoration."
+    ]
+  },
+  "territories": [
+    {
+      "name": "Yours, Entirely",
+      "thesis": "Make ownership the visible and verbal centre of the brand: the couple’s story, style, guest experience, and gifts are all theirs.",
+      "audience_response": "This feels personal enough for our wedding and practical enough to trust with guests and gifts.",
+      "metaphor": "A custom frame or window: each composition holds a different couple, screen, or detail because no celebration repeats.",
+      "tagline": "Entirely yours.",
+      "tagline_alternates": [
+        "Your story. Your site. Your gifts.",
+        "Made for your celebration, not a template."
+      ],
+      "voice": [
+        "Warmly direct",
+        "Editorially personal",
+        "Quietly certain"
+      ],
+      "voice_sample": "Your guests are here for your story. Your site should be, too.",
+      "symbol": "A soft-cornered, asymmetrical frame that crops photography, interface previews, and colour fields; it signals a site made to fit the couple rather than a fixed template.",
+      "palette": [
+        {"name": "Plum", "hex": "#5B2D3A", "role": "Primary brand and headline field"},
+        {"name": "Ivory", "hex": "#FBF6EE", "role": "Primary background"},
+        {"name": "Rose Clay", "hex": "#C78378", "role": "Warm secondary and framing detail"},
+        {"name": "Antique Gold", "hex": "#B88A45", "role": "Accent and keyline"},
+        {"name": "Cocoa", "hex": "#34211F", "role": "Body text and monochrome mark"}
+      ],
+      "typography": {
+        "display": "Cormorant Garamond, with a high-contrast editorial rhythm for names, intimate statements, and campaign lines.",
+        "body": "Inter for interface proof, captions, and clear service information."
+      },
+      "application": "An Instagram carousel opens with ‘Your story. Your site. Your gifts.’, then moves through one real couple’s homepage, RSVP flow, and a direct Pix gift screen within changing custom frames.",
+      "risk": "Without visible product proof, the territory can look like a wedding editorial rather than a service with concrete utility.",
+      "scores": {
+        "strategic_fit": 9,
+        "audience_relevance": 9,
+        "distinctiveness": 9,
+        "credibility": 9,
+        "memorability": 8,
+        "extensibility": 9,
+        "execution_resilience": 9
+      }
+    },
+    {
+      "name": "The First Page",
+      "thesis": "Position the wedding site as the opening page of the celebration—the place where anticipation begins before the day arrives.",
+      "audience_response": "This makes the digital part of our wedding feel as considered as the invitation and event itself.",
+      "metaphor": "A sequence of pages and timestamps that turns preparations into a story unfolding toward the day.",
+      "tagline": "Where the celebration begins.",
+      "tagline_alternates": [
+        "Before the day, there is your story.",
+        "The first page of your celebration."
+      ],
+      "voice": [
+        "Anticipatory",
+        "Intimate",
+        "Composed"
+      ],
+      "voice_sample": "Before the first toast, give your guests a place to arrive.",
+      "symbol": "A page edge and date marker that repeat as an unfolding sequence across posts, stories, and the site.",
+      "palette": [
+        {"name": "Espresso", "hex": "#2D2220", "role": "Primary text and dark field"},
+        {"name": "Parchment", "hex": "#F5EDE0", "role": "Background"},
+        {"name": "Candlelight", "hex": "#C8954E", "role": "Accent"},
+        {"name": "Terracotta", "hex": "#A95848", "role": "Secondary"}
+      ],
+      "typography": {
+        "display": "A high-contrast editorial serif with generous line spacing.",
+        "body": "A calm grotesk for explanatory and product information."
+      },
+      "application": "A reel moves from a printed invitation-like opening frame to the wedding homepage, RSVP, and a final date card.",
+      "risk": "The emotional narrative may obscure the fee-free Pix benefit if it is not deliberately repeated in product posts.",
+      "scores": {
+        "strategic_fit": 8,
+        "audience_relevance": 9,
+        "distinctiveness": 8,
+        "credibility": 8,
+        "memorability": 8,
+        "extensibility": 8,
+        "execution_resilience": 8
+      }
+    },
+    {
+      "name": "Beautifully in Order",
+      "thesis": "Turn the busy coordination of a wedding into calm, elegant control without sounding like event-management software.",
+      "audience_response": "This will make the practical parts feel easier while keeping the wedding beautiful.",
+      "metaphor": "An organised invitation grid: many essential details, each given a clear, graceful place.",
+      "tagline": "Every detail, beautifully in place.",
+      "tagline_alternates": [
+        "The calm side of planning.",
+        "RSVP, gifts, and your story—in place."
+      ],
+      "voice": [
+        "Clear",
+        "Reassuring",
+        "Quietly expert"
+      ],
+      "voice_sample": "The details are handled. You can get back to the celebration.",
+      "symbol": "A flexible grid with one intentionally offset cell, representing a personal celebration held by an orderly system.",
+      "palette": [
+        {"name": "Midnight", "hex": "#18263D", "role": "Primary brand and dark field"},
+        {"name": "Ivory", "hex": "#FCF8F0", "role": "Background"},
+        {"name": "Coral", "hex": "#D77966", "role": "Action accent"},
+        {"name": "Brass", "hex": "#A77B37", "role": "Detail and keyline"}
+      ],
+      "typography": {
+        "display": "An elegant serif used with restraint for wedding character.",
+        "body": "A precise sans-serif used for service clarity and interface callouts."
+      },
+      "application": "A carousel shows a compact RSVP dashboard, guest confirmation flow, and direct Pix gift list with one detail per structured card.",
+      "risk": "Overusing interface imagery risks making casamentos.app feel like a generic planning tool.",
+      "scores": {
+        "strategic_fit": 8,
+        "audience_relevance": 8,
+        "distinctiveness": 8,
+        "credibility": 9,
+        "memorability": 7,
+        "extensibility": 9,
+        "execution_resilience": 9
+      }
+    }
+  ],
+  "recommendation": {
+    "territory": "Yours, Entirely",
+    "reason": "It connects the emotional decision—wanting a wedding site with the couple’s real identity—to the commercial decision—keeping gifts entirely theirs—without pretending the service is a platform.",
+    "tradeoff": "It gives up the immediate operational clarity of Beautifully in Order, so the Instagram system must repeatedly show real RSVP and Pix details.",
+    "selection_status": "Selected by founder on 2026-07-27."
+  },
+  "brand_system": {
+    "selected_territory": "Yours, Entirely",
+    "tagline": "Entirely yours.",
+    "one_liner": "Bespoke wedding sites with RSVP and fee-free Pix gifts.",
+    "value_proposition": "A wedding site made around your story, with the details guests need and Pix gifts that arrive in full.",
+    "cta": "See your celebration online",
+    "logo_concept": "A custom, soft-cornered frame that can enclose the wordmark, crop a photograph, or reveal a website screen. The mark should be drawn as a simple SVG after design review; this report defines the logic, not a finished trademark.",
+    "palette": [
+      {"name": "Plum", "hex": "#5B2D3A", "role": "Primary brand colour, headline backgrounds, primary buttons; use Ivory text."},
+      {"name": "Ivory", "hex": "#FBF6EE", "role": "Primary background and light canvas."},
+      {"name": "Rose Clay", "hex": "#C78378", "role": "Secondary colour for soft framing and cropped shapes; decorative with dark text only after layout contrast review."},
+      {"name": "Antique Gold", "hex": "#B88A45", "role": "Accent, icon, and keyline—not normal-size body text on Ivory."},
+      {"name": "Cocoa", "hex": "#34211F", "role": "Body text, monochrome logo, and high-contrast detail."}
+    ],
+    "typography": {
+      "display": "Cormorant Garamond, 500–600. Use in short, elegant, sentence-case display lines and couple names; tight tracking only at large sizes.",
+      "body": "Inter, 400–600. Use for all product facts, captions, calls to action, and interface content. Fall back to ui-sans-serif, system-ui, sans-serif.",
+      "behaviour": "Make the contrast deliberate: expressive display type earns attention; concise sans-serif earns trust. Do not set explanatory paragraphs in the serif."
+    },
+    "voice_traits": [
+      {
+        "trait": "Warm, not sugary",
+        "meaning": "Write with genuine care and specific wedding context without resorting to generic romance language.",
+        "do": "Your guests can arrive already knowing where to be, what to bring, and how to celebrate with you.",
+        "dont": "Make your fairy-tale wedding dreams come true."
+      },
+      {
+        "trait": "Direct, not transactional",
+        "meaning": "State the practical benefit plainly, especially when discussing Pix, RSVP, timing, and pricing.",
+        "do": "Guests gift by Pix. The full amount goes to you.",
+        "dont": "Unlock a seamless, next-generation gifting solution."
+      },
+      {
+        "trait": "Personal, not performative",
+        "meaning": "Put the couple’s choices and story in the foreground; the brand stays as the thoughtful maker.",
+        "do": "Marcus and Daíse chose marsala, a countdown, and a gift list that feels like theirs.",
+        "dont": "Our premium aesthetic transforms every love story."
+      }
+    ],
+    "preferred_words": ["your story", "your guests", "your celebration", "made for you", "RSVP", "direct Pix", "in full", "a few days", "see it live"],
+    "avoided_words": ["platform", "solution", "revolutionary", "premium experience", "fairy-tale", "dream wedding", "template-ready", "seamless"],
+    "message_pillars": [
+      {
+        "title": "A site with your signature",
+        "message": "Colours, words, photos, and details begin with the couple—not a fixed catalogue of layouts.",
+        "proof": "Show a real before-and-after creative brief or two visibly different case sites."
+      },
+      {
+        "title": "Gifts arrive in full",
+        "message": "Guests can send gifts through direct Pix, without a gateway fee deducted from the amount.",
+        "proof": "Show the direct Pix gift flow and explain the mechanism in one short caption; verify all payment wording before publication."
+      },
+      {
+        "title": "The details stay easy",
+        "message": "RSVP, gifts, and guest information live in one place that the couple can manage without technical help.",
+        "proof": "Show real RSVP and admin-panel screens with private data removed."
+      }
+    ],
+    "image_direction": "Use real couples, real venues, tactile invitation materials, and actual site screens. Crop closely; favour warm daylight, candlelit shadows, and rich material texture. Use the frame motif to connect photographs and product UI. Avoid stock couples, hands holding rings, champagne cheers, generic flower flat-lays, and oversized scripted text placed over faces.",
+    "layout_principles": [
+      "Let one meaningful photograph, a site screen, or a sentence lead each composition—never all three at once.",
+      "Use the soft-corner frame as a recurring crop, not a container around every item.",
+      "Pair a large serif statement with a compact sans-serif fact such as ‘RSVP + direct Pix’. ",
+      "Keep Instagram carousels high-contrast and readable at a glance: Plum or Cocoa text on Ivory; Ivory text on Plum.",
+      "Use antique gold for lines and small moments only; it is not a body-text colour."
+    ],
+    "applications": [
+      {
+        "name": "Instagram profile and pinned posts",
+        "headline": "A wedding site that is entirely yours.",
+        "direction": "Bio: ‘Bespoke wedding sites · RSVP + fee-free Pix gifts · Curitiba + Brazil’. Pin: the real case, how direct Pix works, and the process from conversation to launch. Use a Plum avatar with the custom-frame mark at 32px."
+      },
+      {
+        "name": "Instagram case-study carousel",
+        "headline": "Their story. Their site. Their gifts.",
+        "direction": "Slide 1 carries the claim in a full Plum frame. Slides 2–5 show a real homepage, RSVP, gift-list detail, and one client-specific design choice. Last slide: ‘See your celebration online’ with WhatsApp CTA."
+      },
+      {
+        "name": "Instagram Reel cover and sequence",
+        "headline": "Not a template. A place for your celebration.",
+        "direction": "Open with an invitation-like name card, then move through a five-second screen sequence: hero, details, RSVP, Pix gift. End with the frame mark and CTA; use captions for every factual benefit."
+      },
+      {
+        "name": "Landing-page hero",
+        "headline": "Your wedding site, made around you. Your gifts, received in full.",
+        "direction": "Hero shows one real couple site inside the asymmetric frame. The supporting line names RSVP and direct Pix; the primary CTA opens WhatsApp. The page explains the service before the tagline."
+      },
+      {
+        "name": "Favicon and social avatar",
+        "headline": "The frame, reduced.",
+        "direction": "Use only the simple asymmetrical frame in Plum on Ivory or Ivory on Plum. Test at 16, 24, and 32 pixels; do not attempt to render the full wordmark at favicon size."
+      }
+    ],
+    "dos": [
+      "Lead with a real couple, a real site screen, or a concrete product moment.",
+      "Use casamentos.app consistently in profile name, bio, landing page, footer attribution, and public sales material.",
+      "Repeat the direct-Pix benefit with exact, plain language.",
+      "Show visibly different couple sites to prove bespoke work.",
+      "Keep all body text in Cocoa on Ivory or Ivory on Plum for reliable readability."
+    ],
+    "donts": [
+      "Do not use BG Casamentos in public-facing identity once migration begins.",
+      "Do not fill the feed with generic wedding photography without a service or product point.",
+      "Do not describe the service as a platform or rely on unsupported claims about competitors.",
+      "Do not use Antique Gold or Rose Clay for small body text on Ivory.",
+      "Do not treat the proposed frame symbol as trademark-cleared or a finished production logo."
+    ]
+  },
+  "validation": {
+    "strengths": [
+      "The service has functional product proof, not only a concept.",
+      "The no-fee direct Pix mechanism is concrete and easy to explain.",
+      "The first case can make bespoke work visible immediately."
+    ],
+    "assumptions": [
+      "The first acquisition focus remains Instagram discovery and WhatsApp conversion.",
+      "Curitiba is the initial geographic focus, with national service possible later.",
+      "The first public case remains authorised for portfolio use."
+    ],
+    "risks": [
+      "One public case may not yet prove range; make contrast across future sites visible as soon as possible.",
+      "The direct-Pix message must be worded accurately and reviewed against the actual implementation and customer terms.",
+      "casamentos.app may require a preliminary name and trademark search before substantial launch investment."
+    ],
+    "next_tests": [
+      "Five-second recognition: show the pinned case-post cover to engaged couples and ask what the service does.",
+      "Audience comprehension: ask whether viewers understand both bespoke design and direct Pix after one carousel.",
+      "One-week recall: ask whether viewers remember ‘Entirely yours’, the frame, or fee-free Pix.",
+      "Monochrome test: print the frame mark in one colour and confirm it remains recognisable.",
+      "Favicon test: compare the mark at 16–32px against other wedding-service icons.",
+      "Landing-message test: test the hero against the current headline for WhatsApp click-through quality.",
+      "Competitor-confusion check: shuffle anonymised posts with wedding suppliers and confirm casamentos.app is correctly identified."
+    ],
+    "legal_note": "This is a strategic and creative recommendation, not trademark clearance, legal advice, or a font-license opinion. Confirm name availability, final logo clearance, and font terms before commercial launch."
+  },
+  "sources": [
+    {
+      "label": "Project launch plan",
+      "url": "file:///Users/gabrielcorreaprata/Desktop/Projects/BGCasamentos/marketing/plano-lancamento.md",
+      "note": "Product capabilities, initial audience, market focus, case status, acquisition channel, and pricing evidence."
+    },
+    {
+      "label": "Landing-page plan",
+      "url": "file:///Users/gabrielcorreaprata/Desktop/Projects/BGCasamentos/marketing/landing-page-plano.md",
+      "note": "Existing positioning language, message hierarchy, CTA, and conversion strategy."
+    },
+    {
+      "label": "Template implementation",
+      "url": "file:///Users/gabrielcorreaprata/Desktop/Projects/BGCasamentos/template/README.md",
+      "note": "Reusable product capabilities and current technical proof."
+    }
+  ]
+}

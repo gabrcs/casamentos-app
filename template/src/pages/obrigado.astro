@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/url';
+---
+
+<Base title="Obrigado">
+  <section class="mx-auto max-w-xl px-4 py-24 text-center">
+    <p class="text-6xl">💚</p>
+    <h1 class="mt-6 font-display text-5xl text-marsala-dark">Presença confirmada!</h1>
+    <p class="mt-4 text-ink/80">
+      Obrigado por confirmar. Mal podemos esperar para celebrar com você!
+    </p>
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a href={`${withBase('/')}#presentes`} class="btn-primary">Ver lista de presentes</a>
+      <a href={withBase('/')} class="btn-outline">Voltar ao início</a>
+    </div>
+  </section>
+</Base>

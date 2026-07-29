@@ -1,0 +1,261 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import { getDb } from '../../db/client';
+import { gifts as giftsTable, type Gift } from '../../db/schema';
+import { isAdmin } from '../../lib/auth';
+import { withBase } from '../../lib/url';
+import { asc } from 'drizzle-orm';
+
+export const prerender = false;
+
+let rows: Gift[] = [];
+if (await isAdmin(Astro)) {
+  const db = getDb(Astro);
+  rows = await db
+    .select()
+    .from(giftsTable)
+    .orderBy(asc(giftsTable.sortOrder), asc(giftsTable.id));
+}
+
+const ok = Astro.url.searchParams.get('ok');
+const erro = Astro.url.searchParams.get('erro');
+const money = (cents: number) =>
+  (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const statusLabel: Record<string, string> = {
+  available: 'Disponível',
+  reserved: 'Reservado',
+  purchased: 'Presenteado',
+};
+---
+
+<Admin title="Presentes">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="text-[11px] font-medium uppercase tracking-[0.25em] text-[--color-gold]">Lista de presentes</p>
+      <h1 class="mt-1 font-display text-4xl text-[--color-marsala-dark]">
+        Presentes
+        <span class="ml-1 align-middle rounded-full bg-[--color-sand] px-3 py-1 font-sans text-sm font-medium text-[--color-marsala-dark]">
+          {rows.length}
+        </span>
+      </h1>
+    </div>
+    <a href="#gift-form-card" class="btn-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Adicionar presente
+    </a>
+  </div>
+
+  {
+    ok && (
+      <p class="mt-6 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+        Salvo com sucesso.
+      </p>
+    )
+  }
+  {
+    erro && (
+      <p class="mt-6 flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Ocorreu um erro ({erro}). Verifique os dados.
+      </p>
+    )
+  }
+
+  <!-- Tabela de presentes existentes -->
+  <div class="mt-8 overflow-x-auto rounded-2xl border border-[--color-sand] bg-white shadow-[0_4px_16px_rgba(111,58,60,0.06)]">
+    <table class="w-full text-sm">
+      <thead class="border-b border-[--color-sand] bg-[--color-cream] text-left text-xs font-medium uppercase tracking-wider text-[--color-ink]/50">
+        <tr>
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">Título</th>
+          <th class="px-4 py-3">Valor</th>
+          <th class="px-4 py-3">Status</th>
+          <th class="px-4 py-3">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[--color-sand]/70">
+        {
+          rows.length === 0 ? (
+            <tr>
+              <td colspan="5" class="px-4 py-16 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-8 w-8 text-[--color-ink]/25" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+                <p class="mt-3 text-[--color-ink]/50">Nenhum presente cadastrado. Adicione abaixo.</p>
+              </td>
+            </tr>
+          ) : (
+            rows.map((g) => (
+              <tr class="align-top transition-colors hover:bg-[--color-cream]/60">
+                <td class="px-4 py-3 text-[--color-ink]/50">{g.id}</td>
+                <td class="px-4 py-3">
+                  <p class="font-medium">{g.title}</p>
+                  {g.category && (
+                    <p class="mt-0.5 inline-block rounded-full bg-[--color-sand]/60 px-2 py-0.5 text-[11px] text-[--color-ink]/60">
+                      {g.category}
+                    </p>
+                  )}
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap font-medium text-[--color-marsala-dark]">{money(g.priceCents)}</td>
+                <td class="px-4 py-3">
+                  <form method="POST" action={withBase('/api/gifts')} class="flex items-center gap-2">
+                    <input type="hidden" name="_action" value="status" />
+                    <input type="hidden" name="id" value={g.id} />
+                    <select
+                      name="status"
+                      class:list={[
+                        'cursor-pointer rounded-lg border px-2.5 py-1.5 text-xs font-medium outline-none transition-colors focus:border-[--color-marsala]',
+                        g.status === 'available'
+                          ? 'border-[--color-sand] bg-white text-[--color-ink]/70'
+                          : g.status === 'reserved'
+                            ? 'border-amber-200 bg-amber-50 text-amber-800'
+                            : 'border-emerald-200 bg-emerald-50 text-emerald-800',
+                      ]}
+                      onchange="this.form.submit()"
+                    >
+                      {Object.entries(statusLabel).map(([value, label]) => (
+                        <option value={value} selected={g.status === value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </form>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-1">
+                    <button
+                      type="button"
+                      class="edit-btn rounded-lg px-2.5 py-1.5 text-xs font-medium text-[--color-marsala-dark] transition-colors hover:bg-[--color-sand]"
+                      data-gift={JSON.stringify(g)}
+                    >
+                      Editar
+                    </button>
+                    <form
+                      method="POST"
+                      action={withBase('/api/gifts')}
+                      onsubmit="return confirm('Remover este presente?')"
+                    >
+                      <input type="hidden" name="_action" value="delete" />
+                      <input type="hidden" name="id" value={g.id} />
+                      <button
+                        type="submit"
+                        class="rounded-lg px-2.5 py-1.5 text-xs font-medium text-rose-600 transition-colors hover:bg-rose-50"
+                      >
+                        Remover
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            ))
+          )
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulário de criar / editar -->
+  <div class="mt-10 scroll-mt-24 rounded-2xl border border-[--color-sand] bg-white p-6 shadow-[0_4px_16px_rgba(111,58,60,0.06)] sm:p-8" id="gift-form-card">
+    <h2 id="form-title" class="font-display text-2xl text-[--color-marsala-dark]">
+      Adicionar presente
+    </h2>
+    <p class="mt-1 text-sm text-[--color-ink]/50">
+      Campos marcados com * são obrigatórios.
+    </p>
+    <form method="POST" action={withBase('/api/gifts')} class="mt-6 grid gap-4 sm:grid-cols-2" id="gift-form">
+      <input type="hidden" name="_action" value="create" id="f-action" />
+      <input type="hidden" name="id" value="" id="f-id" />
+
+      <label class="text-sm font-medium text-[--color-ink]/80 sm:col-span-2">
+        Título *
+        <input name="title" id="f-title" required class="inp font-normal" />
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80 sm:col-span-2">
+        Descrição
+        <textarea name="description" id="f-description" rows="2" class="inp font-normal"></textarea>
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80">
+        Valor (R$)
+        <input name="price" id="f-price" placeholder="150,00" class="inp font-normal" />
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80">
+        Categoria
+        <input name="category" id="f-category" class="inp font-normal" />
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80 sm:col-span-2">
+        URL da imagem
+        <input name="image_url" id="f-image" class="inp font-normal" />
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80">
+        Ordem
+        <input name="sort_order" id="f-sort" type="number" value="0" class="inp font-normal" />
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80" id="wrap-reserved" style="display:none">
+        Reservado por
+        <input name="reserved_by" id="f-reserved" class="inp font-normal" />
+      </label>
+      <label class="text-sm font-medium text-[--color-ink]/80" id="wrap-status" style="display:none">
+        Status
+        <select name="status" id="f-status" class="inp font-normal">
+          <option value="available">Disponível</option>
+          <option value="reserved">Reservado</option>
+          <option value="purchased">Presenteado</option>
+        </select>
+      </label>
+
+      <div class="mt-2 flex gap-3 sm:col-span-2">
+        <button type="submit" class="btn-primary">Salvar</button>
+        <button type="button" id="cancel-edit" class="btn-outline" style="display:none">
+          Cancelar edição
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('gift-form') as HTMLFormElement;
+    const title = document.getElementById('form-title')!;
+    const set = (id: string, v: string) =>
+      ((document.getElementById(id) as HTMLInputElement).value = v);
+    const show = (id: string, on: boolean) =>
+      ((document.getElementById(id) as HTMLElement).style.display = on ? '' : 'none');
+
+    document.querySelectorAll<HTMLButtonElement>('.edit-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const g = JSON.parse(btn.dataset.gift ?? '{}');
+        set('f-action', 'update');
+        set('f-id', String(g.id));
+        set('f-title', g.title ?? '');
+        set('f-description', g.description ?? '');
+        set('f-price', ((g.priceCents ?? 0) / 100).toFixed(2).replace('.', ','));
+        set('f-category', g.category ?? '');
+        set('f-image', g.imageUrl ?? '');
+        set('f-sort', String(g.sortOrder ?? 0));
+        set('f-reserved', g.reservedBy ?? '');
+        set('f-status', g.status ?? 'available');
+        show('wrap-status', true);
+        show('wrap-reserved', true);
+        show('cancel-edit', true);
+        title.textContent = `Editando: ${g.title}`;
+        form.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    document.getElementById('cancel-edit')?.addEventListener('click', () => {
+      form.reset();
+      set('f-action', 'create');
+      set('f-id', '');
+      show('wrap-status', false);
+      show('wrap-reserved', false);
+      show('cancel-edit', false);
+      title.textContent = 'Adicionar presente';
+    });
+  </script>
+</Admin>

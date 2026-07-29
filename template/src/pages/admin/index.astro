@@ -1,0 +1,89 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import { getDb } from '../../db/client';
+import { rsvps, gifts } from '../../db/schema';
+import { isAdmin } from '../../lib/auth';
+import { withBase } from '../../lib/url';
+import { sql } from 'drizzle-orm';
+
+export const prerender = false;
+
+let stats = { confirmados: 0, talvez: 0, recusas: 0, presentesTotais: 0, presentesDados: 0 };
+
+if (await isAdmin(Astro)) {
+  const db = getDb(Astro);
+  const [rsvpRow] = await db
+    .select({
+      confirmados: sql<number>`sum(case when status = 'yes' then 1 else 0 end)`,
+      talvez: sql<number>`sum(case when status = 'maybe' then 1 else 0 end)`,
+      recusas: sql<number>`sum(case when status = 'no' then 1 else 0 end)`,
+    })
+    .from(rsvps);
+  const [giftRow] = await db
+    .select({
+      total: sql<number>`count(*)`,
+      dados: sql<number>`sum(case when status != 'available' then 1 else 0 end)`,
+    })
+    .from(gifts);
+  stats = {
+    confirmados: rsvpRow?.confirmados ?? 0,
+    talvez: rsvpRow?.talvez ?? 0,
+    recusas: rsvpRow?.recusas ?? 0,
+    presentesTotais: giftRow?.total ?? 0,
+    presentesDados: giftRow?.dados ?? 0,
+  };
+}
+
+const cards = [
+  {
+    label: 'Confirmações (sim)',
+    value: stats.confirmados,
+    icon: 'M4.5 12.75l6 6 9-13.5',
+    tone: 'text-emerald-700 bg-emerald-50',
+  },
+  {
+    label: 'Talvez',
+    value: stats.talvez,
+    icon: 'M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z',
+    tone: 'text-amber-700 bg-amber-50',
+  },
+  {
+    label: 'Não poderão ir',
+    value: stats.recusas,
+    icon: 'M6 18L18 6M6 6l12 12',
+    tone: 'text-rose-700 bg-rose-50',
+  },
+  {
+    label: 'Presentes escolhidos',
+    value: `${stats.presentesDados}/${stats.presentesTotais}`,
+    icon: 'M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z',
+    tone: 'text-[--color-marsala] bg-[--color-sand]',
+  },
+];
+---
+
+<Admin title="Painel">
+  <p class="text-[11px] font-medium uppercase tracking-[0.25em] text-[--color-gold]">Visão geral</p>
+  <h1 class="mt-1 font-display text-4xl text-[--color-marsala-dark]">Painel dos noivos</h1>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      cards.map((c) => (
+        <div class="rounded-2xl border border-[--color-sand] bg-white p-6 shadow-[0_4px_16px_rgba(111,58,60,0.06)] transition-shadow hover:shadow-[0_8px_24px_rgba(111,58,60,0.1)]">
+          <div class={`flex h-10 w-10 items-center justify-center rounded-full ${c.tone}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d={c.icon} />
+            </svg>
+          </div>
+          <p class="mt-4 text-sm text-[--color-ink]/60">{c.label}</p>
+          <p class="mt-1 font-display text-4xl text-[--color-marsala-dark]">{c.value}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="mt-10 flex flex-wrap gap-3">
+    <a href={withBase('/admin/rsvps')} class="btn-outline">Ver confirmações</a>
+    <a href={withBase('/admin/presentes')} class="btn-outline">Gerenciar presentes</a>
+  </div>
+</Admin>

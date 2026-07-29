@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body{margin:0;background:#faf6ef;color:#43302e;font-family:'Inter',ui-sans-serif,system-ui,sans-serif}
+    a{color:#955251;text-decoration:none}
+    a:hover{color:#6f3a3c}
+    ::-webkit-scrollbar{display:none}
+    @keyframes gc-pulse{from{transform:scale(.9);opacity:1}to{transform:scale(1.8);opacity:0}}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;position:relative">
+
+<!-- NAV -->
+<header style="position:fixed;inset:0 0 auto 0;z-index:50;padding:14px 16px 0" data-screen-label="nav">
+  <nav style="max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;border-radius:16px;border:1px solid rgba(240,229,216,0.7);background:rgba(250,246,239,0.85);padding:8px 10px 8px 18px;box-shadow:0 10px 30px rgba(111,58,60,0.12);backdrop-filter:blur(8px)">
+    <a href="#inicio" onClick="{{ goSite }}" style="white-space:nowrap;font-family:'Cormorant Garamond',serif;font-size:20px;color:#6f3a3c">{{ coupleShort }}</a>
+    <div style="display:flex;align-items:center;gap:6px" class="nav-mobile-only">
+      <a href="#confirmar" style="white-space:nowrap;border-radius:12px;background:#955251;padding:8px 12px;font-size:12px;color:#fff">Confirmar presença</a>
+      <button onClick="{{ toggleNav }}" aria-label="Abrir menu" style="border:none;background:transparent;border-radius:8px;padding:8px;color:#43302e;cursor:pointer">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+    <ul class="nav-desktop-only" style="display:none;align-items:center;gap:24px;font-size:14px;list-style:none;margin:0;padding:0">
+      <li><a href="#casal">O Casal</a></li>
+      <li><a href="#cerimonia">Quando &amp; Onde</a></li>
+      <li><a href="#manual">Informações</a></li>
+      <li><a href="#presentes">Presentes</a></li>
+      <li><a href="#confirmar" style="border-radius:12px;background:#955251;color:#fff;padding:10px 16px">Confirmar presença</a></li>
+    </ul>
+  </nav>
+  <sc-if value="{{ navOpen }}">
+    <ul style="max-width:960px;margin:8px auto 0;border-radius:16px;border:1px solid rgba(240,229,216,0.7);background:rgba(250,246,239,0.97);padding:10px;font-size:14px;box-shadow:0 10px 30px rgba(111,58,60,0.12);list-style:none">
+      <li><a href="#casal" onClick="{{ toggleNav }}" style="display:block;border-radius:10px;padding:10px 14px;color:#43302e">O Casal</a></li>
+      <li><a href="#cerimonia" onClick="{{ toggleNav }}" style="display:block;border-radius:10px;padding:10px 14px;color:#43302e">Quando &amp; Onde</a></li>
+      <li><a href="#manual" onClick="{{ toggleNav }}" style="display:block;border-radius:10px;padding:10px 14px;color:#43302e">Informações</a></li>
+      <li><a href="#presentes" onClick="{{ toggleNav }}" style="display:block;border-radius:10px;padding:10px 14px;color:#43302e">Presentes</a></li>
+    </ul>
+  </sc-if>
+</header>
+
+<main style="flex:1">
+
+<!-- HERO -->
+<section id="inicio" data-screen-label="hero" style="position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#6f3a3c,#955251,#4a2426)">
+    <div style="position:absolute;inset:0;opacity:0.55">
+      <image-slot id="hero-photo" shape="rect" placeholder="Foto do casal (banner)" style="width:100%;height:100%"></image-slot>
+    </div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35)"></div>
+
+  <div style="position:relative;margin:0 auto;display:flex;min-height:92vh;max-width:720px;flex-direction:column;align-items:center;justify-content:center;padding:128px 16px 208px;text-align:center">
+    <div style="position:absolute;inset:0 0 auto;top:96px;padding:0 16px">
+      <p style="margin:0;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.9),0 1px 4px rgba(0,0,0,0.8)">Você está convidado para o nosso casamento</p>
+    </div>
+
+    <h1 style="margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:56px;line-height:1.1;color:#fff">
+      {{ groomName }}
+      <span style="display:block;font-size:32px;font-style:normal;margin:8px 0">&amp;</span>
+      {{ brideName }}
+    </h1>
+
+    <div style="position:absolute;inset:auto 0 128px;padding:0 16px">
+      <p style="margin:0;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.9),0 1px 4px rgba(0,0,0,0.8)">&ldquo;{{ quote }}&rdquo;</p>
+      <p style="margin:10px 0 0;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.9),0 1px 4px rgba(0,0,0,0.8)">{{ dateLabel }} · {{ ceremonyTime }} · {{ city }}</p>
+    </div>
+
+    <div style="position:absolute;inset:auto 0 32px;display:flex;justify-content:center;padding:0 16px">
+      <div style="display:inline-flex;gap:20px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(111,58,60,0.3);padding:8px 20px;backdrop-filter:blur(4px)">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:#fff;text-shadow:0 2px 12px rgba(111,58,60,0.9)">{{ countdown.d }}</span>
+          <span style="margin-top:4px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.85)">dias</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:#fff;text-shadow:0 2px 12px rgba(111,58,60,0.9)">{{ countdown.h }}</span>
+          <span style="margin-top:4px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.85)">horas</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:#fff;text-shadow:0 2px 12px rgba(111,58,60,0.9)">{{ countdown.m }}</span>
+          <span style="margin-top:4px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.85)">min</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:#fff;text-shadow:0 2px 12px rgba(111,58,60,0.9)">{{ countdown.s }}</span>
+          <span style="margin-top:4px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.85)">seg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOAS-VINDAS -->
+<section id="boas-vindas" style="scroll-margin-top:112px">
+  <div style="max-width:720px;margin:0 auto;padding:80px 16px;text-align:center">
+    <p style="margin:0;font-size:13px;letter-spacing:0.3em;text-transform:uppercase;color:#955251">Sejam bem-vindos</p>
+    <h2 style="margin:24px 0 0;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">O amor nos trouxe até aqui</h2>
+    <p style="max-width:600px;margin:24px auto 0;font-size:18px;line-height:1.7;color:rgba(67,48,46,0.8)">Com o coração cheio de alegria, convidamos você para celebrar conosco o dia mais especial das nossas vidas. Preparamos este espaço com todas as informações para que você aproveite cada momento ao nosso lado.</p>
+  </div>
+</section>
+
+<!-- SOBRE O CASAL -->
+<section id="casal" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8;background:rgba(255,255,255,0.4)">
+  <div style="max-width:1024px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Sobre o Casal</h2>
+    <div style="margin-top:48px;display:grid;gap:40px;grid-template-columns:1fr;align-items:stretch" class="two-col">
+      <image-slot id="couple-photo" shape="rounded" radius="16" placeholder="Foto do casal" style="width:100%;min-height:340px"></image-slot>
+      <div>
+        <h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:28px;color:#955251">Nossa história</h3>
+        <p style="margin-top:16px;line-height:1.7;color:rgba(67,48,46,0.8)">Nossa história começou de uma forma inesperada, mas daquelas que parecem já estar escritas pelo destino.</p>
+        <p style="margin-top:16px;line-height:1.7;color:rgba(67,48,46,0.8)">Desde a primeira conversa percebemos que buscávamos exatamente a mesma coisa: um relacionamento verdadeiro, construído com respeito, cumplicidade e propósito.</p>
+        <p style="margin-top:16px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:#955251">&ldquo;Hoje celebramos não apenas um casamento, mas toda a caminhada que nos trouxe até aqui.&rdquo;</p>
+        <p style="margin-top:16px;line-height:1.7;color:rgba(67,48,46,0.8)">Com carinho,<br><span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#6f3a3c">{{ groomName }} &amp; {{ brideName }}</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8">
+  <div style="max-width:860px;margin:0 auto;padding:80px 16px;text-align:center">
+    <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Assista ao clipe do nosso ensaio</h2>
+    <p style="margin-top:16px;color:rgba(67,48,46,0.7)">Um pedacinho do nosso pré-wedding.</p>
+    <div style="margin-top:40px;overflow:hidden;border-radius:16px;border:1px solid #f0e5d8">
+      <sc-if value="{{ isVideoIdle }}">
+        <button onClick="{{ playVideo }}" style="position:relative;display:block;width:100%;aspect-ratio:16/9;cursor:pointer;border:none;padding:0" aria-label="Assistir ao clipe">
+          <image-slot id="video-thumb" shape="rect" placeholder="Foto de capa do vídeo" style="width:100%;height:100%"></image-slot>
+          <span style="position:absolute;inset:0;background:linear-gradient(to top,rgba(111,58,60,0.7),rgba(0,0,0,0.1) 60%,transparent);pointer-events:none"></span>
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <span style="display:flex;height:76px;width:76px;align-items:center;justify-content:center;border-radius:50%;background:rgba(250,246,239,0.95);box-shadow:0 8px 24px rgba(0,0,0,0.25)">
+              <svg style="height:30px;width:30px;color:#955251" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.3v13.4a.5.5 0 0 0 .76.43l11-6.7a.5.5 0 0 0 0-.86l-11-6.7a.5.5 0 0 0-.76.43z"/></svg>
+            </span>
+          </span>
+        </button>
+      </sc-if>
+      <sc-if value="{{ videoPlaying }}">
+        <div style="width:100%;aspect-ratio:16/9;background:#1a1112;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font:12px ui-monospace,monospace">vídeo do ensaio tocando aqui</div>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+<!-- CERIMONIA -->
+<section id="cerimonia" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8;background:rgba(255,255,255,0.4)">
+  <div style="max-width:1024px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Cerimônia</h2>
+    <div style="margin-top:48px;display:grid;gap:40px;grid-template-columns:1fr;align-items:center" class="two-col">
+      <div style="text-align:center" class="text-left-desktop">
+        <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#955251">{{ dateLabel }}</p>
+        <p style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#955251">às {{ ceremonyTime }}</p>
+        <p style="margin-top:24px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500">{{ ceremonyPlace }}</p>
+        <p style="margin-top:4px;color:rgba(67,48,46,0.7)">{{ ceremonyAddress }}</p>
+        <div style="margin-top:24px;display:flex;justify-content:center;gap:12px" class="justify-left-desktop">
+          <a href="#" style="border:1px solid #955251;color:#6f3a3c;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:500">Abrir no Google Maps</a>
+        </div>
+      </div>
+      <div style="height:288px;width:100%;border-radius:16px;border:1px solid #f0e5d8;background:repeating-linear-gradient(45deg,#f0e5d8,#f0e5d8 10px,#faf6ef 10px,#faf6ef 20px);display:flex;align-items:center;justify-content:center;color:rgba(67,48,46,0.45);font:12px ui-monospace,monospace">mapa da cerimônia</div>
+    </div>
+  </div>
+</section>
+
+<!-- FESTA -->
+<section id="festa" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8">
+  <div style="max-width:1024px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Recepção</h2>
+    <div style="margin-top:48px;display:grid;gap:40px;grid-template-columns:1fr;align-items:center" class="two-col">
+      <div style="height:288px;width:100%;border-radius:16px;border:1px solid #f0e5d8;background:repeating-linear-gradient(45deg,#f0e5d8,#f0e5d8 10px,#faf6ef 10px,#faf6ef 20px);display:flex;align-items:center;justify-content:center;color:rgba(67,48,46,0.45);font:12px ui-monospace,monospace">mapa da recepção</div>
+      <div style="text-align:center" class="text-left-desktop">
+        <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#955251">{{ dateLabel }}</p>
+        <p style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#955251">Logo após a cerimônia</p>
+        <p style="margin-top:24px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500">{{ receptionPlace }}</p>
+        <p style="margin-top:4px;color:rgba(67,48,46,0.7)">{{ receptionAddress }}</p>
+        <a href="#" style="display:inline-block;margin-top:24px;border:1px solid #955251;color:#6f3a3c;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:500">Abrir no Google Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANUAL -->
+<section id="manual" style="scroll-margin-top:112px;border-top:1px solid #6f3a3c;background:#955251">
+  <div style="max-width:1024px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#faf6ef">Manual dos Convidados</h2>
+    <p style="max-width:560px;margin:16px auto 0;text-align:center;color:rgba(250,246,239,0.85)">Algumas orientações para que todos aproveitem o grande dia.</p>
+    <div style="margin-top:48px;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <sc-for list="{{ guestManual }}" as="item" hint-placeholder-count="9">
+        <div style="border-radius:16px;border:1px solid rgba(111,58,60,0.3);background:#faf6ef;padding:24px;text-align:center">
+          <div style="color:#955251;display:flex;justify-content:center">{{ item.icon }}</div>
+          <h3 style="margin:12px 0 0;font-family:'Cormorant Garamond',serif;font-size:22px;color:#955251">{{ item.title }}</h3>
+          <p style="margin-top:8px;font-size:14px;line-height:1.6;color:rgba(67,48,46,0.75)">{{ item.text }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- PALETA -->
+<section id="paleta" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8">
+  <div style="max-width:860px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Paleta dos Convidados</h2>
+    <p style="max-width:560px;margin:16px auto 0;text-align:center;color:rgba(67,48,46,0.7)">Traje: <strong>Passeio Completo</strong>. Solicitamos gentilmente que não sejam utilizadas as cores reservadas às madrinhas e padrinhos.</p>
+    <div style="margin-top:48px;display:grid;gap:32px;grid-template-columns:1fr" class="two-col-sm">
+      <div style="border-radius:16px;border:1px solid #f0e5d8;background:rgba(255,255,255,0.6);padding:32px">
+        <h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:22px;color:#955251">Por favor, evitar</h3>
+        <ul style="margin:20px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px;list-style:none">
+          <sc-for list="{{ paletteAvoid }}" as="c" hint-placeholder-count="9">
+            <li style="display:flex;align-items:center;gap:8px;border-radius:999px;border:1px solid rgba(149,82,81,0.3);background:rgba(240,229,216,0.5);padding:6px 16px 6px 8px;font-size:13px;color:rgba(67,48,46,0.8)">
+              <span style="height:16px;width:16px;flex-shrink:0;border-radius:6px;border:1px solid rgba(67,48,46,0.15);background:{{ c.hex }}"></span>
+              {{ c.name }}
+            </li>
+          </sc-for>
+        </ul>
+      </div>
+      <div style="border-radius:16px;border:1px solid #f0e5d8;background:rgba(255,255,255,0.6);padding:32px">
+        <h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:22px;color:#955251">Sugestões elegantes</h3>
+        <ul style="margin:20px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px;list-style:none">
+          <sc-for list="{{ paletteSuggest }}" as="c" hint-placeholder-count="6">
+            <li style="display:flex;align-items:center;gap:8px;border-radius:999px;border:1px solid rgba(149,82,81,0.3);padding:6px 16px 6px 8px;font-size:13px;color:rgba(67,48,46,0.8)">
+              <span style="height:16px;width:16px;flex-shrink:0;border-radius:6px;border:1px solid rgba(67,48,46,0.15);background:{{ c.hex }}"></span>
+              {{ c.name }}
+            </li>
+          </sc-for>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRONOGRAMA -->
+<section id="cronograma" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8;background:rgba(255,255,255,0.4)">
+  <div style="max-width:560px;margin:0 auto;padding:80px 16px">
+    <p style="margin:0;text-align:center;font-size:13px;letter-spacing:0.3em;text-transform:uppercase;color:#955251">Programação do dia</p>
+    <h2 style="margin:16px 0 0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Como será <em>o nosso dia</em></h2>
+    <ol style="max-width:400px;margin:56px auto 0;padding:0;list-style:none">
+      <sc-for list="{{ schedule }}" as="item" hint-placeholder-count="5">
+        <li style="display:grid;grid-template-columns:80px auto 1fr;align-items:start;column-gap:20px">
+          <p style="margin:0;text-align:right;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;line-height:1;color:#955251">{{ item.time }}</p>
+          <div style="display:flex;height:100%;flex-direction:column;align-items:center">
+            <span style="margin-top:6px;height:12px;width:12px;flex-shrink:0;border-radius:50%;border:2px solid #955251;background:#faf6ef"></span>
+            <span style="width:1px;flex:1;background:rgba(149,82,81,0.3)"></span>
+          </div>
+          <p style="margin:0;padding:2px 0 48px;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(67,48,46,0.8)">{{ item.title }}</p>
+        </li>
+      </sc-for>
+    </ol>
+  </div>
+</section>
+
+<!-- PRESENTES -->
+<section id="presentes" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8;background:rgba(255,255,255,0.4)">
+  <div style="max-width:1180px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Lista de Presentes</h2>
+    <p style="max-width:600px;margin:16px auto 0;text-align:center;color:rgba(67,48,46,0.7)">O maior presente será celebrar esse momento ao lado das pessoas que amamos. Caso desejem nos presentear, a contribuição é via Pix, rápida e sem taxas.</p>
+
+    <div style="margin-top:48px;display:grid;gap:20px;grid-template-columns:repeat(2,1fr)" class="gifts-grid">
+      <sc-for list="{{ visibleGifts }}" as="g" hint-placeholder-count="3">
+        <article style="display:flex;flex-direction:column;overflow:hidden;border-radius:16px;border:1px solid #f0e5d8;background:rgba(255,255,255,0.6);opacity:{{ g.opacity }}">
+          <div style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#f0e5d8;display:flex;align-items:center;justify-content:center;font-size:40px">🎁</div>
+          <div style="display:flex;flex:1;flex-direction:column;padding:16px">
+            <h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:18px;color:#6f3a3c">{{ g.title }}</h3>
+            <div style="margin-top:auto;padding-top:12px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+                <p style="margin:0;font-size:16px;font-weight:500;color:#955251">{{ g.priceLabel }}</p>
+                <sc-if value="{{ g.showRemaining }}"><p style="margin:0;flex-shrink:0;border-radius:999px;background:#f0e5d8;padding:2px 8px;font-size:11px;color:#6f3a3c">Restam {{ g.qty }}</p></sc-if>
+              </div>
+              <sc-if value="{{ g.taken }}">
+                <p style="margin-top:10px;border-radius:8px;background:#f0e5d8;padding:8px;text-align:center;font-size:13px;color:#6f3a3c">Já presenteado ✓</p>
+              </sc-if>
+              <sc-if value="{{ g.notTaken }}">
+                <button onClick="{{ g.open }}" style="margin-top:10px;width:100%;border:none;cursor:pointer;border-radius:12px;background:#955251;padding:10px;font-size:13px;font-weight:500;color:#fff">Presentear</button>
+              </sc-if>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:36px;text-align:center">
+      <button onClick="{{ toggleGifts }}" style="border:1px solid #955251;color:#6f3a3c;background:transparent;cursor:pointer;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:500">{{ giftsToggleLabel }}</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIRMAR -->
+<section id="confirmar" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8">
+  <div style="max-width:520px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Confirmação de Presença</h2>
+    <p style="margin-top:16px;text-align:center;color:rgba(67,48,46,0.7)">Por favor, confirme até <strong>{{ rsvpDeadline }}</strong>.</p>
+
+    <sc-if value="{{ rsvpPending }}">
+      <form onSubmit="{{ submitRsvp }}" style="display:flex;flex-direction:column;gap:14px;background:#fff;padding:24px;border-radius:20px;box-shadow:0 12px 32px rgba(111,58,60,0.1);margin-top:32px">
+        <p style="margin:0;position:relative;display:flex;align-items:center;gap:10px;padding-left:30px;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#6f3a3c">
+          <span style="position:absolute;left:0;height:16px;width:16px;border-radius:50%;background:#955251"></span>
+          <span style="position:absolute;left:0;height:16px;width:16px;border-radius:50%;background:#955251;animation:gc-pulse 1s linear infinite"></span>
+          Confirme sua presença
+        </p>
+        <p style="margin:-4px 0 4px;font-size:13px;color:rgba(67,48,46,0.65)">Preencha os campos abaixo para nos avisar se poderá comparecer.</p>
+
+        <label style="display:block">
+          <span style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;color:rgba(67,48,46,0.6)">Código do convite *</span>
+          <input required="true" value="{{ rsvp.code }}" onChange="{{ setRsvpCode }}" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid rgba(149,82,81,0.35);border-radius:10px;font-size:14px;outline:none"/>
+        </label>
+
+        <label style="display:block">
+          <span style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;color:rgba(67,48,46,0.6)">Seu nome *</span>
+          <input required="true" value="{{ rsvp.name }}" onChange="{{ setRsvpName }}" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid rgba(149,82,81,0.35);border-radius:10px;font-size:14px;outline:none"/>
+        </label>
+
+        <fieldset style="border:1px solid rgba(149,82,81,0.25);border-radius:10px;padding:12px 14px">
+          <legend style="font-size:12px;font-weight:600;color:#6f3a3c;padding:0 6px">Confirmação *</legend>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:{{ rsvp.yesColor }}">
+              <input type="radio" name="status" checked="{{ rsvp.yesChecked }}" onChange="{{ setRsvpYes }}"/> Sim, irei comparecer
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:{{ rsvp.noColor }}">
+              <input type="radio" name="status" checked="{{ rsvp.noChecked }}" onChange="{{ setRsvpNo }}"/> Não, infelizmente não irei
+            </label>
+          </div>
+        </fieldset>
+
+        <label style="display:block">
+          <span style="display:block;margin-bottom:4px;font-size:12px;font-weight:600;color:rgba(67,48,46,0.6)">Mensagem, comentário ou perguntas</span>
+          <textarea rows="3" value="{{ rsvp.message }}" onChange="{{ setRsvpMessage }}" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid rgba(149,82,81,0.35);border-radius:10px;font-size:14px;outline:none;resize:vertical"></textarea>
+        </label>
+
+        <button type="submit" style="border:none;outline:none;background:#955251;padding:12px;border-radius:10px;color:#fff;font-size:16px;font-weight:500;cursor:pointer">Enviar confirmação</button>
+      </form>
+    </sc-if>
+
+    <sc-if value="{{ rsvp.submitted }}">
+      <div style="margin-top:40px;text-align:center">
+        <h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:28px;color:#6f3a3c">{{ rsvp.resultTitle }}</h3>
+        <p style="margin-top:12px;color:rgba(67,48,46,0.8)">{{ rsvp.resultMsg }}</p>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8;background:rgba(255,255,255,0.4)">
+  <div style="max-width:720px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Informações e Dúvidas</h2>
+    <p style="margin-top:16px;text-align:center;color:rgba(67,48,46,0.7)">Perguntas frequentes dos convidados.</p>
+    <div style="margin-top:48px;display:flex;flex-direction:column;gap:12px">
+      <sc-for list="{{ faq }}" as="item" hint-placeholder-count="8">
+        <details style="border-radius:16px;border:1px solid #f0e5d8;background:rgba(255,255,255,0.6);padding:16px 24px">
+          <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:500;color:#6f3a3c">
+            {{ item.q }}
+            <span style="color:#955251">+</span>
+          </summary>
+          <p style="margin-top:12px;font-size:14px;line-height:1.6;color:rgba(67,48,46,0.75)">{{ item.a }}</p>
+        </details>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria" style="scroll-margin-top:112px;border-top:1px solid #f0e5d8">
+  <div style="max-width:1180px;margin:0 auto;padding:80px 16px">
+    <h2 style="margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:38px;color:#6f3a3c">Galeria de Fotos</h2>
+    <p style="margin-top:16px;text-align:center;color:rgba(67,48,46,0.7)">Alguns dos nossos momentos favoritos.</p>
+    <div style="margin-top:40px;display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory" class="no-scrollbar">
+      <sc-for list="{{ galleryIds }}" as="gid" hint-placeholder-count="6">
+        <div style="flex:0 0 260px;scroll-snap-align:start">
+          <image-slot id="{{ gid }}" shape="rounded" radius="12" placeholder="Foto da galeria" style="width:260px;height:320px"></image-slot>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid #f0e5d8;background:#6f3a3c;color:#faf6ef">
+  <div style="max-width:960px;margin:0 auto;padding:32px 16px;text-align:center">
+    <p style="margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32px">{{ groomName }} <span style="color:#c09a5e">&amp;</span> {{ brideName }}</p>
+    <p style="margin:12px 0 0;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(250,246,239,0.8)">{{ dateLabel }}</p>
+    <p style="margin:24px 0 0;font-size:11px;color:rgba(250,246,239,0.4)">Mockup de site de casamento</p>
+    <button onClick="{{ goAdminLogin }}" style="margin-top:16px;border:none;background:transparent;color:rgba(250,246,239,0.5);font-size:11px;text-decoration:underline;cursor:pointer">acessar painel administrativo</button>
+  </div>
+</footer>
+
+<!-- GIFT MODAL -->
+<sc-if value="{{ giftModal.open }}">
+  <div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px">
+    <div onClick="{{ closeGiftModal }}" style="position:absolute;inset:0;background:rgba(67,48,46,0.5)"></div>
+    <div style="position:relative;max-height:90vh;width:100%;max-width:420px;overflow-y:auto;border-radius:20px;background:#fff;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+      <button onClick="{{ closeGiftModal }}" aria-label="Fechar" style="position:absolute;right:14px;top:14px;border:none;background:transparent;border-radius:999px;padding:6px;color:rgba(67,48,46,0.4);cursor:pointer">✕</button>
+      <p style="margin:0;font-size:11px;font-weight:500;letter-spacing:0.25em;text-transform:uppercase;color:#c09a5e">Presentear</p>
+      <h3 style="margin:4px 0 0;font-family:'Cormorant Garamond',serif;font-size:24px;color:#6f3a3c">{{ giftModal.title }}</h3>
+      <p style="margin:4px 0 0;font-size:18px;font-weight:500;color:#955251">{{ giftModal.priceLabel }}</p>
+
+      <sc-if value="{{ giftModal.isStep1 }}">
+        <div style="margin-top:20px">
+          <label style="display:block;font-size:13px;font-weight:500;color:rgba(67,48,46,0.8)">Seu nome *
+            <input value="{{ giftModal.name }}" onChange="{{ setGmName }}" placeholder="Como devemos te agradecer?" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid #f0e5d8;border-radius:10px;font-size:14px;outline:none"/>
+          </label>
+          <label style="display:block;margin-top:16px;font-size:13px;font-weight:500;color:rgba(67,48,46,0.8)">Mensagem para os noivos
+            <textarea rows="3" value="{{ giftModal.message }}" onChange="{{ setGmMessage }}" placeholder="Deixe um recadinho carinhoso (opcional)" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid #f0e5d8;border-radius:10px;font-size:14px;outline:none;resize:vertical"></textarea>
+          </label>
+          <sc-if value="{{ giftModal.error }}"><p style="margin-top:12px;border-radius:10px;background:#fee2e2;padding:8px 12px;font-size:13px;color:#991b1b">{{ giftModal.error }}</p></sc-if>
+          <button onClick="{{ gmPay }}" style="margin-top:20px;width:100%;border:none;cursor:pointer;background:#955251;padding:12px;border-radius:10px;color:#fff;font-size:15px;font-weight:500">Pagar com Pix</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ giftModal.isStep2 }}">
+        <div style="margin-top:20px">
+          <div style="margin:0 auto;display:flex;height:180px;width:180px;align-items:center;justify-content:center;border:1px solid #f0e5d8;border-radius:12px;background:repeating-linear-gradient(45deg,#f0e5d8,#f0e5d8 8px,#fff 8px,#fff 16px);font:11px ui-monospace,monospace;color:rgba(67,48,46,0.5);text-align:center;padding:8px">QR Code Pix</div>
+          <p style="margin-top:12px;text-align:center;font-size:12px;color:rgba(67,48,46,0.6)">Escaneie o QR Code no app do seu banco ou copie o código Pix:</p>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+            <input readonly="true" value="{{ giftModal.pixCode }}" style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #f0e5d8;border-radius:10px;font-size:11px;color:rgba(67,48,46,0.7)"/>
+            <button onClick="{{ gmCopy }}" style="flex-shrink:0;border:1px solid #955251;color:#6f3a3c;background:transparent;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer">{{ giftModal.copyLabel }}</button>
+          </div>
+          <p style="margin-top:16px;border-radius:10px;background:#f0e5d8;padding:10px 12px;text-align:center;font-size:13px;color:#6f3a3c">Obrigado pelo carinho! Depois de pagar no app do banco, toque abaixo para confirmar.</p>
+          <button onClick="{{ gmDone }}" style="margin-top:16px;width:100%;border:none;cursor:pointer;background:#955251;padding:12px;border-radius:10px;color:#fff;font-size:15px;font-weight:500">Já paguei</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+
+<!-- ============ ADMIN ============ -->
+<sc-if value="{{ isAdminLogin }}">
+<div style="position:fixed;inset:0;z-index:100;background:#faf6ef;display:flex;align-items:center;justify-content:center;padding:16px" data-screen-label="admin-login">
+  <div style="width:100%;max-width:380px;border-radius:20px;background:#fff;padding:36px;box-shadow:0 20px 60px rgba(111,58,60,0.15);text-align:center">
+    <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:26px;color:#6f3a3c">{{ coupleShort }}</p>
+    <p style="margin:6px 0 0;font-size:13px;color:rgba(67,48,46,0.6)">Painel administrativo</p>
+    <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px;text-align:left">
+      <label style="display:block;font-size:12px;font-weight:600;color:rgba(67,48,46,0.6)">E-mail
+        <input placeholder="noivos@exemplo.com" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid #f0e5d8;border-radius:10px;font-size:14px;outline:none"/>
+      </label>
+      <label style="display:block;font-size:12px;font-weight:600;color:rgba(67,48,46,0.6)">Senha
+        <input type="password" placeholder="••••••••" style="width:100%;box-sizing:border-box;margin-top:4px;padding:10px;border:1px solid #f0e5d8;border-radius:10px;font-size:14px;outline:none"/>
+      </label>
+    </div>
+    <button onClick="{{ goAdminOverview }}" style="margin-top:20px;width:100%;border:none;cursor:pointer;background:#955251;padding:12px;border-radius:10px;color:#fff;font-size:15px;font-weight:500">Entrar</button>
+    <button onClick="{{ goSite }}" style="margin-top:12px;border:none;background:transparent;color:rgba(67,48,46,0.5);font-size:12px;text-decoration:underline;cursor:pointer">voltar ao site</button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAdminView }}">
+<div style="position:fixed;inset:0;z-index:100;background:#faf6ef;display:flex;flex-direction:column" data-screen-label="admin">
+  <header style="border-bottom:1px solid #f0e5d8;background:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:20px;color:#6f3a3c">{{ coupleShort }} · Admin</p>
+    <nav style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onClick="{{ goAdminOverview }}" style="border:none;cursor:pointer;border-radius:10px;padding:8px 14px;font-size:13px;background:{{ tabBg.overview }};color:{{ tabColor.overview }}">Visão geral</button>
+      <button onClick="{{ goAdminRsvps }}" style="border:none;cursor:pointer;border-radius:10px;padding:8px 14px;font-size:13px;background:{{ tabBg.rsvps }};color:{{ tabColor.rsvps }}">RSVPs</button>
+      <button onClick="{{ goAdminGifts }}" style="border:none;cursor:pointer;border-radius:10px;padding:8px 14px;font-size:13px;background:{{ tabBg.gifts }};color:{{ tabColor.gifts }}">Presentes</button>
+      <button onClick="{{ goSite }}" style="border:1px solid #f0e5d8;background:transparent;cursor:pointer;border-radius:10px;padding:8px 14px;font-size:13px;color:#43302e">Ver site</button>
+    </nav>
+  </header>
+
+  <div style="flex:1;overflow-y:auto;padding:32px 24px">
+    <sc-if value="{{ isViewOverview }}">
+      <div style="max-width:960px;margin:0 auto">
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:28px;color:#6f3a3c">Visão geral</h2>
+        <div style="margin-top:24px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="border-radius:16px;border:1px solid #f0e5d8;background:#fff;padding:20px">
+              <p style="margin:0;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(67,48,46,0.55)">{{ s.label }}</p>
+              <p style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-size:32px;color:#955251">{{ s.value }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isViewRsvps }}">
+      <div style="max-width:960px;margin:0 auto">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:28px;color:#6f3a3c">Confirmações</h2>
+          <button style="border:1px solid #955251;color:#6f3a3c;background:transparent;border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer">Exportar CSV</button>
+        </div>
+        <div style="margin-top:24px;overflow-x:auto;border-radius:16px;border:1px solid #f0e5d8;background:#fff">
+          <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <thead>
+              <tr style="text-align:left;background:#f0e5d8">
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Nome</th>
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Código</th>
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Status</th>
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ adminRsvps }}" as="r" hint-placeholder-count="4">
+                <tr style="border-top:1px solid #f0e5d8">
+                  <td style="padding:12px 16px">{{ r.name }}</td>
+                  <td style="padding:12px 16px;font:12px ui-monospace,monospace;color:rgba(67,48,46,0.6)">{{ r.code }}</td>
+                  <td style="padding:12px 16px"><span style="border-radius:999px;padding:3px 10px;font-size:12px;background:{{ r.statusBg }};color:{{ r.statusColor }}">{{ r.statusLabel }}</span></td>
+                  <td style="padding:12px 16px;color:rgba(67,48,46,0.7)">{{ r.message }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isViewGifts }}">
+      <div style="max-width:960px;margin:0 auto">
+        <h2 style="margin:0;font-family:'Cormorant Garamond',serif;font-size:28px;color:#6f3a3c">Presentes</h2>
+        <div style="margin-top:24px;overflow-x:auto;border-radius:16px;border:1px solid #f0e5d8;background:#fff">
+          <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <thead>
+              <tr style="text-align:left;background:#f0e5d8">
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Item</th>
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Preço</th>
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c">Status</th>
+                <th style="padding:12px 16px;font-weight:600;color:#6f3a3c"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ adminGiftsRows }}" as="g" hint-placeholder-count="6">
+                <tr style="border-top:1px solid #f0e5d8">
+                  <td style="padding:12px 16px">{{ g.title }}</td>
+                  <td style="padding:12px 16px;color:rgba(67,48,46,0.7)">{{ g.priceLabel }}</td>
+                  <td style="padding:12px 16px"><span style="border-radius:999px;padding:3px 10px;font-size:12px;background:{{ g.statusBg }};color:{{ g.statusColor }}">{{ g.statusLabel }}</span></td>
+                  <td style="padding:12px 16px"><button onClick="{{ g.toggle }}" style="border:1px solid #955251;color:#6f3a3c;background:transparent;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">{{ g.toggleLabel }}</button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<style>
+  @media (min-width:768px){
+    .nav-mobile-only{display:none !important}
+    .nav-desktop-only{display:flex !important}
+    .two-col{grid-template-columns:1fr 1fr !important}
+    .two-col-sm{grid-template-columns:1fr 1fr !important}
+    .text-left-desktop{text-align:left !important}
+    .justify-left-desktop{justify-content:flex-start !important}
+  }
+  @media (max-width:1023px){
+    .gifts-grid{grid-template-columns:repeat(2,1fr) !important}
+  }
+  @media (min-width:1024px){
+    .gifts-grid{grid-template-columns:repeat(3,1fr) !important}
+  }
+</style>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;groomName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Rafael&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;brideName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Beatriz&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;eventDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2027-05-15T18:00:00-03:00&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;city&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sua Cidade - UF&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;quote&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Toda grande história de amor merece uma bela celebração.&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'site',
+    navOpen: false,
+    videoPlaying: false,
+    countdown: { d: '00', h: '00', m: '00', s: '00' },
+    giftsExpanded: false,
+    gifts: [
+      { id: 1, title: 'Jogo de Panelas', priceCents: 35000, status: 'available', qty: 1 },
+      { id: 2, title: 'Liquidificador', priceCents: 22000, status: 'available', qty: 1 },
+      { id: 3, title: 'Kit Churrasco', priceCents: 18000, status: 'purchased', qty: 1 },
+      { id: 4, title: 'Jogo de Toalhas', priceCents: 12000, status: 'available', qty: 2 },
+      { id: 5, title: 'Cafeteira', priceCents: 29000, status: 'available', qty: 1 },
+      { id: 6, title: 'Cota Lua de Mel', priceCents: 50000, status: 'available', qty: 5 },
+    ],
+    giftModal: { open: false, id: null, title: '', priceLabel: '', step: 1, name: '', message: '', error: '', pixCode: '', copyLabel: 'Copiar' },
+    rsvp: { code: '', name: '', status: 'yes', message: '', submitted: false, resultTitle: '', resultMsg: '' },
+    adminRsvps: [
+      { name: 'Fernanda Souza', code: 'FS123', status: 'yes', message: 'Mal posso esperar!' },
+      { name: 'Carlos Mendes', code: 'CM045', status: 'yes', message: '' },
+      { name: 'Juliana Alves', code: 'JA210', status: 'no', message: 'Vou sentir muita falta.' },
+      { name: 'Pedro Lima', code: 'PL332', status: 'yes', message: '' },
+    ],
+  };
+
+  componentDidMount() {
+    this.tick();
+    this._interval = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this._interval);
+  }
+  tick() {
+    const target = new Date(this.props.eventDate || '2027-05-15T18:00:00-03:00').getTime();
+    const diff = Math.max(0, target - Date.now());
+    const s = Math.floor(diff / 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    this.setState({
+      countdown: {
+        d: pad(Math.floor(s / 86400)),
+        h: pad(Math.floor((s % 86400) / 3600)),
+        m: pad(Math.floor((s % 3600) / 60)),
+        s: pad(s % 60),
+      },
+    });
+  }
+
+  priceLabel(cents) {
+    return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  renderVals() {
+    const groomName = this.props.groomName ?? 'Rafael';
+    const brideName = this.props.brideName ?? 'Beatriz';
+    const coupleShort = `${groomName} & ${brideName}`;
+    const eventDate = this.props.eventDate ?? '2027-05-15T18:00:00-03:00';
+    const dateLabel = new Date(eventDate).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+
+    const guestManual = [
+      { icon: '📋', title: 'Dress Code', text: 'Traje: Passeio Completo. Confira a paleta de cores dos convidados abaixo.' },
+      { icon: '🕕', title: 'Pontualidade', text: 'A cerimônia começará pontualmente às 18h00. Chegue com antecedência.' },
+      { icon: '📵', title: 'Fotos', text: 'Deixe o celular guardado durante a cerimônia e viva o momento com a gente.' },
+      { icon: '🤫', title: 'Silêncio', text: 'O único barulho que gostaríamos de ouvir é o som do "sim".' },
+      { icon: '🧒', title: 'Crianças', text: 'Sabemos que os pequenos são imprevisíveis - fiquem à vontade para sair um instante.' },
+      { icon: '💋', title: 'Cumprimentos', text: 'Evitem beijos com o rosto encostado, para preservar vestido e terno.' },
+      { icon: '⛪', title: 'Cerimônia', text: 'Local a confirmar - endereço completo no convite.' },
+      { icon: '🥂', title: 'Recepção', text: 'Logo após a cerimônia, em local próximo.' },
+      { icon: '✉️', title: 'Confirmação', text: 'Confirme sua presença pelo formulário no fim da página.' },
+    ];
+
+    const paletteAvoid = [
+      { name: 'Marsala', hex: '#955251' }, { name: 'Terracota', hex: '#C1440E' },
+      { name: 'Vinho', hex: '#5E1F2B' }, { name: 'Bordô', hex: '#6D2233' },
+      { name: 'Branco', hex: '#FFFFFF' }, { name: 'Off White', hex: '#F5F0E6' },
+      { name: 'Marfim', hex: '#FFFFF0' }, { name: 'Prata claro', hex: '#E4E4E4' },
+    ];
+    const paletteSuggest = [
+      { name: 'Azul Marinho', hex: '#1B2A4A' }, { name: 'Verde Esmeralda', hex: '#0F6B4C' },
+      { name: 'Lavanda', hex: '#B99CD1' }, { name: 'Azul Serenity', hex: '#92A8D1' }, { name: 'Preto', hex: '#000000' },
+    ];
+
+    const schedule = [
+      { time: '18h00', title: 'Cerimônia' },
+      { time: '20h00', title: 'Recepção' },
+      { time: '20h30', title: 'Jantar' },
+      { time: '22h00', title: 'Festa' },
+      { time: '05h00', title: 'Hora de descansar' },
+    ];
+
+    const faq = [
+      { q: 'Qual traje?', a: 'O traje é Passeio Completo (social elegante). Evitem, por favor, as cores reservadas aos noivos e padrinhos - veja a seção "Paleta dos Convidados".' },
+      { q: 'Posso confirmar mais de um convidado?', a: 'A confirmação vale para quem está nominado no convite. No formulário, informe o nome de cada convidado.' },
+      { q: 'Posso levar crianças?', a: 'Os pequenos são bem-vindos quando o convite estiver estendido à família.' },
+      { q: 'Haverá estacionamento?', a: 'Sim, há opções de estacionamento próximas aos locais da cerimônia e da recepção.' },
+    ];
+
+    const VISIBLE = 3;
+    const cardsSorted = [...this.state.gifts].sort((a, b) => a.priceCents - b.priceCents);
+    const visibleList = this.state.giftsExpanded ? cardsSorted : cardsSorted.slice(0, VISIBLE);
+    const visibleGifts = visibleList.map((g) => {
+      const taken = g.status !== 'available' || g.qty === 0;
+      return {
+        id: g.id, title: g.title, priceLabel: this.priceLabel(g.priceCents),
+        taken, notTaken: !taken, opacity: taken ? 0.55 : 1,
+        showRemaining: !taken && g.qty > 1, qty: g.qty,
+        open: () => this.openGiftModal(g),
+      };
+    });
+    const hiddenCount = Math.max(cardsSorted.length - VISIBLE, 0);
+    const giftsToggleLabel = this.state.giftsExpanded ? 'Mostrar menos' : `Mostrar mais presentes (${hiddenCount})`;
+
+    const adminGiftsRows = cardsSorted.map((g) => {
+      const purchased = g.status === 'purchased';
+      return {
+        id: g.id, title: g.title, priceLabel: this.priceLabel(g.priceCents),
+        statusLabel: purchased ? 'Presenteado' : 'Disponível',
+        statusBg: purchased ? '#f0e5d8' : '#dcfce7',
+        statusColor: purchased ? '#6f3a3c' : '#166534',
+        toggleLabel: purchased ? 'Marcar disponível' : 'Marcar presenteado',
+        toggle: () => this.toggleGiftStatus(g.id),
+      };
+    });
+
+    const adminRsvps = this.state.adminRsvps.map((r) => ({
+      ...r,
+      statusLabel: r.status === 'yes' ? 'Confirmado' : 'Não vai',
+      statusBg: r.status === 'yes' ? '#dcfce7' : '#fee2e2',
+      statusColor: r.status === 'yes' ? '#166534' : '#991b1b',
+    }));
+
+    const totalYes = this.state.adminRsvps.filter((r) => r.status === 'yes').length;
+    const totalNo = this.state.adminRsvps.filter((r) => r.status === 'no').length;
+    const giftsGiven = this.state.gifts.filter((g) => g.status === 'purchased').length;
+    const stats = [
+      { label: 'Confirmados', value: totalYes },
+      { label: 'Não vão', value: totalNo },
+      { label: 'Total de convites', value: this.state.adminRsvps.length },
+      { label: 'Presentes recebidos', value: giftsGiven },
+    ];
+
+    const tab = (name) => (this.state.view === name ? { bg: '#955251', color: '#fff' } : { bg: 'transparent', color: '#43302e' });
+    const tOverview = tab('admin-overview'), tRsvps = tab('admin-rsvps'), tGifts = tab('admin-gifts');
+
+    return {
+      coupleShort, groomName, brideName, dateLabel,
+      quote: this.props.quote ?? 'Toda grande história de amor merece uma bela celebração.',
+      city: this.props.city ?? 'Sua Cidade - UF',
+      ceremonyTime: '18h00',
+      ceremonyPlace: 'Igreja Placeholder',
+      ceremonyAddress: 'Rua Exemplo, 123 - Centro, Sua Cidade/UF',
+      receptionPlace: 'Espaço Placeholder',
+      receptionAddress: 'Av. Exemplo, 456 - Bairro, Sua Cidade/UF',
+      rsvpDeadline: '01 de maio de 2027',
+      countdown: this.state.countdown,
+      navOpen: this.state.navOpen,
+      toggleNav: () => this.setState((s) => ({ navOpen: !s.navOpen })),
+      videoPlaying: this.state.videoPlaying,
+      isVideoIdle: !this.state.videoPlaying,
+      playVideo: () => this.setState({ videoPlaying: true }),
+      guestManual, paletteAvoid, paletteSuggest, schedule, faq,
+      galleryIds: [1, 2, 3, 4, 5, 6].map((n) => `gallery-${n}`),
+      visibleGifts, giftsToggleLabel,
+      toggleGifts: () => this.setState((s) => ({ giftsExpanded: !s.giftsExpanded })),
+      giftModal: {
+        ...this.state.giftModal,
+        step: this.state.giftModal.step,
+        error: this.state.giftModal.error,
+        isStep1: this.state.giftModal.step === 1,
+        isStep2: this.state.giftModal.step === 2,
+      },
+      setGmName: (e) => this.setState((s) => ({ giftModal: { ...s.giftModal, name: e.target.value } })),
+      setGmMessage: (e) => this.setState((s) => ({ giftModal: { ...s.giftModal, message: e.target.value } })),
+      gmPay: () => this.gmPay(),
+      gmCopy: () => this.gmCopy(),
+      gmDone: () => this.gmDone(),
+      closeGiftModal: () => this.setState({ giftModal: { ...this.state.giftModal, open: false } }),
+      rsvp: {
+        ...this.state.rsvp,
+        yesChecked: this.state.rsvp.status === 'yes',
+        noChecked: this.state.rsvp.status === 'no',
+        yesColor: this.state.rsvp.status === 'yes' ? '#6f3a3c' : '#43302e',
+        noColor: this.state.rsvp.status === 'no' ? '#6f3a3c' : '#43302e',
+      },
+      rsvpPending: !this.state.rsvp.submitted,
+      setRsvpCode: (e) => this.setState((s) => ({ rsvp: { ...s.rsvp, code: e.target.value } })),
+      setRsvpName: (e) => this.setState((s) => ({ rsvp: { ...s.rsvp, name: e.target.value } })),
+      setRsvpMessage: (e) => this.setState((s) => ({ rsvp: { ...s.rsvp, message: e.target.value } })),
+      setRsvpYes: () => this.setState((s) => ({ rsvp: { ...s.rsvp, status: 'yes' } })),
+      setRsvpNo: () => this.setState((s) => ({ rsvp: { ...s.rsvp, status: 'no' } })),
+      submitRsvp: (e) => { e.preventDefault(); this.submitRsvp(); },
+      view: this.state.view,
+      isAdminView: ['admin-overview', 'admin-rsvps', 'admin-gifts'].includes(this.state.view),
+      isAdminLogin: this.state.view === 'admin-login',
+      isViewOverview: this.state.view === 'admin-overview',
+      isViewRsvps: this.state.view === 'admin-rsvps',
+      isViewGifts: this.state.view === 'admin-gifts',
+      goSite: () => this.setState({ view: 'site' }),
+      goAdminLogin: () => this.setState({ view: 'admin-login' }),
+      goAdminOverview: () => this.setState({ view: 'admin-overview' }),
+      goAdminRsvps: () => this.setState({ view: 'admin-rsvps' }),
+      goAdminGifts: () => this.setState({ view: 'admin-gifts' }),
+      tabBg: { overview: tOverview.bg, rsvps: tRsvps.bg, gifts: tGifts.bg },
+      tabColor: { overview: tOverview.color, rsvps: tRsvps.color, gifts: tGifts.color },
+      stats, adminRsvps, adminGiftsRows,
+    };
+  }
+
+  openGiftModal(g) {
+    this.setState({
+      giftModal: {
+        open: true, id: g.id, title: g.title, priceLabel: this.priceLabel(g.priceCents),
+        step: 1, name: '', message: '', error: '',
+        pixCode: '00020126580014BR.GOV.BCB.PIX0136mock-pix-key-000000005204000053039865802BR5913CASAMENTO MOCK6009SAO PAULO62070503***6304ABCD',
+        copyLabel: 'Copiar',
+      },
+    });
+  }
+  gmPay() {
+    const name = this.state.giftModal.name.trim();
+    if (!name) {
+      this.setState((s) => ({ giftModal: { ...s.giftModal, error: 'Por favor, informe seu nome.' } }));
+      return;
+    }
+    this.setState((s) => ({ giftModal: { ...s.giftModal, error: '', step: 2 } }));
+  }
+  gmCopy() {
+    this.setState((s) => ({ giftModal: { ...s.giftModal, copyLabel: 'Copiado!' } }));
+    setTimeout(() => this.setState((s) => ({ giftModal: { ...s.giftModal, copyLabel: 'Copiar' } })), 1500);
+  }
+  gmDone() {
+    const id = this.state.giftModal.id;
+    this.setState((s) => ({
+      gifts: s.gifts.map((g) => (g.id === id ? { ...g, status: 'purchased' } : g)),
+      giftModal: { ...s.giftModal, open: false },
+    }));
+  }
+  toggleGiftStatus(id) {
+    this.setState((s) => ({
+      gifts: s.gifts.map((g) => (g.id === id ? { ...g, status: g.status === 'purchased' ? 'available' : 'purchased' } : g)),
+    }));
+  }
+  submitRsvp() {
+    const { status } = this.state.rsvp;
+    this.setState((s) => ({
+      rsvp: {
+        ...s.rsvp, submitted: true,
+        resultTitle: status === 'yes' ? 'Presença confirmada!' : 'Resposta registrada',
+        resultMsg: status === 'yes' ? 'Obrigado por confirmar. Mal podemos esperar para celebrar com você!' : 'Obrigado por nos avisar. Sentiremos sua falta!',
+      },
+    }));
+  }
+}
+</script>
+</body>
+</html>

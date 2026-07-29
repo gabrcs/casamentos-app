@@ -1,0 +1,32 @@
+name = "{{PROJECT_NAME}}"
+main = "./dist/_worker.js/index.js"
+compatibility_date = "2025-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Site publicado em um subcaminho do domínio (ex: seudominio.com/{{SLUG}}).
+# Se for publicar na raiz do domínio, troque o pattern para "{{DOMINIO}}/*"
+# e ajuste `base` em astro.config.mjs para "/".
+routes = [
+  { pattern = "{{DOMINIO}}/{{SLUG}}*", zone_name = "{{ZONE_NAME}}" }
+]
+
+# Serve os assets estáticos gerados pelo Astro
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+# Banco de dados D1. Rode `wrangler d1 create {{PROJECT_NAME}}` e cole o
+# database_id retornado abaixo antes do primeiro deploy.
+[[d1_databases]]
+binding = "DB"
+database_name = "{{PROJECT_NAME}}"
+database_id = "{{D1_DATABASE_ID}}"
+migrations_dir = "migrations"
+
+# Variáveis públicas (não-secretas). As chaves secretas (CLERK_SECRET_KEY,
+# PIX_KEY, etc.) devem ser configuradas com `wrangler secret put NOME`.
+[vars]
+PUBLIC_CLERK_PUBLISHABLE_KEY = "{{CLERK_PUBLISHABLE_KEY}}"
+ADMIN_EMAILS = "{{ADMIN_EMAILS}}"
+PIX_MERCHANT_NAME = "{{PIX_MERCHANT_NAME}}"
+PIX_MERCHANT_CITY = "{{PIX_MERCHANT_CITY}}"

@@ -1,0 +1,82 @@
+---
+import type { Gift } from '../db/schema';
+
+interface Props {
+  gift: Gift;
+  copyPaste: string | null;
+  qrSvg: string | null;
+}
+
+const { gift, copyPaste, qrSvg } = Astro.props;
+const price = (gift.priceCents / 100).toLocaleString('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+});
+const taken = gift.status !== 'available';
+---
+
+<article
+  class:list={[
+    'gift-card flex flex-col overflow-hidden rounded-2xl border border-sand bg-white/60',
+    taken && 'opacity-70',
+  ]}
+>
+  {/* Imagem absoluta: aspect-ratio sozinho não segura fotos retrato (o conteúdo
+      estica o contêiner e o grid iguala as alturas, criando vazio nos cards vizinhos). */}
+  <div class="relative aspect-[4/3] overflow-hidden bg-sand">
+    {
+      gift.imageUrl ? (
+        <img
+          src={gift.imageUrl}
+          alt={gift.title}
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div class="absolute inset-0 flex items-center justify-center text-5xl">🎁</div>
+      )
+    }
+  </div>
+
+  <div class="flex flex-1 flex-col p-5">
+    <h3 class="font-display text-xl text-marsala-dark">{gift.title}</h3>
+    {gift.description && <p class="mt-1 text-sm text-ink/70">{gift.description}</p>}
+
+    <div class="mt-auto pt-4">
+      <p class="text-lg font-medium text-marsala">{price}</p>
+
+      {
+        taken ? (
+          <p class="mt-3 rounded-lg bg-sand px-4 py-2 text-center text-sm text-marsala-dark">
+            {gift.status === 'purchased' ? 'Já presenteado 💚' : 'Reservado'}
+          </p>
+        ) : (
+          <button type="button" class="btn-primary mt-3 w-full pix-toggle">
+            Presentear via Pix
+          </button>
+        )
+      }
+    </div>
+
+    {
+      !taken && copyPaste && (
+        <div class="pix-panel mt-4 hidden border-t border-sand pt-4">
+          <div class="mx-auto max-w-[180px]" set:html={qrSvg ?? ''} />
+          <p class="mt-3 text-center text-xs text-ink/60">
+            Escaneie o QR ou copie o código Pix:
+          </p>
+          <div class="mt-2 flex items-center gap-2">
+            <input
+              readonly
+              value={copyPaste}
+              class="pix-code w-full truncate rounded-lg border border-sand bg-white px-3 py-2 text-xs"
+            />
+            <button type="button" class="btn-outline pix-copy shrink-0 !px-4 !py-2">
+              Copiar
+            </button>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</article>
