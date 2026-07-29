@@ -36,7 +36,7 @@
   <meta property="og:image" content="https://casamentos.app/og-image.jpg" />
   <meta property="og:locale" content="pt_BR" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="theme-color" content="#f6f4f0" />
+  <meta name="theme-color" content="#fbf6ee" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -113,29 +113,55 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════════════
-       1. TOKENS DA MARCA — editorial neutro.
-       Sem acento cromático de propósito: a página é papel e tinta,
-       então os mockups são os únicos pontos de cor. Cor = produto.
+       1. TOKENS DA MARCA — paleta de outputs/casamentos-app-brand-identity.json
+       (território "Yours, Entirely", assinado em 27/07/2026).
+
+       A cor entra como ARQUITETURA, não como enfeite: a página tem três
+       terrenos e cada um significa uma coisa fixa. O leitor aprende o
+       código em dois scrolls.
+
+         papel   (Ivory)  → narrativa: história, passos, FAQ
+         oficina (Ivory-) → produto: mockups, telas, o que vem junto
+         plum    (Plum)   → argumento: dor, taxa, orçamento, pedido
+
+       Plum em dose pequena sobre creme é o clichê do segmento. Em campo
+       cheio, sangrando na largura, vira outra coisa — e resolve de
+       quebra a separação entre blocos.
+
+       Dentro dos device frames as paletas `--m-*` seguem intocadas:
+       "cor = produto" continua verdade, só ganhou uma segunda camada.
        ═══════════════════════════════════════════════════════════════ */
     :root {
-      --papel: #f6f4f0;
-      --papel-2: #edeae3;
-      --papel-3: #e4e0d7;
-      --branco: #fffefb;
-      --tinta: #15140f;
-      --tinta-2: #3f3b34;
-      --tinta-3: #706a5f;
-      --linha: #dcd7cc;
-      --linha-forte: #c8c2b4;
+      /* Terreno claro */
+      --papel: #fbf6ee;        /* Ivory da marca */
+      --papel-2: #f3ebdd;      /* terreno "oficina" */
+      --papel-3: #e9dfcd;
+      --branco: #fffdf9;
+
+      /* Tinta — Cocoa da marca, quente, não preto neutro */
+      --tinta: #34211f;
+      --tinta-2: #55413c;
+      --tinta-3: #877069;
+      --linha: #e3d8c7;
+      --linha-forte: #cbb9a0;
+
+      /* Cor de marca */
+      --plum: #5b2d3a;         /* primária — campos de argumento */
+      --plum-fundo: #4d2431;   /* fundo do campo, um passo mais profundo */
+      --plum-claro: #6e3746;   /* hover */
+      --rose: #c78378;         /* rótulos sobre Plum */
+      --ouro: #b88a45;         /* keyline e marcador de seção — nunca corpo de texto */
 
       --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
       --sans: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
       --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
-      --sombra-1: 0 1px 2px rgba(21, 20, 15, .04), 0 4px 14px rgba(21, 20, 15, .05);
-      --sombra-2: 0 1px 2px rgba(21, 20, 15, .05), 0 8px 22px rgba(21, 20, 15, .07), 0 22px 60px rgba(21, 20, 15, .07);
-      --sombra-3: 0 2px 4px rgba(21, 20, 15, .06), 0 14px 34px rgba(21, 20, 15, .10), 0 40px 90px rgba(21, 20, 15, .11);
+      /* Sombras puxadas pro Cocoa, não pro cinza: sombra fria sobre
+         fundo quente é o que faz mockup parecer colado na página. */
+      --sombra-1: 0 1px 2px rgba(52, 33, 31, .05), 0 4px 14px rgba(52, 33, 31, .06);
+      --sombra-2: 0 1px 2px rgba(52, 33, 31, .06), 0 8px 22px rgba(52, 33, 31, .08), 0 22px 60px rgba(52, 33, 31, .08);
+      --sombra-3: 0 2px 4px rgba(52, 33, 31, .07), 0 14px 34px rgba(52, 33, 31, .11), 0 40px 90px rgba(52, 33, 31, .12);
 
       --larg: 1180px;
       --gutter: clamp(20px, 5vw, 48px);
@@ -210,13 +236,23 @@
 
     .container { width: 100%; max-width: var(--larg); margin: 0 auto; padding: 0 var(--gutter); }
 
+    /* Marcador de seção. Era decorativo; agora é estrutura — o fio curto
+       em Antique Gold aparece igual em toda cabeça de bloco, então você
+       reconhece "começou assunto novo" pela FORMA, antes de ler. */
     .olho {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-size: 11px;
       letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--tinta-3);
+      color: var(--tinta-2);
       font-weight: 400;
+    }
+    .olho::before {
+      content: "";
+      width: 26px; height: 1px; flex: none;
+      background: var(--ouro);
     }
 
     .titulo {
@@ -230,12 +266,24 @@
 
     .regra { height: 1px; background: var(--linha); border: 0; margin: 0; }
 
-    /* Botões */
+    /* Só pra leitor de tela — legenda de tabela, sem ocupar espaço */
+    .so-leitor {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+
+    /* Foco visível em tudo que é navegável por teclado */
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--plum); outline-offset: 3px; border-radius: 1px;
+    }
+    .terreno-plum a:focus-visible, .terreno-plum summary:focus-visible { outline-color: var(--rose); }
+
+    /* Botões — Plum com texto Ivory, um só idioma em toda a página. */
     .cta {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      background: var(--tinta);
+      gap: 11px;
+      background: var(--plum);
       color: var(--papel);
       text-decoration: none;
       font-family: var(--sans);
@@ -247,10 +295,25 @@
       transition: transform .35s var(--ease-out), background-color .35s var(--ease-out), box-shadow .35s var(--ease-out);
       box-shadow: var(--sombra-1);
     }
-    .cta:hover { background: #000; transform: translateY(-2px); box-shadow: var(--sombra-2); }
+    .cta:hover { background: var(--plum-claro); transform: translateY(-2px); box-shadow: var(--sombra-2); }
     .cta:active { transform: translateY(1px); box-shadow: var(--sombra-1); transition-duration: .08s; }
     .cta::after { content: "→"; transition: transform .35s var(--ease-out); }
     .cta:hover::after { transform: translateX(4px); }
+
+    /* Glifo do WhatsApp como máscara: o botão precisa ler como "conversa",
+       não como "formulário". Máscara e não <svg> inline pra não repetir
+       o mesmo path em cinco lugares do HTML. */
+    .cta[data-wa]::before,
+    .ico-wa::before {
+      content: "";
+      width: 18px; height: 18px; flex: none;
+      background: currentColor;
+      -webkit-mask: var(--wa) center / contain no-repeat;
+      mask: var(--wa) center / contain no-repeat;
+    }
+    :root {
+      --wa: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.02 2.5c-5.24 0-9.5 4.26-9.5 9.5 0 1.68.44 3.32 1.27 4.77L2.5 21.5l4.86-1.27a9.47 9.47 0 0 0 4.66 1.22h.01c5.24 0 9.5-4.26 9.5-9.5s-4.27-9.45-9.51-9.45Zm0 17.35h-.01a7.87 7.87 0 0 1-4.01-1.1l-.29-.17-2.98.78.8-2.92-.19-.3a7.86 7.86 0 0 1-1.2-4.19c0-4.35 3.54-7.89 7.9-7.89a7.89 7.89 0 0 1 .01 15.79Z'/%3E%3Cpath d='M16.58 13.9c-.25-.13-1.5-.74-1.73-.82-.23-.09-.4-.13-.57.13-.17.25-.66.82-.8.99-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.01-1.24-.74-.66-.99-1.16-1.12-1.41-.13-.25-.02-.39.11-.52.13-.13.3-.34.42-.5.12-.17.17-.29.25-.47.09-.17.05-.32-.02-.45-.06-.13-.57-1.37-.78-1.87-.2-.5-.41-.43-.57-.43h-.49c-.17 0-.44.06-.67.32-.23.25-.89.86-.89 2.11s.91 2.45 1.04 2.62c.13.17 1.78 2.71 4.3 3.7.6.26 1.07.41 1.43.53.61.19 1.16.17 1.59.1.49-.07 1.5-.61 1.71-1.2.21-.59.21-1.09.15-1.2-.06-.1-.23-.17-.48-.29Z'/%3E%3C/svg%3E");
+    }
 
     .cta-nota { display: block; margin-top: 14px; font-size: 13.5px; color: var(--tinta-3); }
 
@@ -264,7 +327,7 @@
       opacity: .5 !important;
       box-shadow: none !important;
       transform: none !important;
-      background: var(--tinta) !important;
+      background: var(--plum) !important;
     }
     .cta[data-inerte="1"]::after { content: " (sem link ainda)"; font-size: .8em; letter-spacing: 0; }
 
@@ -273,7 +336,7 @@
        ═══════════════════════════════════════════════════════════════ */
     header {
       position: sticky; top: 0; z-index: 40;
-      background: rgba(246, 244, 240, .82);
+      background: rgba(251, 246, 238, .86);
       backdrop-filter: saturate(180%) blur(14px);
       -webkit-backdrop-filter: saturate(180%) blur(14px);
       border-bottom: 1px solid var(--linha);
@@ -283,14 +346,49 @@
       font-family: var(--serif); font-size: 23px; letter-spacing: -.01em;
       color: var(--tinta); text-decoration: none;
     }
-    .logo span { color: var(--tinta-3); }
+    .logo span { color: var(--plum); }
+    /* Era texto sublinhado e não lia como destino de contato. Virou botão
+       de contorno: reconhecível como ação, sem competir com o CTA do hero. */
     .header-cta {
+      display: inline-flex; align-items: center; gap: 9px;
       font-size: 13.5px; letter-spacing: .03em; text-decoration: none;
-      color: var(--tinta); border-bottom: 1px solid var(--linha-forte); padding-bottom: 2px;
-      transition: border-color .3s var(--ease-out);
+      color: var(--plum); border: 1px solid var(--linha-forte);
+      border-radius: 2px; padding: 9px 17px;
+      transition: border-color .3s var(--ease-out), background-color .3s var(--ease-out), color .3s var(--ease-out);
     }
-    .header-cta:hover { border-color: var(--tinta); }
+    .header-cta:hover { background: var(--plum); border-color: var(--plum); color: var(--papel); }
     .header-cta[data-inerte="1"] { opacity: .45; cursor: not-allowed; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       4b. TERRENOS — o sistema que separa os blocos.
+
+       Antes: 7 das 11 seções não tinham fundo nem espaçamento próprio,
+       então a página era um rolo contínuo de bege onde tudo pesava
+       igual. Agora cada troca de assunto é uma troca de terreno.
+       ═══════════════════════════════════════════════════════════════ */
+    .terreno-oficina { background: var(--papel-2); }
+
+    .terreno-plum {
+      background: var(--plum);
+      color: rgba(251, 246, 238, .80);
+      /* Keyline em Antique Gold marca a fronteira entre terrenos —
+         o único uso de ouro na página, como manda o manual da marca. */
+      box-shadow: inset 0 1px 0 var(--ouro);
+      padding: clamp(74px, 10vw, 132px) 0;
+    }
+    .terreno-plum h2,
+    .terreno-plum h3,
+    .terreno-plum b { color: var(--branco); }
+    .terreno-plum .olho { color: var(--rose); }
+    .terreno-plum .olho::before { background: var(--rose); }
+    .terreno-plum p { color: rgba(251, 246, 238, .80); }
+    .terreno-plum .cta { background: var(--papel); color: var(--plum); }
+    .terreno-plum .cta:hover { background: var(--branco); }
+    .terreno-plum .cta[data-inerte="1"] { background: var(--papel) !important; }
+    .terreno-plum .cta-nota { color: rgba(251, 246, 238, .52); }
+
+    /* Fio entre duas seções do MESMO terreno, onde a cor não separa. */
+    .com-fio > .container { border-top: 1px solid var(--linha); padding-top: clamp(40px, 5vw, 64px); }
 
     /* ═══════════════════════════════════════════════════════════════
        5. HERO — split: promessa à esquerda, produto à direita
@@ -570,22 +668,42 @@
     /* ═══════════════════════════════════════════════════════════════
        8. SELETOR DE ESTILO
        ═══════════════════════════════════════════════════════════════ */
-    .seletor { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
-    .seletor-rotulo { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--tinta-3); margin-right: 4px; }
+    /* Trocar de estilo e ver o site inteiro mudar É a prova de "não é
+       template" — não precisa de frase nenhuma. Estava num cantinho
+       embaixo do mockup; agora é faixa própria, com enunciado. */
+    .estilos {
+      margin-top: clamp(30px, 4vw, 48px);
+      border-top: 1px solid var(--linha);
+      padding-top: clamp(24px, 3vw, 34px);
+      display: grid;
+      grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+      gap: clamp(20px, 4vw, 56px);
+      align-items: center;
+    }
+    .estilos-frase {
+      font-family: var(--serif); font-weight: 300;
+      font-size: clamp(20px, 2.1vw, 27px); line-height: 1.22; color: var(--tinta);
+      margin-top: 14px;
+    }
+    .estilos-frase em { font-style: italic; color: var(--plum); }
+
+    .seletor { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .seletor-rotulo { display: none; }
     .estilo-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: var(--sans); font-size: 13.5px; font-weight: 300; letter-spacing: .02em;
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--sans); font-size: 14px; font-weight: 400; letter-spacing: .02em;
       color: var(--tinta-2); background: transparent;
       border: 1px solid var(--linha); border-radius: 40px;
-      padding: 7px 15px 7px 9px; cursor: pointer;
+      padding: 9px 18px 9px 11px; cursor: pointer;
       transition: border-color .3s var(--ease-out), background-color .3s var(--ease-out), color .3s var(--ease-out);
     }
-    .estilo-btn .amostra { width: 15px; height: 15px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+    .estilo-btn .amostra { width: 17px; height: 17px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(52,33,31,.10); }
     .estilo-btn[data-alvo="marsala"] .amostra { background: linear-gradient(135deg, #955251 55%, #c09a5e 55%); }
     .estilo-btn[data-alvo="marinho"] .amostra { background: linear-gradient(135deg, #0f1f3d 55%, #f0ece4 55%); }
     .estilo-btn[data-alvo="minimal"] .amostra { background: linear-gradient(135deg, #3a3833 55%, #d8d1c6 55%); }
     .estilo-btn:hover { border-color: var(--linha-forte); }
-    .estilo-btn[aria-pressed="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--papel); }
+    .estilo-btn:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+    .estilo-btn[aria-pressed="true"] { background: var(--plum); border-color: var(--plum); color: var(--papel); }
 
     /* Um selo por estilo: dois apontam pra site real e são clicáveis,
        o Minimal se declara exemplo e não finge ser cliente. */
@@ -609,11 +727,15 @@
     /* ═══════════════════════════════════════════════════════════════
        9. SEÇÕES
        ═══════════════════════════════════════════════════════════════ */
-    section { padding: clamp(56px, 8vw, 104px) 0; }
+    /* Escala de espaçamento em 3 níveis. Antes era um só, e por isso
+       tudo lia como um bloco único: troca de terreno respira mais que
+       troca de seção, que respira mais que sub-bloco. */
+    section { padding: clamp(60px, 8.5vw, 108px) 0; }
     .estreito { max-width: 760px; }
 
-    /* Origem — os dois sites que já estão no ar */
-    .origem { padding-top: clamp(28px, 4vw, 48px); }
+    /* Origem — os dois sites que já estão no ar.
+       Mesmo terreno do hero, então a separação vem do fio (.com-fio). */
+    .origem { padding-top: clamp(34px, 4.5vw, 56px); }
     .origem-texto { max-width: 34em; }
     .origem-texto h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(26px, 3.2vw, 38px); line-height: 1.18; margin-top: 16px; }
     .origem-texto h2 em { font-style: italic; }
@@ -636,9 +758,10 @@
     }
     .caso:hover .caso-link { border-color: var(--tinta); }
 
-    /* Dor */
-    .dor h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(26px, 3.3vw, 40px); line-height: 1.22; }
-    .dor p { margin-top: 22px; font-size: clamp(16px, 1.4vw, 18.5px); color: var(--tinta-2); max-width: 34em; }
+    /* Dor — primeiro campo Plum. A partir daqui, escuro = argumento. */
+    .dor h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.18; margin-top: 20px; }
+    .dor h2 em { font-style: italic; color: var(--rose); }
+    .dor p { margin-top: 24px; font-size: clamp(16px, 1.4vw, 18.5px); max-width: 34em; }
 
     /* Benefícios — assimétrico: enunciado à esquerda, lista pautada à direita.
        De propósito NÃO é a mesma grade de 3 colunas das outras seções. */
@@ -665,16 +788,48 @@
     .beneficio h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(22px, 2.2vw, 27px); margin: 0 0 8px; }
     .beneficio p { font-size: 15.5px; color: var(--tinta-2); max-width: 34em; }
 
-    /* Faixa escura — corta o bege no meio da página e carrega o argumento
-       mais forte sozinha, sem card, sem ícone. */
-    .faixa { background: var(--tinta); padding: clamp(66px, 9vw, 118px) 0; }
-    .faixa-frase {
+    /* ── TAXA — o campo Plum central. Absorveu a antiga `.faixa`, que
+       dizia a mesma coisa sem número e por isso não provava nada.
+
+       O achado da pesquisa: iCasei e Casar.com deixam o casal REPASSAR a
+       tarifa ao convidado. Então "eles descontam do seu presente" tem
+       réplica fácil. A formulação que não tem réplica é a de baixo — a
+       taxa existe de todo jeito, só muda quem a paga. ── */
+    .taxa-frase {
       font-family: var(--serif); font-weight: 300;
-      font-size: clamp(30px, 4.6vw, 60px); line-height: 1.1; letter-spacing: -.015em;
-      color: var(--branco); max-width: 13em;
+      font-size: clamp(29px, 4.3vw, 55px); line-height: 1.1; letter-spacing: -.015em;
+      color: var(--branco); max-width: 17em; margin-top: 22px;
     }
-    .faixa-frase em { font-style: italic; }
-    .faixa-nota { display: block; margin-top: 26px; font-size: 15px; color: rgba(246, 244, 240, .5); }
+    .taxa-frase em { font-style: italic; color: var(--rose); }
+    .taxa-nota { display: block; margin-top: 24px; font-size: 15.5px; color: rgba(251, 246, 238, .62); max-width: 34em; }
+
+    .taxa-tabela {
+      width: 100%; border-collapse: collapse; margin-top: clamp(38px, 5vw, 60px);
+      font-variant-numeric: tabular-nums; text-align: left;
+    }
+    .taxa-tabela th, .taxa-tabela td { padding: 17px 18px; border-bottom: 1px solid rgba(251, 246, 238, .16); }
+    .taxa-tabela thead th {
+      font-weight: 400; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--rose); padding-bottom: 12px;
+    }
+    .taxa-tabela thead th:not(:first-child),
+    .taxa-tabela td:not(:first-child) { text-align: right; white-space: nowrap; }
+    .taxa-tabela tbody th { font-weight: 400; font-size: 15.5px; color: rgba(251, 246, 238, .78); }
+    .taxa-tabela td { font-size: 17px; color: rgba(251, 246, 238, .78); }
+    .taxa-tabela .destaque { color: var(--branco); }
+
+    /* A linha do casamentos.app é a resposta: fundo levemente erguido do
+       campo, keyline em ouro à esquerda. Sem card, sem badge. */
+    .taxa-tabela tbody tr.nos th,
+    .taxa-tabela tbody tr.nos td {
+      background: rgba(251, 246, 238, .07);
+      border-bottom-color: transparent;
+      font-size: 18px;
+      color: var(--branco);
+    }
+    .taxa-tabela tbody tr.nos th { box-shadow: inset 2px 0 0 var(--ouro); font-weight: 500; }
+    .taxa-envolve { overflow-x: auto; }
+    .taxa-fonte { margin-top: 22px; font-size: 13px; color: rgba(251, 246, 238, .5); max-width: 46em; }
 
     /* Demo */
     .demo { background: var(--papel-2); }
@@ -686,21 +841,30 @@
     .grid-demo figcaption b { display: block; color: var(--tinta); font-weight: 400; font-family: var(--serif); font-size: 20px; margin-bottom: 3px; }
     .celular-centro { max-width: 240px; margin: 0 auto; }
 
-    /* O que mais vem junto — índice, não cards. Duas colunas densas
-       com pauta fina; a leitura é de sumário de livro. */
+    /* O que mais vem junto — era índice de duas colunas em texto corrido,
+       e é justamente aqui que está a resposta de "o que vocês entregam".
+       Virou grade escaneável: cada item com keyline em ouro no topo, sem
+       card e sem sombra, pra não virar mais um mar de retângulos. */
     .junto-lista {
-      display: grid; grid-template-columns: 1fr 1fr;
-      column-gap: clamp(30px, 5vw, 76px);
-      margin-top: 44px;
-      border-top: 1px solid var(--linha);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(22px, 2.6vw, 38px) clamp(24px, 3.4vw, 52px);
+      margin-top: clamp(38px, 5vw, 56px);
     }
     .junto-lista div {
       display: grid; grid-template-columns: minmax(0, 1fr);
-      gap: 3px; padding: 15px 0;
-      border-bottom: 1px solid var(--linha);
+      gap: 5px;
+      border-top: 1px solid var(--linha);
+      padding-top: 16px;
+      position: relative;
     }
-    .junto-lista b { font-weight: 400; color: var(--tinta); font-size: 16.5px; }
-    .junto-lista span { font-size: 14.5px; color: var(--tinta-3); }
+    /* Trecho em ouro sobre o fio neutro: marca o item sem pesar. */
+    .junto-lista div::before {
+      content: ""; position: absolute; top: -1px; left: 0;
+      width: 22px; height: 1px; background: var(--ouro);
+    }
+    .junto-lista b { font-weight: 400; color: var(--tinta); font-size: 19px; line-height: 1.25; font-family: var(--serif); }
+    .junto-lista span { font-size: 14.5px; color: var(--tinta-2); }
 
     /* Passos — numeral serif grande como marca d'água à direita,
        texto correndo por baixo. */
@@ -719,14 +883,10 @@
     }
     .passo p { position: relative; font-size: 15.5px; color: var(--tinta-2); max-width: 22em; }
 
-    /* Orçamento */
-    .orcamento { background: var(--tinta); color: var(--papel-2); }
-    .orcamento h2 { color: var(--branco); font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.15; }
-    .orcamento .olho { color: rgba(246,244,240,.55); }
-    .orcamento p { margin-top: 20px; font-size: 17px; color: rgba(246,244,240,.78); max-width: 32em; }
-    .orcamento .cta { background: var(--papel); color: var(--tinta); margin-top: 32px; }
-    .orcamento .cta:hover { background: #fff; }
-    .orcamento .cta-nota { color: rgba(246,244,240,.5); }
+    /* Orçamento — campo Plum (a cor vem de .terreno-plum) */
+    .orcamento h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.6vw, 44px); line-height: 1.15; margin-top: 20px; }
+    .orcamento p { margin-top: 20px; font-size: 17px; max-width: 32em; }
+    .orcamento .cta { margin-top: 32px; }
 
     /* FAQ */
     .faq-lista { margin-top: 40px; border-top: 1px solid var(--linha); }
@@ -753,13 +913,51 @@
 
     /* CTA final */
     .cta-final { text-align: center; }
-    .cta-final h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.8vw, 46px); line-height: 1.15; max-width: 16em; margin: 16px auto 0; }
+    .cta-final .olho { justify-content: center; }
+    .cta-final h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.8vw, 46px); line-height: 1.15; max-width: 16em; margin: 18px auto 0; }
     .cta-final .cta { margin-top: 32px; }
 
-    /* Footer */
-    footer { border-top: 1px solid var(--linha); padding: 40px 0 56px; }
-    footer .container { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-    footer p { font-size: 14px; color: var(--tinta-3); }
+    /* Footer — não tinha contato NENHUM: quem chegava convencido ao fim da
+       página não tinha o que clicar. Agora o WhatsApp fecha a leitura. */
+    footer { border-top: 1px solid var(--linha); padding: 44px 0 60px; }
+    footer .container {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 28px; flex-wrap: wrap;
+    }
+    footer p { font-size: 14px; color: var(--tinta-2); margin-top: 8px; max-width: 30em; }
+    .footer-contato { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .footer-cta {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 15px; text-decoration: none; color: var(--plum);
+      border-bottom: 1px solid var(--linha-forte); padding-bottom: 3px;
+      transition: border-color .3s var(--ease-out);
+    }
+    .footer-cta:hover { border-color: var(--plum); }
+    .footer-cta[data-inerte="1"] { opacity: .45; cursor: not-allowed; }
+    .footer-nota { font-size: 13px; color: var(--tinta-3); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       9b. BARRA FIXA DE CONTATO (mobile)
+       A página é longa; no celular o CTA desaparecia por milhares de
+       pixels. A barra entra depois que o hero sai de vista.
+       ═══════════════════════════════════════════════════════════════ */
+    .barra-wa {
+      position: fixed; z-index: 50; left: 0; right: 0; bottom: 0;
+      display: none;
+      padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom, 0px));
+      background: rgba(251, 246, 238, .93);
+      backdrop-filter: saturate(180%) blur(14px);
+      -webkit-backdrop-filter: saturate(180%) blur(14px);
+      border-top: 1px solid var(--linha);
+      transform: translateY(110%);
+      transition: transform .45s var(--ease-out);
+    }
+    .barra-wa.aparece { transform: none; }
+    .barra-wa .cta { width: 100%; justify-content: center; }
+    @media (max-width: 780px) {
+      .barra-wa { display: block; }
+      body { padding-bottom: 76px; }
+    }
 
     /* ═══════════════════════════════════════════════════════════════
        10. REVEAL
@@ -781,17 +979,24 @@
       .beneficios-grid { grid-template-columns: 1fr; gap: 30px; }
       .passos-lista { grid-template-columns: repeat(2, 1fr); }
       .grid-demo { grid-template-columns: 1fr; gap: 44px; }
+      .estilos { grid-template-columns: 1fr; gap: 22px; align-items: start; }
+      .junto-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 780px) {
       .casos { grid-template-columns: 1fr; gap: 0; }
-      .junto-lista { grid-template-columns: 1fr; }
+      .taxa-tabela th, .taxa-tabela td { padding: 14px 14px; }
     }
     @media (max-width: 620px) {
       body { font-size: 16px; }
       .passos-lista { grid-template-columns: 1fr; }
       .passo .num { font-size: 62px; }
       .palco-fone { width: 30%; right: -6px; bottom: -18px; }
+      .junto-lista { grid-template-columns: 1fr; }
+      /* A barra fixa já resolve o contato no mobile; o CTA do corpo não
+         precisa mais ocupar a largura toda e virar um bloco de cor. */
       .cta { width: 100%; justify-content: center; }
+      .taxa-tabela { font-size: 15px; }
+      .taxa-tabela thead th { letter-spacing: .12em; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -805,7 +1010,7 @@
   <header>
     <div class="container">
       <a class="logo" href="/">casamentos<span>.app</span></a>
-      <a class="header-cta" data-wa href="#">Falar no WhatsApp</a>
+      <a class="header-cta ico-wa" data-wa href="#">Falar no WhatsApp</a>
     </div>
   </header>
 
@@ -898,24 +1103,32 @@
             </div>
           </div>
 
-          <!-- Seletor de estilo: o argumento de personalização vira interação -->
-          <div class="seletor" role="group" aria-label="Escolher estilo visual do exemplo">
-            <span class="seletor-rotulo">Estilo</span>
-            <button class="estilo-btn" type="button" data-alvo="marsala" aria-pressed="true"><span class="amostra" aria-hidden="true"></span>Clássico marsala</button>
-            <button class="estilo-btn" type="button" data-alvo="marinho" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Marinho</button>
-            <button class="estilo-btn" type="button" data-alvo="minimal" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Minimal</button>
-            <a class="selo-real selo-real--marsala" href="https://casamentos.app/marcusedaise" target="_blank" rel="noopener">Marcus &amp; Daíse — <b>ver o site real</b></a>
-            <a class="selo-real selo-real--marinho" href="https://gabrcs.github.io/bruno-e-gabriel-casamento/" target="_blank" rel="noopener">Bruno &amp; Gabriel — <b>ver o site real</b></a>
-            <span class="selo-real selo-real--minimal selo-real--exemplo">Minimal — <b>exemplo de estilo, não é um site publicado</b></span>
-          </div>
         </div>
 
+      </div>
+
+      <!-- Seletor de estilo — promovido a faixa própria do hero.
+           A prova de personalização é a interação, não a frase. -->
+      <div class="estilos">
+        <div>
+          <span class="olho">Toque e veja mudar</span>
+          <p class="estilos-frase">Três estilos, dois deles no ar agora. <em>O de vocês é o quarto.</em></p>
+        </div>
+        <div class="seletor" role="group" aria-label="Escolher estilo visual do exemplo">
+          <span class="seletor-rotulo">Estilo</span>
+          <button class="estilo-btn" type="button" data-alvo="marsala" aria-pressed="true"><span class="amostra" aria-hidden="true"></span>Clássico marsala</button>
+          <button class="estilo-btn" type="button" data-alvo="marinho" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Marinho</button>
+          <button class="estilo-btn" type="button" data-alvo="minimal" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Minimal</button>
+          <a class="selo-real selo-real--marsala" href="https://casamentos.app/marcusedaise" target="_blank" rel="noopener">Marcus &amp; Daíse — <b>ver o site real</b></a>
+          <a class="selo-real selo-real--marinho" href="https://gabrcs.github.io/bruno-e-gabriel-casamento/" target="_blank" rel="noopener">Bruno &amp; Gabriel — <b>ver o site real</b></a>
+          <span class="selo-real selo-real--minimal selo-real--exemplo">Minimal — <b>exemplo de estilo, não é um site publicado</b></span>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ═══ 2. ORIGEM + OS DOIS SITES NO AR ═══ -->
-  <section class="origem">
+  <section class="origem com-fio">
     <div class="container">
       <div class="origem-texto">
         <span class="olho reveal">Como isso começou</span>
@@ -948,16 +1161,16 @@
   </section>
 
   <!-- ═══ 3. DOR ═══ -->
-  <section class="dor">
+  <section class="dor terreno-plum">
     <div class="container estreito">
       <span class="olho reveal">Por que sob medida</span>
-      <h2 class="reveal" style="--i: 1">Site de casamento genérico não tem a cara de vocês. E a maioria das listas de presentes cobra taxa em cima do que seus convidados dão de coração.</h2>
+      <h2 class="reveal" style="--i: 1">Site de casamento genérico não tem a cara de vocês. E toda lista de presentes de plataforma cobra taxa em cima do que seus convidados dão <em>de coração</em>.</h2>
       <p class="reveal" style="--i: 2">Vocês já escolheram fotógrafo, cerimonial e buffet pensando em cada detalhe. O site que vai representar esse dia pra quem não puder ir também merece isso.</p>
     </div>
   </section>
 
   <!-- ═══ 4. BENEFÍCIOS ═══ -->
-  <section class="beneficios">
+  <section class="beneficios terreno-oficina">
     <div class="container">
       <div class="beneficios-grid">
         <div class="beneficios-cabeca">
@@ -976,7 +1189,7 @@
             <span class="num">02</span>
             <div>
               <h3>Presentes sem taxa</h3>
-              <p>Pix copia-e-cola gerado direto, sem gateway. 100% do valor cai pra vocês, sem desconto.</p>
+              <p>Pix copia-e-cola gerado direto, sem gateway. Ninguém paga taxa — nem vocês, nem quem presenteia.</p>
             </div>
           </li>
           <li class="beneficio reveal" style="--i: 3">
@@ -991,11 +1204,49 @@
     </div>
   </section>
 
-  <!-- ═══ 4b. FAIXA ═══ -->
-  <section class="faixa">
+  <!-- ═══ 4b. A TAXA — o campo Plum central.
+       Números conferidos em jul/2026 em três plataformas independentes:
+       3,89% é a tarifa de entrada do iCasei (regressivo até 3,69%), a
+       tarifa única do Casar.com e a do plano gratuito do Lejour.
+       Não nomear concorrente na página é decisão de tom, não de medo:
+       a conta se sustenta sozinha. ═══ -->
+  <section class="taxa terreno-plum">
     <div class="container">
-      <p class="faixa-frase reveal">Sem gateway no meio: o Pix vai <em>direto</em> pra conta de vocês. Cem por cento.</p>
-      <span class="faixa-nota reveal" style="--i: 1">É o que a próxima tela mostra na prática.</span>
+      <span class="olho reveal">A conta que ninguém mostra</span>
+      <p class="taxa-frase reveal" style="--i: 1">A taxa existe de todo jeito. A única escolha que as plataformas dão é <em>quem paga por ela</em>: vocês ou seus convidados.</p>
+      <span class="taxa-nota reveal" style="--i: 2">Aqui não tem taxa pra ninguém pagar. O Pix é gerado direto no site, sem gateway no meio.</span>
+
+      <div class="taxa-envolve reveal" style="--i: 3">
+        <table class="taxa-tabela">
+          <caption class="so-leitor">Quanto sobra de um presente de R$ 300, com taxa de plataforma e sem taxa</caption>
+          <thead>
+            <tr>
+              <th scope="col">Num presente de R$ 300</th>
+              <th scope="col">Vocês recebem</th>
+              <th scope="col">O convidado paga</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Plataforma, com vocês absorvendo a taxa</th>
+              <td class="destaque">R$ 288,33</td>
+              <td>R$ 300,00</td>
+            </tr>
+            <tr>
+              <th scope="row">Plataforma, repassando a taxa ao convidado</th>
+              <td>R$ 300,00</td>
+              <td class="destaque">R$ 311,67</td>
+            </tr>
+            <tr class="nos">
+              <th scope="row">casamentos.app</th>
+              <td>R$ 300,00</td>
+              <td>R$ 300,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="taxa-fonte reveal" style="--i: 4">Cálculo sobre 3,89% — tarifa de entrada do iCasei (regressiva até 3,69%), tarifa única do Casar.com e tarifa do plano gratuito do Lejour, consultadas em julho de 2026. Numa lista que arrecada R$ 15.000, são R$ 583,50 que ficam com vocês.</p>
     </div>
   </section>
 
@@ -1208,7 +1459,7 @@
   </section>
 
   <!-- ═══ 7. COMO FUNCIONA ═══ -->
-  <section class="passos">
+  <section class="passos com-fio">
     <div class="container">
       <span class="olho reveal">Como funciona</span>
       <div class="passos-lista">
@@ -1232,7 +1483,7 @@
   </section>
 
   <!-- ═══ 8. ORÇAMENTO ═══ -->
-  <section class="orcamento">
+  <section class="orcamento terreno-plum">
     <div class="container estreito">
       <span class="olho">Investimento</span>
       <h2>Orçamento sob medida — fechado na primeira conversa.</h2>
@@ -1264,6 +1515,10 @@
           <p>Sim. O código Pix (BR Code) é gerado direto no site, sem gateway de pagamento no meio. O convidado paga, o valor cai integral na conta de vocês. 100%, sem desconto.</p>
         </details>
         <details>
+          <summary>As plataformas não deixam repassar a taxa pro convidado?</summary>
+          <p>Deixam — e é justamente aí que está o problema. A taxa de cerca de 3,89% existe de qualquer forma; a plataforma só te dá a escolha de quem absorve ela. Se vocês absorvem, um presente de R$ 300 chega como R$ 288,33. Se repassam, o convidado paga R$ 311,67 pelo mesmo presente. Aqui não existe essa escolha porque não existe a taxa: os R$ 300 saem da conta do convidado e entram inteiros na de vocês.</p>
+        </details>
+        <details>
           <summary>Esses três estilos são os únicos?</summary>
           <p>Não. Dois deles nem são estilo: são sites de verdade, no ar, e vocês podem clicar e conferir. O <strong>marsala</strong> é o do Marcus &amp; Daíse; o <strong>marinho</strong> é o do meu casamento com o Bruno, com ilustração em aquarela no lugar de foto. O <strong>minimal</strong> é só um exemplo, pra mostrar até onde a cara do site pode mudar. O de vocês é montado a partir das suas cores, suas fotos e sua história.</p>
         </details>
@@ -1276,7 +1531,7 @@
   </section>
 
   <!-- ═══ 10. CTA FINAL ═══ -->
-  <section class="cta-final">
+  <section class="cta-final terreno-plum">
     <div class="container">
       <span class="olho reveal">Vamos começar</span>
       <h2 class="reveal" style="--i: 1">Casamento tem data marcada. O site de vocês também pode estar pronto rápido.</h2>
@@ -1286,10 +1541,22 @@
 
   <footer>
     <div class="container">
-      <a class="logo" href="/">casamentos<span>.app</span></a>
-      <p>Sites de casamento sob medida — Curitiba/PR e todo o Brasil.</p>
+      <div>
+        <a class="logo" href="/">casamentos<span>.app</span></a>
+        <p>Sites de casamento sob medida — Curitiba/PR e todo o Brasil.</p>
+      </div>
+      <div class="footer-contato">
+        <span class="olho">Falar com a gente</span>
+        <a class="footer-cta ico-wa" data-wa href="#">Chamar no WhatsApp</a>
+        <span class="footer-nota">Resposta no mesmo dia, normalmente em algumas horas.</span>
+      </div>
     </div>
   </footer>
+
+  <!-- Barra fixa de contato no mobile — aparece depois que o hero sai de vista -->
+  <div class="barra-wa" id="barra-wa">
+    <a class="cta" data-wa href="#">Fazer meu site no WhatsApp</a>
+  </div>
 
   <script>
   /* ═════════════════════════════════════════════════════════════════
@@ -1320,6 +1587,26 @@
 
     var href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(MSG);
     ctas.forEach(function (a) { a.setAttribute('href', href); });
+  })();
+
+  /* Barra fixa de contato no mobile — entra quando o hero sai de vista.
+     Enquanto WHATSAPP estiver vazio a barra não aparece: uma barra fixa
+     com botão morto cobriria conteúdo sem oferecer nada. */
+  (function () {
+    var barra = document.getElementById('barra-wa');
+    var hero = document.querySelector('.hero');
+    if (!barra || !hero) return;
+    if (!WHATSAPP) {
+      barra.style.display = 'none';
+      document.body.style.paddingBottom = '0';
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) { barra.classList.add('aparece'); return; }
+
+    new IntersectionObserver(function (entries) {
+      barra.classList.toggle('aparece', !entries[0].isIntersecting);
+    }, { threshold: 0 }).observe(hero);
   })();
 
   /* Seletor de estilo — troca as CSS variables no <html>.
