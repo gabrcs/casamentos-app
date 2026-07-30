@@ -1,0 +1,947 @@
+<title>Automatização de Processos com IA</title>
+<style>
+/*FONTS*/
+
+:root{
+  --ink:#16224E;
+  --ink-soft:#4A5578;
+  --navy:#1D4F91;
+  --magenta:#E80070;
+  --purple:#6D2077;
+  --deep:#77127B;
+  --lavender:#F4F0F9;
+  --lavender-2:#EAE3F3;
+  --paper:#FFFFFF;
+  --line:#E3DCEC;
+  --stage:#DDD6E6;
+  --ok:#1F7A5C;
+  --warn:#B4620A;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  background:var(--stage);
+  font-family:'Roboto',system-ui,sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.stage{
+  position:relative;
+  width:min(100vw, 177.78vh);
+  aspect-ratio:16/9;
+  container-type:inline-size;
+  background:var(--paper);
+  overflow:hidden;
+  box-shadow:0 0.8cqw 4cqw rgba(22,34,78,.28);
+}
+
+/* ---------- slide plumbing ---------- */
+.slide{
+  position:absolute;
+  inset:0;
+  padding:6.2cqw 7cqw 5.4cqw;
+  display:none;
+  flex-direction:column;
+  background:var(--paper);
+}
+.slide.on{display:flex}
+@media (prefers-reduced-motion:no-preference){
+  .slide.on{animation:fade .28s ease both}
+}
+@keyframes fade{from{opacity:0;transform:translateY(.5cqw)}to{opacity:1;transform:none}}
+
+/* ---------- type scale ---------- */
+.eyebrow{
+  font-size:1.15cqw;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--magenta);margin-bottom:1.5cqw;
+}
+h1{font-size:5.6cqw;font-weight:700;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+h2{font-size:3.5cqw;font-weight:700;line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+h3{font-size:1.85cqw;font-weight:700;line-height:1.2}
+.lede{font-size:1.75cqw;font-weight:300;line-height:1.45;color:var(--ink-soft);max-width:62ch}
+p,li{font-size:1.35cqw;font-weight:400;line-height:1.5;color:var(--ink-soft)}
+.mono{font-family:'Roboto Mono',ui-monospace,monospace}
+em.hl{font-style:normal;color:var(--magenta)}
+em.hlp{font-style:normal;color:var(--purple)}
+strong{font-weight:700;color:var(--ink)}
+
+/* ---------- signature devices ---------- */
+.dots{position:absolute;pointer-events:none}
+.dot{position:absolute;border-radius:50%}
+.dot.m{background:var(--magenta)}
+.dot.b{background:var(--navy)}
+
+.badge{
+  width:3.4cqw;height:3.4cqw;border-radius:50%;
+  background:var(--magenta);
+  display:grid;place-items:center;flex:none;
+}
+.badge svg{width:1.75cqw;height:1.75cqw;stroke:#fff;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.badge.num{font-size:1.5cqw;font-weight:700;color:#fff;font-family:'Roboto Mono',monospace}
+.badge.pu{background:var(--purple)}
+.badge.nv{background:var(--navy)}
+
+.card{
+  background:var(--paper);
+  border-radius:1.4cqw;
+  border:1px solid var(--line);
+  box-shadow:0 .55cqw 1.6cqw rgba(22,34,78,.07);
+  padding:2.1cqw;
+  display:flex;flex-direction:column;gap:1.1cqw;
+}
+.card h3{font-size:1.6cqw}
+.card p{font-size:1.2cqw;line-height:1.45}
+.arrow{
+  margin-top:auto;font-size:1.15cqw;font-weight:700;color:var(--magenta);
+  letter-spacing:.01em;
+}
+.tint{background:var(--lavender);border:0}
+
+/* ---------- cover ---------- */
+.cover{padding:0;flex-direction:row}
+.cover .left{
+  flex:1.15;padding:6.5cqw 5cqw 5cqw 7cqw;display:flex;flex-direction:column;justify-content:center;
+}
+.cover .right{
+  flex:1;background:linear-gradient(158deg,var(--deep) 0%,var(--purple) 46%,var(--navy) 100%);
+  position:relative;overflow:hidden;
+}
+.cover .right .sq{
+  position:absolute;border-radius:22%;
+}
+.cover h1{font-size:5.1cqw;color:var(--ink)}
+.cover .sub{font-size:1.7cqw;font-weight:300;color:var(--ink-soft);margin-top:1.8cqw;max-width:30ch;line-height:1.4}
+.cover .by{margin-top:auto;display:flex;flex-direction:column;gap:.5cqw}
+.cover .by .n{font-size:1.35cqw;font-weight:700;color:var(--ink)}
+.cover .by .r{font-size:1.15cqw;color:var(--ink-soft)}
+.topbar{
+  position:absolute;top:0;left:0;right:0;height:1.1cqw;
+  background:var(--navy);
+}
+.cover .topbar{background:linear-gradient(90deg,var(--navy) 0 55%,var(--magenta) 55% 100%)}
+
+/* ---------- statement (dark punctuation) ---------- */
+.statement{
+  background:linear-gradient(140deg,var(--deep) 0%,#4E0E62 55%,var(--navy) 100%);
+  justify-content:center;
+}
+.statement .eyebrow{color:#FF8FC0}
+.statement h2{color:#fff;max-width:34ch}
+.statement .lede{color:#E7DCEF;margin-top:2cqw}
+.statement em.hl{color:#FF8FC0}
+
+/* ---------- section opener with rail ---------- */
+.opener{flex-direction:row;gap:5cqw;align-items:center;padding-left:7cqw}
+.opener .rail{flex:none;width:26cqw;display:flex;flex-direction:column;gap:1.15cqw}
+.rail .r{
+  display:flex;align-items:center;gap:1.1cqw;
+  font-size:1.3cqw;color:#9A93AC;font-weight:500;
+  padding:.55cqw 0;
+}
+.rail .r .k{
+  font-family:'Roboto Mono',monospace;font-size:1.05cqw;width:2.2cqw;flex:none;
+}
+.rail .r.now{color:var(--magenta);font-weight:700}
+.rail .r.now .bar{
+  position:absolute;left:0;width:.28cqw;height:2cqw;background:var(--magenta);border-radius:1cqw;
+}
+.rail .r.done{color:var(--ink);font-weight:400}
+.opener .body{flex:1;border-left:1px solid var(--line);padding-left:5cqw}
+.opener .big{
+  font-family:'Roboto Mono',monospace;font-size:1.3cqw;color:var(--magenta);font-weight:500;
+  letter-spacing:.1em;margin-bottom:1.4cqw;
+}
+.opener h2{font-size:4.2cqw}
+.opener .lede{margin-top:1.8cqw;font-size:1.6cqw}
+
+/* ---------- headers on content slides ---------- */
+.head{margin-bottom:2.6cqw}
+.head h2{max-width:40ch}
+.head .lede{margin-top:1.1cqw;font-size:1.5cqw}
+
+/* ---------- grids ---------- */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.8cqw}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.35cqw}
+.fill{flex:1;min-height:0}
+
+/* ---------- table ---------- */
+.tw{overflow-x:auto;border-radius:1.2cqw;border:1px solid var(--line);background:var(--paper)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{
+  background:var(--navy);color:#fff;font-size:1cqw;font-weight:700;
+  text-align:left;padding:1cqw 1.1cqw;letter-spacing:.03em;white-space:nowrap;
+}
+th.hi{background:var(--magenta)}
+td{
+  padding:.85cqw 1.1cqw;font-size:1.08cqw;color:var(--ink-soft);
+  border-top:1px solid var(--line);
+}
+tbody tr:nth-child(even){background:#FBF9FD}
+td.k{color:var(--ink);font-weight:500}
+td .pill{
+  display:inline-block;padding:.22cqw .8cqw;border-radius:1cqw;
+  font-size:.92cqw;font-weight:700;letter-spacing:.02em;
+}
+.pill.code{background:#E4EDF8;color:var(--navy)}
+.pill.llm{background:#FBE0EE;color:var(--magenta)}
+.pill.hum{background:#EEE3F4;color:var(--purple)}
+.pill.lo{background:#E6F1EC;color:var(--ok)}
+.pill.md{background:#FBEEDF;color:var(--warn)}
+.pill.hi{background:#FBE0EE;color:var(--magenta)}
+
+/* ---------- matrix ---------- */
+.mx{display:flex;gap:1.4cqw;flex:1;min-height:0}
+.mx .ylab{
+  flex:none;display:flex;flex-direction:column;gap:1cqw;
+}
+.mx .ylab .yc{
+  flex:1;display:grid;place-items:center;
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-size:1.02cqw;font-weight:700;color:var(--ink);letter-spacing:.06em;text-transform:uppercase;
+}
+.mx .ylab .yc s{text-decoration:none;font-weight:400;color:var(--ink-soft)}
+.mx .qwrap{flex:1;display:flex;flex-direction:column;gap:1cqw;min-width:0}
+.mx .q{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;flex:1;min-height:0}
+.quad{
+  border-radius:1.2cqw;padding:1.5cqw 1.6cqw;display:flex;flex-direction:column;gap:.7cqw;
+  border:1px solid var(--line);
+}
+.quad .t{font-size:1.35cqw;font-weight:700;color:var(--ink)}
+.quad p{font-size:1.05cqw;line-height:1.4}
+.quad .tag{font-family:'Roboto Mono',monospace;font-size:.9cqw;font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.quad.a{background:#E6F1EC}.quad.a .tag{color:var(--ok)}
+.quad.b{background:#FBEEDF}.quad.b .tag{color:var(--warn)}
+.quad.c{background:var(--lavender)}.quad.c .tag{color:var(--purple)}
+.quad.d{background:#FBE0EE}.quad.d .tag{color:var(--magenta)}
+.mx .xlab{display:flex;justify-content:space-between;font-size:1.05cqw;font-weight:700;color:var(--ink);letter-spacing:.04em}
+.mx .xlab span{font-weight:400;color:var(--ink-soft);font-size:.95cqw}
+
+/* ---------- compare columns ---------- */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:2cqw;flex:1;min-height:0}
+.col{display:flex;flex-direction:column;gap:1.2cqw}
+.col .ch{display:flex;align-items:center;gap:1.1cqw;padding-bottom:1.1cqw;border-bottom:2px solid var(--line)}
+.col .ch h3{font-size:1.7cqw}
+.col.win .ch{border-bottom-color:var(--magenta)}
+.col.lose .ch{border-bottom-color:var(--navy)}
+.col ul{list-style:none;display:flex;flex-direction:column;gap:.95cqw}
+.col li{font-size:1.22cqw;line-height:1.4;padding-left:1.7cqw;position:relative}
+.col li::before{
+  content:"";position:absolute;left:0;top:.55cqw;width:.62cqw;height:.62cqw;border-radius:50%;
+}
+.col.win li::before{background:var(--magenta)}
+.col.lose li::before{background:var(--navy)}
+
+/* ---------- numbered practice list ---------- */
+.plist{display:grid;grid-template-columns:1fr 1fr;gap:1.15cqw 2.6cqw;flex:1;align-content:center}
+.pr{display:flex;gap:1.15cqw;align-items:flex-start}
+.pr .k{
+  font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:500;color:var(--magenta);
+  flex:none;width:2.1cqw;padding-top:.28cqw;
+}
+.pr .tx{font-size:1.2cqw;line-height:1.4;color:var(--ink-soft)}
+.pr .tx b{color:var(--ink);font-weight:700}
+
+/* ---------- callout ---------- */
+.callout{
+  margin-top:1.8cqw;background:var(--lavender);border-radius:1.2cqw;padding:1.5cqw 1.8cqw;
+  border-left:.35cqw solid var(--magenta);
+}
+.callout p{font-size:1.2cqw;color:var(--ink)}
+.callout .lab{
+  font-family:'Roboto Mono',monospace;font-size:.9cqw;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--magenta);margin-bottom:.6cqw;
+}
+
+/* ---------- layers (tools) ---------- */
+.layers{display:flex;flex-direction:column;gap:.6cqw;flex:1;justify-content:center}
+.layer{
+  display:grid;grid-template-columns:14cqw 1fr;gap:1.6cqw;align-items:center;
+  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:.9cqw 1.5cqw;
+}
+.layer .ln{display:flex;align-items:center;gap:.9cqw}
+.layer .ln .t{font-size:1.25cqw;font-weight:700;color:var(--ink)}
+.layer .tools{display:flex;flex-wrap:wrap;gap:.55cqw}
+.tool{
+  font-family:'Roboto Mono',monospace;font-size:1cqw;padding:.3cqw .85cqw;border-radius:.6cqw;
+  background:var(--lavender);color:var(--purple);font-weight:500;
+}
+.layer.key{border-color:var(--magenta);background:#FEF6FA}
+.layer.key .tool{background:#FBE0EE;color:var(--magenta)}
+.stripe{width:.3cqw;height:1.8cqw;border-radius:1cqw;background:var(--navy);flex:none}
+.layer.key .stripe{background:var(--magenta)}
+
+/* ---------- questions ---------- */
+.qs{display:flex;flex-direction:column;gap:1.5cqw;flex:1;justify-content:center}
+.qrow{display:flex;gap:1.6cqw;align-items:flex-start}
+.qrow .qq{font-size:1.6cqw;font-weight:700;color:var(--ink);line-height:1.25}
+.qrow .qa{font-size:1.18cqw;color:var(--ink-soft);line-height:1.45;margin-top:.5cqw}
+
+/* ---------- case placeholders ---------- */
+.ph{
+  border:1.5px dashed var(--magenta);background:#FEF6FA;border-radius:1.2cqw;
+  padding:1.4cqw 1.6cqw;display:flex;flex-direction:column;gap:.55cqw;
+}
+.ph .lab{
+  font-family:'Roboto Mono',monospace;font-size:.88cqw;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--magenta);
+}
+.ph p{font-size:1.12cqw;line-height:1.42}
+.ph .hint{font-size:1cqw;color:#A08BAA;font-style:italic}
+
+/* ---------- flow ---------- */
+.flow{display:flex;gap:.9cqw;flex:1;align-items:center}
+.step{
+  flex:1;background:var(--paper);border:1px solid var(--line);border-radius:1.2cqw;
+  padding:1.4cqw 1.3cqw;display:flex;flex-direction:column;gap:.8cqw;
+}
+.step .sn{font-family:'Roboto Mono',monospace;font-size:1cqw;color:var(--magenta);font-weight:700}
+.step .st{font-size:1.28cqw;font-weight:700;color:var(--ink);line-height:1.2}
+.step p{font-size:1.05cqw;line-height:1.4}
+.step .mode{margin-top:.4cqw;font-size:.92cqw;font-weight:700;letter-spacing:.04em;padding:.28cqw .75cqw;border-radius:1cqw;align-self:flex-start}
+.step.auto{background:#F5FAF7;border-color:#BFDDCE}
+.step.auto .mode{background:#E6F1EC;color:var(--ok)}
+.step.hitl{background:var(--lavender);border-color:var(--lavender-2)}
+.step.hitl .mode{background:#EEE3F4;color:var(--purple)}
+.chev{color:#B9AFC9;font-size:2.2cqw;flex:none;font-weight:300;line-height:1}
+
+/* ---------- close ---------- */
+.close .three{display:flex;flex-direction:column;gap:1.6cqw;margin-top:1cqw}
+.close .three .t{display:flex;gap:1.4cqw;align-items:flex-start}
+.close .three .t .n{
+  font-family:'Roboto Mono',monospace;font-size:1.2cqw;color:#FF8FC0;font-weight:700;
+  width:2.4cqw;flex:none;padding-top:.4cqw;
+}
+.close .three .t .x{font-size:2cqw;font-weight:400;color:#fff;line-height:1.3;max-width:38ch}
+.close .three .t .x b{font-weight:700}
+
+/* ---------- chrome ---------- */
+.foot{
+  position:absolute;bottom:0;left:0;right:0;height:2.9cqw;
+  display:flex;align-items:center;gap:1.6cqw;padding:0 7cqw;
+  font-size:.95cqw;color:#9A93AC;
+}
+.slide.statement .foot,.slide.cover .foot,.slide.close .foot{color:rgba(255,255,255,.55)}
+.foot .brand{font-weight:700;letter-spacing:.02em}
+.foot .sec{margin-left:auto;font-family:'Roboto Mono',monospace}
+.prog{
+  position:absolute;bottom:0;left:0;height:.35cqw;background:var(--magenta);
+  transition:width .3s ease;z-index:5;
+}
+.hint-nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:.9cqw;
+  font-size:11px;color:#9A93AC;background:rgba(255,255,255,.82);
+  padding:3px 10px;border-radius:20px;
+  font-family:'Roboto Mono',monospace;letter-spacing:.04em;
+  transition:opacity .8s ease;pointer-events:none;
+}
+
+/* logo lockup */
+.logo{display:flex;align-items:center;gap:.7cqw}
+.logo .sq{width:1.9cqw;height:1.9cqw;border-radius:28%;background:var(--magenta);flex:none}
+.logo .tx{font-size:1.1cqw;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-.01em}
+.logo .tx s{display:block;text-decoration:none;font-weight:400;color:var(--ink-soft);font-size:.88cqw}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  body{overflow:visible;height:auto;display:block;background:#fff}
+  .stage{width:1280px;height:720px;aspect-ratio:auto;box-shadow:none;page-break-after:always}
+  .slide{display:flex !important;position:relative;page-break-after:always;height:720px;animation:none}
+  .hint-nav{display:none}
+}
+</style>
+
+<div class="stage" id="stage">
+
+<!-- 01 COVER -->
+<section class="slide cover on" data-sec="Abertura">
+  <div class="topbar"></div>
+  <div class="left">
+    <div class="eyebrow">Serasa Experian &middot; Tecnologia</div>
+    <h1>Automatização de processos com <em class="hl">IA</em></h1>
+    <div class="sub">Como mapear, decidir o que automatizar e onde manter o humano na alça &mdash; sem virar mais um piloto abandonado.</div>
+    <div class="by">
+      <div class="n">Gabriel Corrêa</div>
+      <div class="r">Palestra técnica &middot; 25 minutos</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="sq" style="width:26cqw;height:26cqw;background:rgba(255,255,255,.09);top:-6cqw;right:-7cqw"></div>
+    <div class="sq" style="width:15cqw;height:15cqw;background:rgba(232,0,112,.85);bottom:5cqw;left:-4cqw"></div>
+    <div class="sq" style="width:8cqw;height:8cqw;background:rgba(255,255,255,.14);top:12cqw;left:9cqw"></div>
+    <div class="dot m" style="width:2.2cqw;height:2.2cqw;top:8.5cqw;right:8cqw"></div>
+    <div class="dot b" style="width:1.4cqw;height:1.4cqw;bottom:12cqw;right:5cqw;background:#4E8BD8"></div>
+  </div>
+</section>
+
+<!-- 02 HOOK -->
+<section class="slide statement" data-sec="Abertura">
+  <div class="eyebrow">O ponto de partida</div>
+  <h2>A pergunta errada é <em class="hl">"o que a IA consegue fazer aqui?"</em></h2>
+  <div class="lede">A pergunta certa é: <strong style="color:#fff">neste processo, o que é decisão e o que é digitação?</strong><br><br>
+  Automação com IA é 80% desenho de processo e 20% modelo. Quem inverte essa conta entrega uma demo bonita que ninguém usa em produção.</div>
+</section>
+
+<!-- 03 AGENDA -->
+<section class="slide" data-sec="Abertura">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">O caminho</div>
+    <h2>Cinco paradas, uma <em class="hl">ordem que importa</em></h2>
+    <div class="lede">Cada parada só faz sentido depois da anterior. A maioria dos projetos falha porque começa na parada 4.</div>
+  </div>
+  <div class="g4 fill" style="align-items:stretch;align-content:center">
+    <div class="card">
+      <div class="badge num">1</div>
+      <h3>Mapear</h3>
+      <p>Desenhar o processo como ele é de verdade — com volume, exceções e custo do erro.</p>
+    </div>
+    <div class="card">
+      <div class="badge num">2</div>
+      <h3>Decidir</h3>
+      <p>Separar o que vira código, o que vira IA e o que continua humano.</p>
+    </div>
+    <div class="card">
+      <div class="badge num">3</div>
+      <h3>Manter o humano</h3>
+      <p>Escolher o padrão de supervisão certo para cada etapa — e provar que ele é real.</p>
+    </div>
+    <div class="card tint">
+      <div class="badge num pu">4</div>
+      <h3>Ferramentar</h3>
+      <p>Escolher stack por camada. E as práticas que separam piloto de produção.</p>
+      <div class="arrow" style="color:var(--purple)">+ caso prático ↗</div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">Agenda</span></div>
+</section>
+
+<!-- 04 OPENER: MAPEAR -->
+<section class="slide opener" data-sec="01 Mapear">
+  <div class="rail">
+    <div class="r now"><span class="k">01</span> Mapear o processo</div>
+    <div class="r"><span class="k">02</span> Decidir o que automatizar</div>
+    <div class="r"><span class="k">03</span> Humano na alça</div>
+    <div class="r"><span class="k">04</span> Ferramentas e práticas</div>
+    <div class="r"><span class="k">05</span> Caso prático</div>
+  </div>
+  <div class="body">
+    <div class="big">PARADA 01</div>
+    <h2>Mapear antes de <em class="hl">automatizar</em></h2>
+    <div class="lede">Você não pode automatizar o que não conseguiu descrever em uma tabela.</div>
+  </div>
+</section>
+
+<!-- 05 ERRO Nº 1 -->
+<section class="slide" data-sec="01 Mapear">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">O erro nº 1</div>
+    <h2>Automatizar um processo que ninguém mapeou não gera eficiência &mdash; gera o <em class="hl">mesmo caos, mais rápido</em></h2>
+  </div>
+  <div class="g3 fill" style="align-content:center">
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg></div>
+      <h3>Sintoma 1</h3>
+      <p>Ninguém sabe dizer a taxa de exceção do processo. Se você não sabe quanto ele já erra hoje, não tem como definir o que o modelo precisa acertar.</p>
+    </div>
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h9"/><path d="M18 15l3 3-3 3"/></svg></div>
+      <h3>Sintoma 2</h3>
+      <p>O processo existe em quatro versões — uma por pessoa que executa. Automatizar aqui significa escolher a versão de alguém e chamar de padrão.</p>
+    </div>
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a5 5 0 01-6.4 6.4l-4.3 4.3v3h3l4.3-4.3a5 5 0 016.4-6.4l-2.5 2.5 2 2 2.5-2.5"/></svg></div>
+      <h3>Sintoma 3</h3>
+      <p>A primeira pergunta da reunião é sobre ferramenta — "vamos usar n8n? LangGraph?" — e não sobre o fluxo. A escolha da ferramenta é consequência, não ponto de partida.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="lab">Regra prática</div>
+    <p>Se o processo não cabe numa tabela de uma página, ele não é um processo — são três processos que ninguém separou ainda.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">01 · Mapear</span></div>
+</section>
+
+<!-- 06 CANVAS -->
+<section class="slide" data-sec="01 Mapear">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">A ferramenta que resolve 80% do problema</div>
+    <h2>O canvas de mapeamento &mdash; <em class="hl">uma linha por etapa</em></h2>
+    <div class="lede">Exemplo: triagem de solicitações de suporte. As duas colunas destacadas decidem tudo.</div>
+  </div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>Etapa</th><th>Entrada</th><th>Saída</th>
+          <th class="hi">É decisão?</th><th class="hi">Custo do erro</th>
+          <th>Exceções</th><th>Volume/mês</th><th>Dono</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="k">1. Receber e registrar</td><td>e-mail, formulário</td><td>ticket criado</td><td>Não</td><td><span class="pill lo">baixo</span></td><td>2%</td><td>12.000</td><td>Suporte</td></tr>
+        <tr><td class="k">2. Classificar assunto</td><td>texto livre</td><td>categoria</td><td>Sim — ambígua</td><td><span class="pill lo">baixo</span></td><td>15%</td><td>12.000</td><td>Suporte</td></tr>
+        <tr><td class="k">3. Verificar elegibilidade</td><td>dados do cliente</td><td>sim / não</td><td>Sim — regra fixa</td><td><span class="pill hi">alto</span></td><td>5%</td><td>4.000</td><td>Suporte</td></tr>
+        <tr><td class="k">4. Redigir resposta</td><td>contexto + histórico</td><td>texto</td><td>Sim — ambígua</td><td><span class="pill md">médio</span></td><td>20%</td><td>9.000</td><td>Suporte</td></tr>
+        <tr><td class="k">5. Aprovar exceção comercial</td><td>proposta</td><td>decisão</td><td>Sim — julgamento</td><td><span class="pill hi">alto, irreversível</span></td><td>—</td><td>300</td><td>Gestor</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <div class="lab">Como ler</div>
+    <p>Linha 1 é digitação → <strong>código</strong>. Linhas 2 e 4 são decisão ambígua com erro tolerável → <strong>IA</strong>. Linha 3 é regra fixa → <strong>código</strong>, nunca LLM. Linha 5 é julgamento irreversível → <strong>humano</strong>. O mapa dá a arquitetura antes de você escrever uma linha.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">01 · Mapear</span></div>
+</section>
+
+<!-- 07 OPENER: DECIDIR -->
+<section class="slide opener" data-sec="02 Decidir">
+  <div class="rail">
+    <div class="r done"><span class="k">01</span> Mapear o processo</div>
+    <div class="r now"><span class="k">02</span> Decidir o que automatizar</div>
+    <div class="r"><span class="k">03</span> Humano na alça</div>
+    <div class="r"><span class="k">04</span> Ferramentas e práticas</div>
+    <div class="r"><span class="k">05</span> Caso prático</div>
+  </div>
+  <div class="body">
+    <div class="big">PARADA 02</div>
+    <h2>O que automatizar &mdash; e com <em class="hl">o quê</em></h2>
+    <div class="lede">Antes de perguntar qual modelo, pergunte se precisa de modelo.</div>
+  </div>
+</section>
+
+<!-- 08 MATRIZ -->
+<section class="slide" data-sec="02 Decidir">
+  <div class="topbar"></div>
+  <div class="head" style="margin-bottom:1.8cqw">
+    <div class="eyebrow">A matriz de decisão</div>
+    <h2>Custo do erro <em class="hl">×</em> reversibilidade</h2>
+  </div>
+  <div class="mx">
+    <div class="ylab">
+      <div class="yc">custo alto</div>
+      <div class="yc">custo baixo</div>
+    </div>
+    <div class="qwrap">
+      <div class="q">
+        <div class="quad c">
+          <div class="tag">alto · reversível</div>
+          <div class="t">Humano supervisiona</div>
+          <p>A IA executa sozinha, o humano acompanha e reverte. Exige <strong>undo real</strong> e alerta — painel que ninguém abre não é supervisão.</p>
+        </div>
+        <div class="quad d">
+          <div class="tag">alto · irreversível</div>
+          <div class="t">Humano aprova antes</div>
+          <p>Nada acontece sem clique. Pagamento, comunicação ao cliente, alteração de cadastro, decisão que afeta crédito.</p>
+        </div>
+      </div>
+      <div class="q">
+        <div class="quad a">
+          <div class="tag">baixo · reversível</div>
+          <div class="t">Automatize e siga</div>
+          <p>Log completo + revisão por amostragem. Aqui está o ganho fácil que quase ninguém colhe porque foi direto para o quadrante difícil.</p>
+        </div>
+        <div class="quad b">
+          <div class="tag">baixo · irreversível</div>
+          <div class="t">Automatize com rede</div>
+          <p><em class="hlp">dry-run</em>, ambiente de teste, janela de cancelamento. Torne reversível e o problema muda de quadrante.</p>
+        </div>
+      </div>
+      <div class="xlab"><span>Reversibilidade &nbsp;·&nbsp; reversível</span><span>irreversível</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="lab">Filtro anterior à matriz</div>
+    <p>A etapa é determinística e estável? Então é <strong>código</strong>, não é IA. LLM em cima de regra fixa é caro, lento e não-determinístico — três defeitos onde antes havia zero.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">02 · Decidir</span></div>
+</section>
+
+<!-- 09 GANHA / PERDE -->
+<section class="slide" data-sec="02 Decidir">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">Onde o modelo é a ferramenta certa</div>
+    <h2>LLM <em class="hl">ganha</em> &mdash; e onde LLM <em class="hlp">perde</em></h2>
+  </div>
+  <div class="cmp">
+    <div class="col win">
+      <div class="ch">
+        <div class="badge"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+        <h3>Use IA</h3>
+      </div>
+      <ul>
+        <li>Não-estruturado → estruturado: e-mail, PDF, transcrição, chamado virando JSON confiável.</li>
+        <li>Classificação de borda confusa — onde a regra já tem 40 exceções e cresce todo mês.</li>
+        <li>Rascunho que um humano revisa: resposta, resumo, código, documento, especificação.</li>
+        <li>Interface em linguagem natural sobre um sistema que <strong>já existe</strong>.</li>
+        <li>Tarefa <strong>caro de especificar, barato de verificar</strong> — a assinatura de um bom caso de uso.</li>
+      </ul>
+    </div>
+    <div class="col lose">
+      <div class="ch">
+        <div class="badge nv"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></div>
+        <h3>Não use IA</h3>
+      </div>
+      <ul>
+        <li>Aritmética exata, conciliação, soma de valores. Dê a calculadora ao modelo, não a conta.</li>
+        <li>Regra determinística e estável — isso é um <span class="mono">if</span>, e um <span class="mono">if</span> você testa.</li>
+        <li>Qualquer etapa que precise de 100% de recall e não tenha rede de segurança.</li>
+        <li>Decisão que precisa ser explicada juridicamente sem rastro de como foi tomada.</li>
+        <li>Processo onde <strong>verificar custa mais que executar</strong> — a automação vira trabalho novo.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">02 · Decidir</span></div>
+</section>
+
+<!-- 10 OPENER: HUMANO -->
+<section class="slide opener" data-sec="03 Humano na alça">
+  <div class="rail">
+    <div class="r done"><span class="k">01</span> Mapear o processo</div>
+    <div class="r done"><span class="k">02</span> Decidir o que automatizar</div>
+    <div class="r now"><span class="k">03</span> Humano na alça</div>
+    <div class="r"><span class="k">04</span> Ferramentas e práticas</div>
+    <div class="r"><span class="k">05</span> Caso prático</div>
+  </div>
+  <div class="body">
+    <div class="big">PARADA 03</div>
+    <h2><em class="hl">Human in the loop</em> não é um checkbox</h2>
+    <div class="lede">São quatro padrões diferentes, com custos diferentes. Escolher errado custa caro nas duas direções.</div>
+  </div>
+</section>
+
+<!-- 11 QUATRO PADRÕES -->
+<section class="slide" data-sec="03 Humano na alça">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">Os quatro padrões</div>
+    <h2>O humano pode estar em <em class="hl">quatro posições</em> diferentes</h2>
+  </div>
+  <div class="g4 fill" style="align-content:center">
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+      <h3>Aprovação</h3>
+      <p><strong>IA propõe, humano decide.</strong> Nada tem efeito sem clique.</p>
+      <p style="color:var(--purple)">Para: ação irreversível ou regulada.<br>Custo: latência e gargalo humano.</p>
+    </div>
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.6"/></svg></div>
+      <h3>Supervisão</h3>
+      <p><strong>IA executa, humano monitora</strong> e pode reverter.</p>
+      <p style="color:var(--purple)">Para: volume alto e reversível.<br>Exige: undo e alerta ativo, não painel.</p>
+    </div>
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><path d="M4 4l7 16 2.3-6.7L20 11z"/></svg></div>
+      <h3>Copiloto</h3>
+      <p><strong>Humano conduz, IA acelera.</strong> Código, análise, redação.</p>
+      <p style="color:var(--purple)">Para: trabalho de especialista.<br>Ganho imediato, risco baixo. Comece aqui.</p>
+    </div>
+    <div class="card">
+      <div class="badge"><svg viewBox="0 0 24 24"><path d="M6 3v7a4 4 0 004 4h8"/><path d="M15 11l3 3-3 3"/><circle cx="6" cy="19" r="2.2"/></svg></div>
+      <h3>Escalonamento</h3>
+      <p><strong>IA resolve o claro, encaminha o ambíguo.</strong></p>
+      <p style="color:var(--purple)">Exige: caminho explícito para "não sei" — e que esse caminho seja recompensado.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="lab">O detalhe que muda o projeto</div>
+    <p>O padrão não é escolhido por processo, é escolhido <strong>por linha do canvas</strong>. Um fluxo real normalmente usa três dos quatro ao mesmo tempo.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">03 · Humano na alça</span></div>
+</section>
+
+<!-- 12 RUBBER STAMPING -->
+<section class="slide" data-sec="03 Humano na alça">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">O anti-padrão que passa em toda auditoria</div>
+    <h2>Se o humano aprova 400 itens por dia, não existe humano na alça &mdash; existe um <em class="hl">ritual de aprovação</em></h2>
+  </div>
+  <div class="g2 fill" style="align-content:center">
+    <div class="card">
+      <h3 style="color:var(--magenta)">Três perguntas para saber se o checkpoint é real</h3>
+      <p><strong>1.</strong> O revisor tem tempo e informação suficientes para discordar?</p>
+      <p><strong>2.</strong> Existe registro de quando ele discordou? Taxa de rejeição de 0% é alarme, não é qualidade.</p>
+      <p><strong>3.</strong> Se a revisão por amostragem daria o mesmo resultado, a revisão item a item é teatro — e está te custando uma pessoa.</p>
+    </div>
+    <div class="card tint">
+      <h3 style="color:var(--purple)">O lado regulatório</h3>
+      <p>A <strong>LGPD, art. 20</strong> garante ao titular o direito de solicitar revisão de decisões tomadas <em>unicamente</em> com base em tratamento automatizado que afetem seus interesses.</p>
+      <p>Em serviço financeiro isso não é rodapé jurídico: é o que define quais etapas <strong>podem</strong> ser 100% automáticas — e obriga rastro de qual versão do modelo decidiu o quê, quando.</p>
+      <p style="color:var(--purple)"><strong>Consequência prática:</strong> desenhe o log de decisão junto com o fluxo, não depois da primeira solicitação de revisão.</p>
+    </div>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">03 · Humano na alça</span></div>
+</section>
+
+<!-- 13 OPENER: FERRAMENTAS -->
+<section class="slide opener" data-sec="04 Ferramentas">
+  <div class="rail">
+    <div class="r done"><span class="k">01</span> Mapear o processo</div>
+    <div class="r done"><span class="k">02</span> Decidir o que automatizar</div>
+    <div class="r done"><span class="k">03</span> Humano na alça</div>
+    <div class="r now"><span class="k">04</span> Ferramentas e práticas</div>
+    <div class="r"><span class="k">05</span> Caso prático</div>
+  </div>
+  <div class="body">
+    <div class="big">PARADA 04</div>
+    <h2>Ferramentas: um <em class="hl">mapa</em>, não um desfile de logos</h2>
+    <div class="lede">Ferramenta muda a cada seis meses. As camadas, não.</div>
+  </div>
+</section>
+
+<!-- 14 CAMADAS -->
+<section class="slide" data-sec="04 Ferramentas">
+  <div class="topbar"></div>
+  <div class="head" style="margin-bottom:1.6cqw">
+    <div class="eyebrow">A stack por camada</div>
+    <h2>Seis camadas &mdash; e as <em class="hl">duas</em> que decidem se vai para produção</h2>
+  </div>
+  <div class="layers">
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">Modelo</span></div>
+      <div class="tools"><span class="tool">Claude</span><span class="tool">GPT</span><span class="tool">Gemini</span><span class="tool">modelo aberto self-hosted</span></div>
+    </div>
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">Agente e código</span></div>
+      <div class="tools"><span class="tool">Claude Code</span><span class="tool">Claude Agent SDK</span><span class="tool">Cursor</span><span class="tool">LangGraph</span></div>
+    </div>
+    <div class="layer key">
+      <div class="ln"><span class="stripe"></span><span class="t">Orquestração</span></div>
+      <div class="tools"><span class="tool">Temporal</span><span class="tool">Airflow</span><span class="tool">Step Functions</span><span class="tool">n8n</span><span class="tool">retry · idempotência · estado</span></div>
+    </div>
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">Integração</span></div>
+      <div class="tools"><span class="tool">MCP</span><span class="tool">APIs internas</span><span class="tool">um protocolo no lugar de N integrações</span></div>
+    </div>
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">Contexto e dados</span></div>
+      <div class="tools"><span class="tool">busca que você já tem</span><span class="tool">banco vetorial</span><span class="tool">só quando a busca simples falhar</span></div>
+    </div>
+    <div class="layer key">
+      <div class="ln"><span class="stripe"></span><span class="t">Eval e observabilidade</span></div>
+      <div class="tools"><span class="tool">conjunto de casos versionado</span><span class="tool">Langfuse</span><span class="tool">Braintrust</span><span class="tool">traço com input, output e versão</span></div>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="lab">O que separa piloto de produção</div>
+    <p>Todo piloto tem a camada de modelo. O que quase nenhum tem é <strong>orquestração</strong> e <strong>eval</strong> — e são exatamente as duas que decidem se aquilo sobrevive ao terceiro mês.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
+</section>
+
+<!-- 15 QUATRO PERGUNTAS -->
+<section class="slide" data-sec="04 Ferramentas">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">Critério de escolha</div>
+    <h2>Quatro perguntas antes de adotar <em class="hl">qualquer</em> ferramenta</h2>
+  </div>
+  <div class="qs">
+    <div class="qrow">
+      <div class="badge num">1</div>
+      <div><div class="qq">O dado sai da empresa?</div>
+      <div class="qa">Não "a ferramenta é segura?", mas <strong>qual campo exatamente</strong> atravessa a fronteira. A resposta muda contrato, DPA, base legal e, muitas vezes, a arquitetura.</div></div>
+    </div>
+    <div class="qrow">
+      <div class="badge num">2</div>
+      <div><div class="qq">Quanto custa uma execução — e dez mil?</div>
+      <div class="qa">Custo por token é linha de orçamento, não detalhe técnico. Faça a conta do volume do canvas antes do piloto, não depois da fatura.</div></div>
+    </div>
+    <div class="qrow">
+      <div class="badge num">3</div>
+      <div><div class="qq">Se essa ferramenta dobrar de preço ou morrer, o que acontece?</div>
+      <div class="qa">Trocar de modelo deve ser <strong>configuração</strong>, não reescrita. Isole a chamada atrás de uma interface sua desde o primeiro dia.</div></div>
+    </div>
+    <div class="qrow">
+      <div class="badge num">4</div>
+      <div><div class="qq">Quem mantém isso em seis meses?</div>
+      <div class="qa">Automação sem dono apodrece — em silêncio, e normalmente só se descobre pelo cliente. Nome de pessoa, não nome de squad.</div></div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
+</section>
+
+<!-- 16 BOAS PRÁTICAS -->
+<section class="slide" data-sec="04 Ferramentas">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">Boas práticas</div>
+    <h2>As dez que <em class="hl">doem</em> quando você ignora</h2>
+  </div>
+  <div class="plist">
+    <div class="pr"><span class="k">01</span><span class="tx"><b>Defina o "certo" antes do prompt.</b> Vinte casos reais com resposta esperada. Sem isso não é automação, é aposta.</span></div>
+    <div class="pr"><span class="k">02</span><span class="tx"><b>Prompt é código.</b> Versionado, revisado em PR, testado no CI. Não mora num Google Doc.</span></div>
+    <div class="pr"><span class="k">03</span><span class="tx"><b>Fixe a versão do modelo.</b> Atualizar modelo é deploy — com eval antes e rollback previsto.</span></div>
+    <div class="pr"><span class="k">04</span><span class="tx"><b>Contexto e ferramenta antes de modelo maior.</b> A maioria das falhas é falta de acesso, não falta de inteligência.</span></div>
+    <div class="pr"><span class="k">05</span><span class="tx"><b>Dê a ferramenta determinística</b> em vez de pedir o cálculo. O modelo decide <em>quando</em> usar; o código faz a conta.</span></div>
+    <div class="pr"><span class="k">06</span><span class="tx"><b>Projete a falha explícita.</b> Pior que errar é errar com confiança e em silêncio. "Não sei" precisa ser uma saída válida.</span></div>
+    <div class="pr"><span class="k">07</span><span class="tx"><b>Registre input, output, versão e quem decidiu.</b> Auditoria não é opcional — e não é reconstruível depois.</span></div>
+    <div class="pr"><span class="k">08</span><span class="tx"><b>Custo e latência são requisitos.</b> Definidos no começo, medidos sempre, não descobertos no fechamento do trimestre.</span></div>
+    <div class="pr"><span class="k">09</span><span class="tx"><b>Piloto → medir → escalar.</b> Um processo, uma etapa, uma métrica. Nunca big bang.</span></div>
+    <div class="pr"><span class="k">10</span><span class="tx"><b>Toda automação tem dono e data de revisão.</b> O processo muda; a automação não muda sozinha.</span></div>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">04 · Práticas</span></div>
+</section>
+
+<!-- 17 OPENER: CASO -->
+<section class="slide opener" data-sec="05 Caso prático">
+  <div class="rail">
+    <div class="r done"><span class="k">01</span> Mapear o processo</div>
+    <div class="r done"><span class="k">02</span> Decidir o que automatizar</div>
+    <div class="r done"><span class="k">03</span> Humano na alça</div>
+    <div class="r done"><span class="k">04</span> Ferramentas e práticas</div>
+    <div class="r now"><span class="k">05</span> Caso prático</div>
+  </div>
+  <div class="body">
+    <div class="big">PARADA 05</div>
+    <h2>Como eu fiz &mdash; <em class="hl">na prática</em></h2>
+    <div class="lede">Um processo real, o mapa antes e depois, e o que quebrou no caminho.</div>
+  </div>
+</section>
+
+<!-- 18 CASO: O PROCESSO -->
+<section class="slide" data-sec="05 Caso prático">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">Caso prático · o processo</div>
+    <h2>O fluxo, etapa por etapa &mdash; e <em class="hl">quem executa cada uma</em></h2>
+  </div>
+  <div class="flow">
+    <div class="step auto">
+      <div class="sn">01</div>
+      <div class="st">Etapa</div>
+      <p>O que entra e o que sai desta etapa.</p>
+      <span class="mode">automatizado</span>
+    </div>
+    <span class="chev">›</span>
+    <div class="step auto">
+      <div class="sn">02</div>
+      <div class="st">Etapa</div>
+      <p>O que entra e o que sai desta etapa.</p>
+      <span class="mode">automatizado</span>
+    </div>
+    <span class="chev">›</span>
+    <div class="step hitl">
+      <div class="sn">03</div>
+      <div class="st">Etapa</div>
+      <p>Onde você entrou na alça — e por quê.</p>
+      <span class="mode">humano aprova</span>
+    </div>
+    <span class="chev">›</span>
+    <div class="step auto">
+      <div class="sn">04</div>
+      <div class="st">Etapa</div>
+      <p>O que entra e o que sai desta etapa.</p>
+      <span class="mode">automatizado</span>
+    </div>
+    <span class="chev">›</span>
+    <div class="step hitl">
+      <div class="sn">05</div>
+      <div class="st">Etapa</div>
+      <p>Decisão final que continuou sua.</p>
+      <span class="mode">humano decide</span>
+    </div>
+  </div>
+  <div class="ph" style="margin-top:1.8cqw">
+    <div class="lab">A preencher com o seu caso</div>
+    <p class="hint">Substitua as cinco etapas pelo fluxo real: nome da etapa, entrada → saída, e o modo (automatizado / humano aprova / humano decide / copiloto). Mantenha o contraste visual: verde = máquina, lavanda = você.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">05 · Caso prático</span></div>
+</section>
+
+<!-- 19 CASO: RESULTADO -->
+<section class="slide" data-sec="05 Caso prático">
+  <div class="topbar"></div>
+  <div class="head">
+    <div class="eyebrow">Caso prático · resultado e cicatrizes</div>
+    <h2>O que ganhei, o que <em class="hl">quebrou</em>, e o que eu faria diferente</h2>
+  </div>
+  <div class="g3 fill" style="align-content:center">
+    <div class="ph">
+      <div class="lab">Antes → depois</div>
+      <p><strong>Tempo por execução:</strong> de X para Y</p>
+      <p><strong>Volume que passou a caber:</strong> Z</p>
+      <p><strong>Custo por execução:</strong> R$ —</p>
+      <p class="hint">Um número que você consiga defender vale mais que três estimados.</p>
+    </div>
+    <div class="ph">
+      <div class="lab">O que quebrou</div>
+      <p class="hint">A falha mais interessante do projeto — de preferência uma em que o modelo errou com confiança e você só descobriu depois. É o slide que a plateia lembra.</p>
+      <p class="hint">Como você detectou, e qual guarda-corpo entrou depois.</p>
+    </div>
+    <div class="ph">
+      <div class="lab">O que eu faria diferente</div>
+      <p class="hint">Uma coisa concreta. Normalmente: "teria escrito os casos de teste antes do prompt" ou "teria começado por uma etapa menor".</p>
+    </div>
+  </div>
+  <div class="callout">
+    <div class="lab">Onde o humano ficou — e por quê</div>
+    <p class="hint" style="font-size:1.15cqw">Fechar amarrando ao Ato 3: qual dos quatro padrões você usou em cada ponto, e o que aconteceu quando tentou tirar o humano de onde ele era necessário.</p>
+  </div>
+  <div class="foot"><span class="brand">Automatização de processos com IA</span><span class="sec">05 · Caso prático</span></div>
+</section>
+
+<!-- 20 FECHO -->
+<section class="slide statement close" data-sec="Fecho">
+  <div class="eyebrow">Para levar</div>
+  <h2 style="font-size:2.6cqw">Três frases e <em class="hl">um desafio de uma semana</em></h2>
+  <div class="three">
+    <div class="t"><span class="n">01</span><span class="x">Mapeie o processo <b>antes</b> de escolher a ferramenta.</span></div>
+    <div class="t"><span class="n">02</span><span class="x">Automatize o que é digitação. Mantenha o humano onde <b>errar é caro</b>.</span></div>
+    <div class="t"><span class="n">03</span><span class="x">Sem eval e sem dono, nenhuma automação sobrevive ao <b>terceiro mês</b>.</span></div>
+  </div>
+  <div class="callout" style="background:rgba(255,255,255,.1);border-left-color:#FF8FC0;margin-top:2.4cqw">
+    <div class="lab" style="color:#FF8FC0">Desafio</div>
+    <p style="color:#fff">Escolha um processo que você executa toda semana. Preencha o canvas de uma página. Marque a única linha que é pura digitação. Automatize <strong style="color:#fff">só ela</strong>. Meça. Depois volte para a segunda linha.</p>
+  </div>
+</section>
+
+<div class="prog" id="prog"></div>
+</div>
+<div class="hint-nav" id="hintnav">← → navegar · F tela cheia</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var prog = document.getElementById('prog');
+  var i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
+    prog.style.width = ((i + 1) / slides.length * 100) + '%';
+    try { location.hash = 's' + (i + 1); } catch(e){}
+  }
+  document.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown'){ e.preventDefault(); show(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp'){ e.preventDefault(); show(i - 1); }
+    else if (k === 'Home'){ e.preventDefault(); show(0); }
+    else if (k === 'End'){ e.preventDefault(); show(slides.length - 1); }
+    else if (k === 'f' || k === 'F'){
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    }
+  });
+  document.getElementById('stage').addEventListener('click', function(e){
+    var r = this.getBoundingClientRect();
+    show(i + ((e.clientX - r.left) / r.width < 0.22 ? -1 : 1));
+  });
+  var m = (location.hash || '').match(/^#s(\d+)$/);
+  show(m ? parseInt(m[1], 10) - 1 : 0);
+  setTimeout(function(){
+    var h = document.getElementById('hintnav');
+    if (h) h.style.opacity = '0';
+  }, 3000);
+})();
+</script>
