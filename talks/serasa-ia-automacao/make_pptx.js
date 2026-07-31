@@ -1,5 +1,5 @@
 /**
- * Gera deck.pptx — versão editável da palestra "Automatização de processos com IA".
+ * Gera deck.pptx — versão editável da palestra "Automação de processos com IA".
  * 16 slides, espelhando deck.src.html. Paleta e motivo visual seguem a identidade
  * Serasa Experian (roxo/magenta/navy, cards squircle, badge circular magenta).
  *
@@ -50,7 +50,7 @@ const M = 0.72;
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
 pres.author = "Gabriel Corrêa";
-pres.title = "Automatização de processos com IA";
+pres.title = "Automação de processos com IA";
 
 /** px do viewBox 1280x720 → polegadas */
 const px = (v) => v / 96;
@@ -78,7 +78,7 @@ function header(slide, eyebrow, titleRuns, opts) {
 }
 
 function footer(slide, sec) {
-  slide.addText("Automatização de processos com IA", {
+  slide.addText("Automação de processos com IA", {
     x: M, y: 6.92, w: 5, h: 0.28,
     margin: 0, fontFace: FONT, fontSize: 9, bold: true, color: "9A93AC",
   });
@@ -318,13 +318,13 @@ function triagem(slide, painted) {
   });
   s.addText(
     [
-      { text: "Automatização de\nprocessos com ", options: { color: "FFFFFF" } },
+      { text: "Automação de\nprocessos com ", options: { color: "FFFFFF" } },
       { text: "IA", options: { color: C.pink } },
     ],
     { x: M, y: 1.98, w: 9.9, h: 2.15, margin: 0, valign: "top", fontFace: FONT, fontSize: 42, bold: true, lineSpacing: 48 }
   );
   s.addText(
-    "Como mapear, decidir o que automatizar e onde manter o humano na alça — sem virar mais um piloto abandonado.",
+    "Como mapear o processo, implementar com eval e levar para produção.",
     { x: M, y: 4.2, w: 6.6, h: 1, margin: 0, fontFace: FONT, fontSize: 15, color: "E7DCEF", lineSpacing: 22 }
   );
   s.addText("Gabriel Corrêa", {

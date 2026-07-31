@@ -1,4 +1,4 @@
-# Automatização de processos com IA — Serasa Experian / Tecnologia
+# Automação de processos com IA — Serasa Experian / Tecnologia
 
 Palestra técnica de 20-25 minutos. 16 slides.
 

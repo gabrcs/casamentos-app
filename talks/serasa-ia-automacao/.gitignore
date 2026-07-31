@@ -1,3 +1,7 @@
 node_modules/
 package-lock.json
 deck.pdf
+qa/node_modules/
+qa/package-lock.json
+qa/package.json
+qa/shots/
