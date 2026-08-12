@@ -49,7 +49,7 @@ const M = 0.72;
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
-pres.author = "Gabriel Corrêa";
+pres.author = "Bruno Prata";
 pres.title = "Automação de processos com IA";
 
 /** px do viewBox 1280x720 → polegadas */
@@ -327,7 +327,7 @@ function triagem(slide, painted) {
     "Como mapear o processo, implementar com eval e levar para produção.",
     { x: M, y: 4.2, w: 6.6, h: 1, margin: 0, fontFace: FONT, fontSize: 15, color: "E7DCEF", lineSpacing: 22 }
   );
-  s.addText("Gabriel Corrêa", {
+  s.addText("Bruno Prata", {
     x: M, y: 6.15, w: 6, h: 0.3, margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: "FFFFFF",
   });
   s.addText("Palestra técnica · 25 minutos", {
