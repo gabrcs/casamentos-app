@@ -1,11 +1,12 @@
 /**
  * Gera deck.pptx — versão editável da palestra "Automação de processos com IA".
- * 16 slides, espelhando deck.src.html. Paleta e motivo visual seguem a identidade
+ * 14 slides, espelhando deck.src.html. Paleta e motivo visual seguem a identidade
  * Serasa Experian (roxo/magenta/navy, cards squircle, badge circular magenta).
  *
- * Os fluxogramas usam as MESMAS coordenadas do SVG do deck HTML: o viewBox é
- * 1280x720 e o slide é 13.333x7.5in, então px / 96 = polegadas. A função px()
- * faz essa conversão, e é por isso que os dois decks ficam idênticos.
+ * Os fluxogramas do deck HTML vivem em SVGs com viewBox próprio (650x600 e
+ * 650x570). Aqui a função frame() mapeia esse viewBox para uma região do slide,
+ * então as MESMAS coordenadas servem nos dois arquivos: se você mover um nó no
+ * SVG, mova pelo mesmo número aqui.
  *
  * Fonte: Arial. Roboto (a fonte da marca) não está garantida no PowerPoint de
  * terceiros; Arial é o grotesco seguro mais próximo. Troque FONT abaixo se a
@@ -26,14 +27,14 @@ const C = {
   line: "E3DCEC",
   paper: "FFFFFF",
   pink: "FF8FC0",
-  green: "1F7A5C",
-  greenBg: "E6F1EC",
-  amber: "B4620A",
-  amberBg: "FBEEDF",
-  pinkBg: "FBE0EE",
-  blueBg: "E4EDF8",
-  humBg: "EEE3F4",
   edge: "8E86A0",
+  pinkBg: "FBE0EE",
+  pinkTint: "FEF6FA",
+  blueBg: "E4EDF8",
+  blueTint: "F2F7FC",
+  humBg: "EEE3F4",
+  mute: "9A93AC",
+  hint: "A08BAA",
   // bloco de código
   codeBg: "141A31",
   codeTx: "D6D0E6",
@@ -45,6 +46,7 @@ const C = {
 const FONT = "Arial";
 const MONO = "Courier New";
 const W = 13.333;
+const H = 7.5;
 const M = 0.72;
 
 const pres = new pptxgen();
@@ -52,10 +54,14 @@ pres.layout = "LAYOUT_WIDE";
 pres.author = "Bruno Prata";
 pres.title = "Automação de processos com IA";
 
-/** px do viewBox 1280x720 → polegadas */
-const px = (v) => v / 96;
-
 /* ---------------- chrome ---------------- */
+
+function topbar(slide) {
+  slide.addShape(pres.ShapeType.rect, {
+    x: 0, y: 0, w: W, h: 0.115,
+    fill: { color: C.navy }, line: { width: 0 },
+  });
+}
 
 function header(slide, eyebrow, titleRuns, opts) {
   const o = opts || {};
@@ -69,60 +75,55 @@ function header(slide, eyebrow, titleRuns, opts) {
     margin: 0, valign: "top", fontFace: FONT,
     fontSize: o.size || 30, bold: true, color: C.ink, lineSpacing: o.lnspc || 34,
   });
-  if (o.lede) {
-    slide.addText(o.lede, {
-      x: M, y: 1.82, w: W - 2 * M - 1.4, h: 0.42,
-      margin: 0, fontFace: FONT, fontSize: 13.5, color: C.inkSoft, lineSpacing: 18,
-    });
-  }
 }
 
 function footer(slide, sec) {
   slide.addText("Automação de processos com IA", {
     x: M, y: 6.92, w: 5, h: 0.28,
-    margin: 0, fontFace: FONT, fontSize: 9, bold: true, color: "9A93AC",
+    margin: 0, fontFace: FONT, fontSize: 9, bold: true, color: C.mute,
   });
   slide.addText(sec, {
     x: W - M - 5, y: 6.92, w: 5, h: 0.28,
-    margin: 0, align: "right", fontFace: FONT, fontSize: 9, color: "9A93AC",
+    margin: 0, align: "right", fontFace: FONT, fontSize: 9, color: C.mute,
   });
 }
 
-function callout(slide, label, runs, y, h) {
+function callout(slide, label, runs, y, h, opts) {
+  const o = opts || {};
   const hh = h || 0.92;
   slide.addShape(pres.ShapeType.roundRect, {
     x: M, y, w: W - 2 * M, h: hh, rectRadius: 0.1,
-    fill: { color: C.lavender }, line: { color: C.lavender, width: 0 },
+    fill: { color: o.fill || C.lavender }, line: { width: 0 },
+  });
+  slide.addShape(pres.ShapeType.rect, {
+    x: M, y, w: 0.05, h: hh,
+    fill: { color: C.magenta }, line: { width: 0 },
   });
   slide.addText(label.toUpperCase(), {
-    x: M + 0.28, y: y + 0.1, w: 7, h: 0.22,
+    x: M + 0.28, y: y + 0.1, w: 8, h: 0.22,
     margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1.8,
   });
   slide.addText(runs, {
-    x: M + 0.28, y: y + 0.32, w: W - 2 * M - 0.56, h: hh - 0.4,
-    margin: 0, valign: "top", fontFace: FONT, fontSize: 12, color: C.ink, lineSpacing: 16,
+    x: M + 0.28, y: y + 0.34, w: W - 2 * M - 0.56, h: hh - 0.42,
+    margin: 0, valign: "top", fontFace: FONT, fontSize: 12,
+    color: o.color || C.ink, lineSpacing: 16,
   });
 }
 
-function card(slide, x, y, w, h, fill) {
+function card(slide, x, y, w, h, fill, lineColor) {
   slide.addShape(pres.ShapeType.roundRect, {
     x, y, w, h, rectRadius: 0.1,
     fill: { color: fill || C.paper },
-    line: { color: fill && fill !== C.paper ? fill : C.line, width: 1 },
+    line: { color: lineColor || (fill && fill !== C.paper ? fill : C.line), width: 1 },
   });
 }
 
-function badge(slide, x, y, d, label, fill) {
-  slide.addShape(pres.ShapeType.ellipse, {
-    x, y, w: d, h: d,
-    fill: { color: fill || C.magenta }, line: { width: 0 },
+function dashCard(slide, x, y, w, h) {
+  slide.addShape(pres.ShapeType.roundRect, {
+    x, y, w, h, rectRadius: 0.1,
+    fill: { color: C.pinkTint },
+    line: { color: C.magenta, width: 1.25, dashType: "dash" },
   });
-  if (label) {
-    slide.addText(label, {
-      x, y, w: d, h: d, align: "center", valign: "middle", margin: 0,
-      fontFace: FONT, fontSize: 11, bold: true, color: "FFFFFF",
-    });
-  }
 }
 
 /* ---------------- bloco de código ---------------- */
@@ -165,7 +166,7 @@ function codeBlock(slide, x, y, w, h, lines, fontSize) {
 
 function codeCap(slide, x, y, text, w) {
   slide.addText(text.toUpperCase(), {
-    x, y, w: w || 7.5, h: 0.24,
+    x, y, w: w || 5, h: 0.24,
     margin: 0, fontFace: MONO, fontSize: 8.5, bold: true,
     color: C.magenta, charSpacing: 1.2,
   });
@@ -173,79 +174,96 @@ function codeCap(slide, x, y, text, w) {
 
 /* ---------------- fluxograma ---------------- */
 
+/**
+ * Mapeia um viewBox SVG (vbW x vbH) para a região (x,y,w,h) do slide, em
+ * polegadas, mantendo proporção e centralizando — igual ao
+ * preserveAspectRatio="xMidYMid meet" do HTML.
+ */
+function frame(vbW, vbH, x, y, w, h) {
+  const s = Math.min(w / vbW, h / vbH);
+  const ox = x + (w - vbW * s) / 2;
+  const oy = y + (h - vbH * s) / 2;
+  return {
+    s,
+    X: (v) => ox + v * s,
+    Y: (v) => oy + v * s,
+    L: (v) => v * s,
+    pt: (v) => v * s * 72, // px do viewBox → pontos de fonte
+  };
+}
+
 const NODE_STYLE = {
   plain: { fill: C.paper, line: C.line, txt: C.ink },
   term: { fill: "EFEAF5", line: "CFC3DE", txt: C.purple },
   code: { fill: C.blueBg, line: C.navy, txt: C.ink },
   ia: { fill: C.pinkBg, line: C.magenta, txt: C.ink },
   hum: { fill: C.humBg, line: C.purple, txt: C.ink },
-  todo: { fill: "FEF6FA", line: C.magenta, txt: "B4620A", dash: true },
 };
 
-/** caixa do fluxo, em coordenadas de px do viewBox */
-function fnode(slide, xp, yp, wp, hp, lines, kind, opts) {
+/** caixa do fluxo, em coordenadas do viewBox */
+function fnode(slide, F, xp, yp, wp, hp, lines, kind, opts) {
   const o = opts || {};
   const st = NODE_STYLE[kind || "plain"];
+  const size = F.pt(o.size || 19);
   slide.addText(
     lines.map((t, i) => ({ text: t, options: { breakLine: i !== lines.length - 1 } })),
     {
       shape: pres.ShapeType.roundRect,
-      rectRadius: o.pill ? 0.5 : 0.1,
-      x: px(xp), y: px(yp), w: px(wp), h: px(hp),
+      rectRadius: o.pill ? 0.5 : 0.09,
+      x: F.X(xp), y: F.Y(yp), w: F.L(wp), h: F.L(hp),
       fill: { color: st.fill },
-      line: { color: st.line, width: 1.25, dashType: st.dash ? "dash" : "solid" },
+      line: { color: st.line, width: 1.25 },
       align: "center", valign: "middle", margin: 0,
-      fontFace: FONT, fontSize: o.size || 11.5,
-      bold: o.bold || kind === "term", italic: !!o.italic,
-      color: o.color || st.txt, lineSpacing: (o.size || 11.5) * 1.25,
+      fontFace: FONT, fontSize: size,
+      bold: kind === "term", color: st.txt, lineSpacing: size * 1.25,
     }
   );
 }
 
-/** losango de decisão; cx/cy = centro em px */
-function fdiamond(slide, cxp, cyp, hwp, hhp, lines, kind, opts) {
+/** losango de decisão; cx/cy = centro no viewBox */
+function fdiamond(slide, F, cxp, cyp, hwp, hhp, lines, kind, opts) {
   const o = opts || {};
   const st = NODE_STYLE[kind || "plain"];
+  const size = F.pt(o.size || 17);
   slide.addText(
     lines.map((t, i) => ({ text: t, options: { breakLine: i !== lines.length - 1 } })),
     {
       shape: pres.ShapeType.diamond,
-      x: px(cxp - hwp), y: px(cyp - hhp), w: px(hwp * 2), h: px(hhp * 2),
+      x: F.X(cxp - hwp), y: F.Y(cyp - hhp), w: F.L(hwp * 2), h: F.L(hhp * 2),
       fill: { color: st.fill }, line: { color: st.line, width: 1.25 },
       align: "center", valign: "middle", margin: 0,
-      fontFace: FONT, fontSize: o.size || 11, color: st.txt,
-      lineSpacing: (o.size || 11) * 1.25,
+      fontFace: FONT, fontSize: size, color: st.txt, lineSpacing: size * 1.25,
     }
   );
 }
 
-/** rótulo abaixo do nó (CÓDIGO / IA / HUMANO) */
-function ftag(slide, cxp, yp, text, color) {
+/** rótulo de classificação, alinhado à esquerda a partir de xp */
+function ftag(slide, F, xp, yp, text, color, wp) {
   slide.addText(text, {
-    x: px(cxp) - 0.95, y: px(yp) - 0.1, w: 1.9, h: 0.2,
-    margin: 0, align: "center", fontFace: FONT, fontSize: 8.5,
-    bold: true, color, charSpacing: 0.8,
+    x: F.X(xp), y: F.Y(yp) - F.L(11), w: F.L(wp || 190), h: F.L(22),
+    margin: 0, align: "left", valign: "middle", fontFace: FONT,
+    fontSize: F.pt(14), bold: true, color, charSpacing: 0.5,
   });
 }
 
 /** texto solto no espaço do fluxograma */
-function ftext(slide, xp, yp, runs, opts) {
+function ftext(slide, F, xp, yp, text, opts) {
   const o = opts || {};
-  slide.addText(runs, {
-    x: px(xp), y: px(yp), w: o.w || 3.2, h: o.h || 0.24,
+  const size = F.pt(o.size || 15);
+  slide.addText(text, {
+    x: F.X(xp), y: F.Y(yp) - F.L(11), w: F.L(o.w || 200), h: F.L(o.h || 22),
     margin: 0, valign: "middle", align: o.align || "left",
-    fontFace: o.mono ? MONO : FONT, fontSize: o.size || 9.5,
-    bold: !!o.bold, color: o.color || C.inkSoft, charSpacing: o.cs || 0,
-    lineSpacing: (o.size || 9.5) * 1.35,
+    fontFace: FONT, fontSize: size, bold: !!o.bold,
+    color: o.color || C.inkSoft, lineSpacing: size * 1.3,
   });
 }
 
 /** um segmento de aresta; arrow=true põe a ponta no fim */
-function seg(slide, x1, y1, x2, y2, arrow) {
+function seg(slide, F, x1, y1, x2, y2, arrow) {
   const o = {
-    x: px(Math.min(x1, x2)), y: px(Math.min(y1, y2)),
-    w: px(Math.abs(x2 - x1)), h: px(Math.abs(y2 - y1)),
-    line: { color: C.edge, width: 1.75 },
+    x: F.X(Math.min(x1, x2)), y: F.Y(Math.min(y1, y2)),
+    w: F.L(Math.abs(x2 - x1)), h: F.L(Math.abs(y2 - y1)),
+    line: { color: C.edge, width: 1.5 },
   };
   if (x2 < x1) o.flipH = true;
   if (y2 < y1) o.flipV = true;
@@ -254,46 +272,47 @@ function seg(slide, x1, y1, x2, y2, arrow) {
 }
 
 /** aresta com cotovelos: pontos [[x,y],...]; ponta no último segmento */
-function edge(slide, pts) {
+function edge(slide, F, pts) {
   for (let i = 0; i < pts.length - 1; i++) {
-    seg(slide, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], i === pts.length - 2);
+    seg(slide, F, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], i === pts.length - 2);
   }
 }
 
-/** desenha o fluxo da triagem; painted=true classifica cada caixa */
-function triagem(slide, painted) {
+/**
+ * O fluxo da triagem de chamados — as mesmas coordenadas do SVG do HTML.
+ * painted=true classifica cada caixa (Python / IA / humano).
+ */
+function triagem(slide, F, painted) {
   const k = (c) => (painted ? c : "plain");
-  fnode(slide, 70, 250, 120, 70, ["Solicitação", "chega"], "term", { pill: true, size: 11 });
-  fnode(slide, 228, 250, 165, 70, ["Registrar", "ticket"], k("code"));
-  fnode(slide, 431, 250, 175, 70, ["Classificar", "assunto"], k("ia"));
-  fnode(slide, 644, 250, 165, 70, ["Redigir", "resposta"], k("ia"));
-  fdiamond(slide, 932, 285, 85, 65, ["Precisa", "aprovação?"], k("code"), { size: 10 });
-  fnode(slide, 560, 460, 200, 70, ["Gestor revisa", "e aprova"], k("hum"));
-  fnode(slide, 820, 460, 180, 70, ["Enviar", "resposta"], k("code"));
-  fnode(slide, 1060, 460, 100, 70, ["Fim"], "term", { pill: true, size: 11 });
+  fnode(slide, F, 20, 6, 230, 50, ["Chamado chega"], "term", { pill: true, size: 18 });
+  fnode(slide, F, 20, 88, 230, 52, ["Registrar chamado"], k("code"));
+  fnode(slide, F, 20, 172, 230, 52, ["Classificar assunto"], k("ia"));
+  fnode(slide, F, 20, 256, 230, 52, ["Redigir resposta"], k("ia"));
+  fdiamond(slide, F, 135, 392, 115, 48, ["Desconto", "acima de 10%?"], k("code"));
+  fnode(slide, F, 300, 366, 210, 52, ["Gestor aprova"], k("hum"));
+  fnode(slide, F, 20, 474, 230, 52, ["Enviar resposta"], k("code"));
+  fnode(slide, F, 430, 474, 100, 52, ["Fim"], "term", { pill: true, size: 18 });
 
-  edge(slide, [[190, 285], [222, 285]]);
-  edge(slide, [[393, 285], [425, 285]]);
-  edge(slide, [[606, 285], [638, 285]]);
-  edge(slide, [[809, 285], [841, 285]]);
-  edge(slide, [[932, 350], [932, 400], [660, 400], [660, 454]]);
-  edge(slide, [[1017, 285], [1200, 285], [1200, 420], [910, 420], [910, 454]]);
-  edge(slide, [[760, 495], [814, 495]]);
-  edge(slide, [[1000, 495], [1054, 495]]);
-  ftext(slide, 936, 396, "sim", { bold: true, size: 9, color: "6E6684", w: 0.5 });
-  ftext(slide, 1024, 268, "não", { bold: true, size: 9, color: "6E6684", w: 0.5 });
+  edge(slide, F, [[135, 56], [135, 82]]);
+  edge(slide, F, [[135, 140], [135, 166]]);
+  edge(slide, F, [[135, 224], [135, 250]]);
+  edge(slide, F, [[135, 308], [135, 338]]);
+  edge(slide, F, [[250, 392], [294, 392]]);
+  edge(slide, F, [[135, 440], [135, 468]]);
+  edge(slide, F, [[405, 418], [405, painted ? 456 : 450], [200, painted ? 456 : 450], [200, 468]]);
+  edge(slide, F, [[250, 500], [424, 500]]);
+  ftext(slide, F, 258, 376, "sim", { bold: true, size: 15, color: "6E6684", w: 40 });
+  ftext(slide, F, 146, 454, "não", { bold: true, size: 15, color: "6E6684", w: 40 });
 
   if (painted) {
-    ftag(slide, 310, 342, "CÓDIGO", C.navy);
-    ftag(slide, 518, 342, "IA · 12.000/mês", C.magenta);
-    ftag(slide, 726, 342, "IA + revisão", C.magenta);
-    ftag(slide, 932, 372, "CÓDIGO · regra fixa", C.navy);
-    ftag(slide, 660, 552, "HUMANO · 300/mês", C.purple);
-    ftag(slide, 910, 552, "CÓDIGO", C.navy);
+    ftag(slide, F, 262, 114, "PYTHON · API do sistema", C.navy);
+    ftag(slide, F, 262, 198, "IA · 12.000/mês", C.magenta);
+    ftag(slide, F, 262, 282, "IA · 9.000/mês + revisão", C.magenta);
+    ftag(slide, F, 518, 392, "HUMANO · 300/mês", C.purple, 140);
+    ftag(slide, F, 20, 547, "PYTHON", C.navy, 100);
   } else {
-    ftext(slide, 80, 432, "A REGRA DO LOSANGO, ESCRITA:", { bold: true, size: 9, color: C.magenta, w: 3.4 });
-    ftext(slide, 80, 456, "desconto > 10% ou exceção contratual", { size: 10, w: 3.6 });
-    ftext(slide, 80, 478, "losango sem regra = decisão que ninguém revisou", { size: 9, color: "8E86A0", w: 4.6 });
+    ftext(slide, F, 20, 557, "A REGRA DO LOSANGO, ESCRITA:", { bold: true, size: 16, color: C.magenta, w: 330 });
+    ftext(slide, F, 20, 581, "desconto > 10% ou exceção contratual", { size: 17, w: 380 });
   }
 }
 
@@ -323,10 +342,9 @@ function triagem(slide, painted) {
     ],
     { x: M, y: 1.98, w: 9.9, h: 2.15, margin: 0, valign: "top", fontFace: FONT, fontSize: 42, bold: true, lineSpacing: 48 }
   );
-  s.addText(
-    "Como mapear o processo, implementar com eval e levar para produção.",
-    { x: M, y: 4.2, w: 6.6, h: 1, margin: 0, fontFace: FONT, fontSize: 15, color: "E7DCEF", lineSpacing: 22 }
-  );
+  s.addText("Onde a IA ajuda — e onde um script resolve melhor.", {
+    x: M, y: 4.2, w: 7.2, h: 0.5, margin: 0, fontFace: FONT, fontSize: 16, color: "E7DCEF", lineSpacing: 22,
+  });
   s.addText("Bruno Prata", {
     x: M, y: 6.15, w: 6, h: 0.3, margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: "FFFFFF",
   });
@@ -334,857 +352,892 @@ function triagem(slide, painted) {
     x: M, y: 6.45, w: 6, h: 0.3, margin: 0, fontFace: FONT, fontSize: 11, color: "C9B6D4",
   });
   s.addNotes(
-    "Abertura curta. Nome, o que faço, e a promessa em uma frase: vocês vão sair com um método " +
-      "de uma página para decidir o que automatizar. Prometa o caso prático do fim. ~1 min."
+    "Abertura curta. Nome e a promessa em uma frase: vocês vão sair com um roteiro de entrevista, " +
+      "uma notação de fluxograma e uma regra de decisão. Prometa o kit do fim. ~1 min."
   );
 }
 
-/* ================= 02 · HOOK ================= */
+/* ================= 02 · BIO ================= */
 {
   const s = pres.addSlide();
-  s.background = { color: C.deep };
-  s.addText("O PONTO DE PARTIDA", {
-    x: M, y: 1.15, w: 9, h: 0.3, margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.pink, charSpacing: 2.2,
+  topbar(s);
+  s.addText("QUEM ESTÁ FALANDO", {
+    x: M, y: 0.5, w: 8, h: 0.3,
+    margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.magenta, charSpacing: 2.2,
+  });
+  s.addText("Bruno Prata", {
+    x: M, y: 1.5, w: 6.5, h: 0.85, margin: 0, valign: "top",
+    fontFace: FONT, fontSize: 40, bold: true, color: C.ink,
   });
   s.addText(
     [
-      { text: "A pergunta errada é ", options: { color: "FFFFFF" } },
-      { text: "“o que a IA consegue fazer aqui?”", options: { color: C.pink } },
+      { text: "Especialista em Dados no ", options: { color: C.inkSoft } },
+      { text: "Nubank", options: { color: C.ink, bold: true } },
     ],
-    { x: M, y: 1.6, w: 11.3, h: 1.5, margin: 0, valign: "top", fontFace: FONT, fontSize: 34, bold: true, lineSpacing: 40 }
+    { x: M, y: 2.4, w: 6.5, h: 0.4, margin: 0, fontFace: FONT, fontSize: 17 }
   );
-  s.addText(
-    [
-      { text: "A pergunta certa é: ", options: { color: "E7DCEF" } },
-      { text: "neste processo, o que é decisão e o que é digitação?", options: { color: "FFFFFF", bold: true } },
-    ],
-    { x: M, y: 3.4, w: 10.6, h: 0.7, margin: 0, fontFace: FONT, fontSize: 18, lineSpacing: 25 }
-  );
-  s.addText(
-    "Automação com IA é 80% desenho de processo e 20% modelo. Quem inverte essa conta entrega uma demo bonita que ninguém usa em produção.",
-    { x: M, y: 4.3, w: 10.2, h: 1, margin: 0, fontFace: FONT, fontSize: 15, color: "E7DCEF", lineSpacing: 22 }
-  );
-  // roteiro em uma linha (substitui o slide de agenda)
-  s.addText(
-    [
-      { text: "NOS PRÓXIMOS 25 MIN     ", options: { color: C.pink, bold: true, charSpacing: 1.6 } },
-      { text: "mapear  →  decidir  →  humano na alça  →  levar para produção  →  ", options: { color: "C9B6D4" } },
-      { text: "um caso real", options: { color: "FFFFFF", bold: true } },
-    ],
-    { x: M, y: 5.95, w: 11.9, h: 0.4, margin: 0, valign: "middle", fontFace: FONT, fontSize: 12 }
-  );
-  s.addNotes(
-    "Pausa depois da pergunta errada; deixe o silêncio trabalhar. Esta é a tese: automação é " +
-      "desenho de processo, não escolha de modelo. A linha do rodapé é a única agenda. ~1,5 min."
-  );
-}
-
-/* ================= 03 · MÉTODO + NOTAÇÃO ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "O método", [
-    { text: "Quatro passos e ", options: { color: C.ink } },
-    { text: "quatro formas", options: { color: C.magenta } },
-    { text: ". É só isso.", options: { color: C.ink } },
-  ]);
-  const steps = [
-    ["Desenhe o fluxo como ele acontece hoje", ", sem melhorar nada. Entreviste quem executa: a versão do gerente é a oficial, a de quem executa é a real."],
-    ["Uma caixa por ação, um losango por decisão.", " Na dúvida, é decisão — decisão escondida dentro de ação é onde a automação quebra depois."],
-    ["Tabele cada caixa", ": entrada, saída, dono, volume/mês, taxa de exceção, custo do erro. Sem os dois últimos, o passo 4 é chute."],
-    ["Volte ao desenho e pinte cada caixa", ": código, IA ou humano. O fluxo pintado é a arquitetura."],
-  ];
-  const y0 = 2.3, rh = 0.82;
-  steps.forEach(([lead, rest], i) => {
-    badge(s, M, y0 + i * rh, 0.34, String(i + 1));
-    s.addText(
-      [
-        { text: lead, options: { bold: true, color: C.ink } },
-        { text: rest, options: { color: C.inkSoft } },
-      ],
-      { x: M + 0.5, y: y0 + i * rh - 0.04, w: 6.5, h: 0.74, margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, lineSpacing: 15.5 }
-    );
-  });
-
-  // notação: as quatro formas, desenhadas
-  const nx = 8.0;
-  codeCap(s, nx, 2.18, "A notação inteira", 4.6);
-  const shapes = [
-    ["início / fim", "term", true, "onde o processo começa e termina", null],
-    ["ação", "plain", false, "uma caixa = uma ação.", "Se tem “e” no nome, são duas."],
-    ["decisão", "plain", false, "todo losango tem que ter", "uma regra escrita embaixo"],
-  ];
-  shapes.forEach(([label, kind, pill, d1, d2], i) => {
-    const y = 2.52 + i * 0.86;
-    const st = NODE_STYLE[kind];
-    if (label === "decisão") {
-      s.addText(label, {
-        shape: pres.ShapeType.diamond,
-        x: nx, y, w: 1.55, h: 0.56,
-        fill: { color: st.fill }, line: { color: st.line, width: 1.25 },
-        align: "center", valign: "middle", margin: 0,
-        fontFace: FONT, fontSize: 11, color: st.txt,
-      });
-    } else {
-      s.addText(label, {
-        shape: pres.ShapeType.roundRect, rectRadius: pill ? 0.5 : 0.1,
-        x: nx, y, w: 1.55, h: 0.56,
-        fill: { color: st.fill }, line: { color: st.line, width: 1.25 },
-        align: "center", valign: "middle", margin: 0,
-        fontFace: FONT, fontSize: 11, bold: pill, color: st.txt,
-      });
-    }
-    s.addText(d2 ? d1 + "\n" + d2 : d1, {
-      x: nx + 1.75, y, w: 2.9, h: 0.56,
-      margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5,
-    });
-  });
-  // seta condicional
-  const ya = 2.52 + 3 * 0.86;
-  s.addShape(pres.ShapeType.line, {
-    x: nx, y: ya + 0.3, w: 1.4, h: 0,
-    line: { color: C.edge, width: 1.75, endArrowType: "triangle" },
-  });
-  s.addText("sim", {
-    x: nx + 0.4, y: ya + 0.05, w: 0.6, h: 0.22,
-    margin: 0, fontFace: FONT, fontSize: 9, bold: true, color: "6E6684",
-  });
-  s.addText("seta condicional —\nrotule sempre as duas saídas", {
-    x: nx + 1.75, y: ya, w: 2.9, h: 0.56,
-    margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5,
-  });
-
-  callout(
-    s,
-    "Por que fluxograma e não texto",
-    [
-      { text: "Processo em texto esconde decisão. Em fluxograma, decisão tem forma própria — e é exatamente onde você vai escolher entre código, IA e humano. ", options: {} },
-      { text: "O desenho não é documentação, é a ferramenta de decisão.", options: { bold: true } },
-    ],
-    5.82
-  );
-  footer(s, "01 · Mapear");
-  s.addNotes(
-    "Este é o slide do método. Diga que a notação inteira são quatro formas — não é BPMN, " +
-      "não precisa de ferramenta, papel resolve. O passo 4 é o que ninguém faz. ~2,5 min."
-  );
-}
-
-/* ================= 04 · FLUXO COMO É HOJE ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "Passos 1 e 2 · exemplo real", [
-    { text: "Triagem de solicitação de suporte, ", options: { color: C.ink } },
-    { text: "como acontece hoje", options: { color: C.magenta } },
-  ]);
-  triagem(s, false);
-  callout(
-    s,
-    "O que este desenho já entrega",
-    [
-      { text: "Seis ações, uma decisão, duas saídas rotuladas — e a regra do losango escrita. ", options: {} },
-      { text: "Nada aqui é sobre IA ainda.", options: { bold: true } },
-      { text: " Quem tenta desenhar isso e não consegue fechar as setas descobriu que tem dois processos, não um.", options: {} },
-    ],
-    5.92
-  );
-  footer(s, "01 · Mapear");
-  s.addNotes(
-    "Percorra o fluxo com o dedo, uma caixa por vez. Insista que ainda não se falou de IA — " +
-      "e que a regra do losango escrita já é metade da decisão de arquitetura. ~2 min."
-  );
-}
-
-/* ================= 05 · CANVAS ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(
-    s,
-    "Passo 3 · a tabela",
-    [
-      { text: "O canvas — ", options: { color: C.ink } },
-      { text: "uma linha por caixa do fluxo", options: { color: C.magenta } },
-    ],
-    { lede: "As duas colunas destacadas são as que decidem tudo no passo 4." }
-  );
-  const th = (t, hi) => ({
-    text: t,
-    options: {
-      fill: { color: hi ? C.magenta : C.navy }, color: "FFFFFF",
-      bold: true, fontSize: 10.5, fontFace: FONT, align: "left", valign: "middle",
-    },
-  });
-  const td = (t, o) => ({
-    text: t,
-    options: Object.assign({ color: C.inkSoft, fontSize: 10.5, fontFace: FONT, valign: "middle" }, o || {}),
-  });
-  const rows = [
-    [th("Caixa do fluxo"), th("Entrada"), th("Saída"), th("É decisão?", true), th("Custo do erro", true), th("Exceções"), th("Volume/mês"), th("Dono")],
-    [td("Registrar ticket", { color: C.ink, bold: true }), td("e-mail, formulário"), td("ticket criado"), td("Não"), td("baixo", { color: C.green, bold: true }), td("2%"), td("12.000"), td("Suporte")],
-    [td("Classificar assunto", { color: C.ink, bold: true }), td("texto livre"), td("categoria"), td("Sim — ambígua"), td("baixo", { color: C.green, bold: true }), td("15%"), td("12.000"), td("Suporte")],
-    [td("Redigir resposta", { color: C.ink, bold: true }), td("contexto + histórico"), td("texto"), td("Sim — ambígua"), td("médio", { color: C.amber, bold: true }), td("20%"), td("9.000"), td("Suporte")],
-    [td("Precisa aprovação?", { color: C.ink, bold: true }), td("valor do desconto"), td("sim / não"), td("Sim — regra fixa"), td("alto", { color: C.magenta, bold: true }), td("5%"), td("12.000"), td("Suporte")],
-    [td("Gestor revisa e aprova", { color: C.ink, bold: true }), td("proposta"), td("decisão"), td("Sim — julgamento"), td("alto, irreversível", { color: C.magenta, bold: true }), td("—"), td("300"), td("Gestor")],
-  ];
-  s.addTable(rows, {
-    x: M, y: 2.5, w: W - 2 * M,
-    colW: [2.5, 1.8, 1.35, 1.75, 1.85, 1.0, 1.15, 0.49],
-    rowH: 0.42,
-    border: { type: "solid", color: C.line, pt: 1 },
-    fill: { color: C.paper },
-    margin: 0.07,
-  });
-  callout(
-    s,
-    "Como ler",
-    [
-      { text: "Decisão ambígua + erro tolerável → ", options: {} }, { text: "IA", options: { bold: true } },
-      { text: ". Regra fixa, mesmo com erro caro → ", options: {} }, { text: "código", options: { bold: true } },
-      { text: ". Julgamento irreversível → ", options: {} }, { text: "humano", options: { bold: true } },
-      { text: ". Digitação → ", options: {} }, { text: "código", options: { bold: true } },
-      { text: ". A tabela decide, você só transcreve para o desenho.", options: {} },
-    ],
-    5.62
-  );
-  footer(s, "01 · Mapear");
-  s.addNotes(
-    "SLIDE-CHAVE — dê tempo, a plateia fotografa. Uma linha por caixa do fluxo anterior: " +
-      "o canvas não é outro documento, é o mesmo desenho em forma de tabela. " +
-      "Percorra só as duas colunas destacadas. ~3 min."
-  );
-}
-
-/* ================= 06 · FLUXO PINTADO ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "Passo 4 · o entregável de verdade", [
-    { text: "O mesmo fluxo, pintado — e pronto, ", options: { color: C.ink } },
-    { text: "essa é a arquitetura", options: { color: C.magenta } },
-  ]);
-  triagem(s, true);
-  callout(
-    s,
-    "Como ler o resultado",
-    [
-      { text: "As duas caixas rosas são ", options: {} },
-      { text: "21.000 execuções/mês de decisão ambígua com erro tolerável", options: { bold: true } },
-      { text: " — é aí que a IA se paga. A lavanda são 300 julgamentos irreversíveis por mês: continua humana, e é barato que continue. O losango parece decisão de IA e não é.", options: {} },
-    ],
-    5.92
-  );
-  footer(s, "01 · Mapear");
-  s.addNotes(
-    "O ponto alto da primeira parte. Mesmo desenho, três cores — e a arquitetura apareceu " +
-      "sem ninguém escrever documento. Destaque que o losango engana: parece IA, é um if. ~2 min."
-  );
-}
-
-/* ================= 07 · ÁRVORE DE DECISÃO ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(
-    s,
-    "A árvore · rode uma vez por linha do canvas",
-    [
-      { text: "Quatro perguntas e a etapa ", options: { color: C.ink } },
-      { text: "se classifica sozinha", options: { color: C.magenta } },
-    ],
-    { size: 27, lnspc: 31, titleW: 8.2 }
-  );
-  // o quinto caminho, no canto livre ao lado do título
-  ftext(s, 880, 104, "E O QUINTO CAMINHO", { bold: true, size: 9, color: C.purple, w: 3.6, h: 0.2 });
-  s.addText(
-    [
-      { text: "A árvore classifica ", options: {} },
-      { text: "etapa de processo", options: { bold: true } },
-      { text: ". Trabalho de especialista — código, análise, redação — não entra: ali é ", options: {} },
-      { text: "copiloto", options: { bold: true, color: C.purple } },
-      { text: ".", options: {} },
-    ],
-    { x: px(880), y: px(124), w: 3.7, h: 0.8, margin: 0, valign: "top", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5 }
-  );
-
-  const qs = [
-    [256, ["A regra é fixa", "e estável?"]],
-    [348, ["Verificar custa menos", "que executar?"]],
-    [440, ["O erro é caro?"]],
-    [532, ["É reversível?"]],
-  ];
-  qs.forEach(([cy, lines]) => fdiamond(s, 240, cy, 150, 34, lines, "plain", { size: 10 }));
-
-  // descidas
-  [[290, 308, "não"], [382, 400, "sim"], [474, 492, "sim"]].forEach(([y1, y2, lb]) => {
-    edge(s, [[240, y1], [240, y2]]);
-    ftext(s, 248, (y1 + y2) / 2, lb, { bold: true, size: 8.5, color: "6E6684", w: 0.42 });
-  });
-
-  const leaves = [
-    [256, "CÓDIGO — não use LLM", "code", "sim", ["Um if você testa uma vez", "e confia para sempre."]],
-    [348, "AINDA NÃO AUTOMATIZE", "todo", "não", ["Torne verificável primeiro. Senão", "a automação vira trabalho novo."]],
-    [440, "IA + revisão por amostragem", "ia", "não", ["O ganho fácil. Comece por aqui,", "não pelo processo mais visível."]],
-    [532, "IA + humano supervisiona", "ia", "sim", ["Só vale com undo real e alerta.", "Painel que ninguém abre não conta."]],
-  ];
-  leaves.forEach(([cy, label, kind, lb, notes]) => {
-    edge(s, [[390, cy], [464, cy]]);
-    ftext(s, 404, cy - 12, lb, { bold: true, size: 8.5, color: "6E6684", w: 0.42 });
-    fnode(s, 470, cy - 28, 330, 56, [label], kind, { size: 12, bold: true, italic: kind === "todo" });
-    s.addText(notes.join("\n"), {
-      x: px(820), y: px(cy) - 0.24, w: 3.7, h: 0.48,
-      margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5,
-    });
-  });
-  // quinta folha
-  edge(s, [[240, 566], [240, 624], [464, 624]]);
-  ftext(s, 248, 590, "não", { bold: true, size: 8.5, color: "6E6684", w: 0.42 });
-  fnode(s, 470, 596, 330, 56, ["IA propõe + humano aprova"], "hum", { size: 12, bold: true });
-  s.addText("Caro e irreversível. O clique\nhumano é o produto aqui.", {
-    x: px(820), y: px(624) - 0.24, w: 3.7, h: 0.48,
-    margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5,
-  });
-  footer(s, "02 · Decidir");
-  s.addNotes(
-    "Percorra a árvore em voz alta com UMA linha do canvas — de preferência 'Classificar " +
-      "assunto'. A primeira pergunta é a que mais economiza dinheiro: se é regra fixa, é código. " +
-      "A segunda é a que ninguém faz e é a que evita projeto morto. ~3 min."
-  );
-}
-
-/* ================= 08 · ESCALONAMENTO (CÓDIGO) ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "O padrão mais útil, na prática", [
-    { text: "Escalonamento por confiança — ", options: { color: C.ink } },
-    { text: "são doze linhas", options: { color: C.magenta } },
-  ]);
-  codeCap(s, M, 2.32, "triagem.py");
-  codeBlock(s, M, 2.6, 7.5, 3.05, [
-    [["# o schema é o contrato: sem ele não há limiar nem log", "c"]],
-    [["class ", "k"], ["Triagem", "w"], ["(BaseModel):", "t"]],
-    [["    categoria: ", "t"], ["Literal", "v"], ['["cobranca", "fraude", "cadastro", "outro"]', "s"]],
-    [["    confianca: ", "t"], ["float", "v"], ["        # 0-1, exigido no prompt", "c"]],
-    [["    justificativa: ", "t"], ["str", "v"], ["     # 1 frase — vai para o log", "c"]],
-    [["    faltou_contexto: ", "t"], ["bool", "v"], ["   # o caminho explícito de \"não sei\"", "c"]],
-    [],
-    [["r = ", "t"], ["classificar", "w"], ["(ticket)   ", "t"], ["# saída estruturada", "c"]],
-    [["if ", "k"], ["r.faltou_contexto ", "t"], ["or ", "k"], ["r.confianca < LIMIAR:", "t"]],
-    [["    fila_humana.", "t"], ["enfileirar", "w"], ["(ticket, sugestao=r)  ", "t"], ["# COM a sugestão", "c"]],
-    [["else", "k"], [":", "t"]],
-    [["    ", "t"], ["rotear", "w"], ["(ticket, r.categoria)", "t"]],
-    [["registrar", "w"], ["(ticket.id, r, modelo=MODELO, prompt_v=PROMPT_V)", "t"]],
-  ], 9);
-
-  const cx = 8.5, cw = W - M - cx;
-  const notes = [
-    ["O limiar sai do eval", "Rode os casos, veja onde o acerto cai, escolha ali. Começamos em 0.85 — o ponto em que o erro confiante zerou.", C.paper, C.magenta],
-    ["Escalone com a sugestão", "Fila que chega em branco custa o mesmo que não ter automação. Com categoria sugerida + justificativa, o humano confirma em segundos.", C.paper, C.magenta],
-  ];
-  let cy = 2.6;
-  notes.forEach(([t, d, bg, tc]) => {
-    const h = 1.18;
-    card(s, cx, cy, cw, h, bg);
+  const chips = ["Grupo Boticário", "iFood", "EBANX", "Nubank"];
+  const chipW = [1.85, 0.95, 1.1, 1.15];
+  let cx = M;
+  chips.forEach((t, i) => {
     s.addText(t, {
-      x: cx + 0.24, y: cy + 0.16, w: cw - 0.48, h: 0.26,
-      margin: 0, fontFace: FONT, fontSize: 12, bold: true, color: tc,
+      shape: pres.ShapeType.roundRect, rectRadius: 0.06,
+      x: cx, y: 3.1, w: chipW[i], h: 0.36,
+      fill: { color: C.lavender }, line: { width: 0 },
+      align: "center", valign: "middle", margin: 0,
+      fontFace: MONO, fontSize: 10.5, color: C.purple,
     });
-    s.addText(d, {
-      x: cx + 0.24, y: cy + 0.46, w: cw - 0.48, h: 0.6,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5,
-    });
-    cy += h + 0.16;
+    cx += chipW[i] + 0.14;
   });
-  card(s, cx, cy, cw, 0.8, C.lavender);
+  s.addText("Administração — UFPR  ·  6+ anos entre análise de dados, BI e decisão", {
+    x: M, y: 3.66, w: 6.5, h: 0.3, margin: 0, fontFace: FONT, fontSize: 11.5, color: "8B84A0",
+  });
+
+  s.addShape(pres.ShapeType.roundRect, {
+    x: 7.7, y: 1.45, w: 4.9, h: 2.6, rectRadius: 0.13,
+    fill: { color: C.deep }, line: { width: 0 },
+  });
+  s.addText("O QUE EU FAÇO", {
+    x: 7.98, y: 1.68, w: 4.3, h: 0.24,
+    margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.pink, charSpacing: 1.2,
+  });
   s.addText(
     [
-      { text: "Meça a taxa de escalonamento. ", options: { bold: true, color: C.purple } },
-      { text: "Subiu? Mudou o contexto ou apareceu categoria nova — não é o modelo piorando.", options: { color: C.inkSoft } },
+      { text: "Os últimos anos foram automatizando processo de decisão: entender como ele acontece hoje e devolver a parte repetitiva pra máquina — ", options: { color: "EDE4F3" } },
+      { text: "script quando dá, IA quando é linguagem, pessoa quando o erro custa caro", options: { color: "FFFFFF", bold: true } },
+      { text: ".", options: { color: "EDE4F3" } },
     ],
-    { x: cx + 0.24, y: cy + 0.1, w: cw - 0.48, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 10, lineSpacing: 13.5 }
+    { x: 7.98, y: 1.98, w: 4.34, h: 1.9, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 19 }
   );
 
   callout(
-    s,
-    "O detalhe que quase todo mundo esquece",
+    s, "O combinado desta palestra",
     [
-      { text: "Sem faltou_contexto, o modelo nunca diz \"não sei\" — ele chuta com confiança alta.", options: { bold: true } },
-      { text: " \"Não sei\" precisa ser uma saída válida e explicitamente permitida no prompt, senão você mediu confiança de um modelo que não tem como discordar de si mesmo.", options: {} },
+      { text: "Não é demo de ferramenta. Em 25 minutos você sai com " },
+      { text: "um roteiro de entrevista, uma notação de fluxograma e uma regra de decisão", options: { bold: true } },
+      { text: " que dá pra aplicar no seu processo amanhã de manhã — mais um kit de arquivos pra baixar no fim." },
     ],
-    5.85
+    4.55, 1.0
   );
-  footer(s, "03 · Humano na alça");
+  footer(s, "Abertura");
   s.addNotes(
-    "Leia o código em voz alta — são doze linhas, cabe. O que importa não é o código, é o " +
-      "schema: sem faltou_contexto e confianca não existe limiar nem log. " +
-      "Este é o slide que transforma 'human in the loop' de conceito em implementação. ~3 min."
+    "Credencial em 30 segundos, não currículo. A frase do painel escuro é a tese da palestra inteira: " +
+      "script / IA / pessoa. Ela volta no slide 8. ~1 min."
   );
 }
 
-/* ================= 09 · RUBBER STAMPING ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "O anti-padrão que passa em toda auditoria", [
-    { text: "Se o humano aprova 400 itens por dia, não existe humano na alça — existe um ", options: { color: C.ink } },
-    { text: "ritual de aprovação", options: { color: C.magenta } },
-  ]);
-  const cw = (W - 2 * M) / 2 - 0.2, y = 2.75, ch = 3.0;
-  card(s, M, y, cw, ch, C.paper);
-  s.addText("Três perguntas para saber se o checkpoint é real", {
-    x: M + 0.34, y: y + 0.3, w: cw - 0.68, h: 0.6,
-    margin: 0, valign: "top", fontFace: FONT, fontSize: 15, bold: true, color: C.magenta, lineSpacing: 20,
-  });
-  [
-    "O revisor tem tempo e informação suficientes para discordar?",
-    "Existe registro de quando ele discordou? Taxa de rejeição de 0% é alarme, não é qualidade.",
-    "Se a revisão por amostragem daria o mesmo resultado, a revisão item a item é teatro — e está custando uma pessoa.",
-  ].forEach((t, i) => {
-    s.addText(
-      [{ text: `${i + 1}. `, options: { bold: true, color: C.ink } }, { text: t, options: { color: C.inkSoft } }],
-      { x: M + 0.34, y: y + 1.0 + i * 0.66, w: cw - 0.68, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
-    );
-  });
-
-  const x2 = M + cw + 0.4;
-  card(s, x2, y, cw, ch, C.lavender);
-  s.addText("O lado regulatório", {
-    x: x2 + 0.34, y: y + 0.3, w: cw - 0.68, h: 0.32,
-    margin: 0, fontFace: FONT, fontSize: 15, bold: true, color: C.purple,
-  });
-  s.addText(
-    [
-      { text: "A LGPD, art. 20", options: { bold: true, color: C.ink } },
-      { text: " garante ao titular o direito de solicitar revisão de decisões tomadas unicamente com base em tratamento automatizado que afetem seus interesses.", options: { color: C.inkSoft } },
-    ],
-    { x: x2 + 0.34, y: y + 0.72, w: cw - 0.68, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
-  );
-  s.addText(
-    [
-      { text: "Em serviço financeiro isso não é rodapé jurídico: é o que define quais etapas ", options: { color: C.inkSoft } },
-      { text: "podem", options: { bold: true, color: C.ink } },
-      { text: " ser 100% automáticas — e obriga rastro de qual versão do modelo decidiu o quê, quando.", options: { color: C.inkSoft } },
-    ],
-    { x: x2 + 0.34, y: y + 1.62, w: cw - 0.68, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
-  );
-  s.addText(
-    [
-      { text: "Consequência prática: ", options: { bold: true } },
-      { text: "desenhe o log de decisão junto com o fluxo — é o slide seguinte.", options: {} },
-    ],
-    { x: x2 + 0.34, y: y + 2.5, w: cw - 0.68, h: 0.42, margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.purple, lineSpacing: 15 }
-  );
-  footer(s, "03 · Humano na alça");
-  s.addNotes(
-    "Slide mais relevante para o contexto Serasa. 'Taxa de rejeição 0% é alarme' costuma gerar " +
-      "pergunta. No art. 20 seja preciso: o direito é à revisão, e o gatilho é a decisão tomada " +
-      "UNICAMENTE por tratamento automatizado. ~2,5 min."
-  );
-}
-
-/* ================= 10 · CAMADAS ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "A stack por camada", [
-    { text: "Seis camadas — e as ", options: { color: C.ink } },
-    { text: "duas", options: { color: C.magenta } },
-    { text: " que decidem se vai para produção", options: { color: C.ink } },
-  ]);
-  const layers = [
-    ["Modelo", "Claude · GPT · Gemini · modelo aberto self-hosted", false],
-    ["Agente e código", "Claude Code · Claude Agent SDK · Cursor · LangGraph", false],
-    ["Orquestração", "Temporal · Airflow · Step Functions · n8n — retry, idempotência, estado", true],
-    ["Integração", "MCP · APIs internas — um protocolo no lugar de N integrações sob medida", false],
-    ["Contexto e dados", "A busca que você já tem · banco vetorial só quando a busca simples falhar", false],
-    ["Eval e observabilidade", "Conjunto de casos versionado · Langfuse · Braintrust · traço com input, output e versão", true],
-  ];
-  const y0 = 2.42, rh = 0.5, rg = 0.08;
-  layers.forEach(([name, tools, key], i) => {
-    const y = y0 + i * (rh + rg);
-    s.addShape(pres.ShapeType.roundRect, {
-      x: M, y, w: W - 2 * M, h: rh, rectRadius: 0.08,
-      fill: { color: key ? "FEF6FA" : C.paper },
-      line: { color: key ? C.magenta : C.line, width: 1 },
-    });
-    s.addText(name, {
-      x: M + 0.28, y, w: 2.7, h: rh,
-      margin: 0, valign: "middle", fontFace: FONT, fontSize: 12.5, bold: true, color: C.ink,
-    });
-    s.addText(tools, {
-      x: M + 3.05, y, w: W - 2 * M - 3.35, h: rh,
-      margin: 0, valign: "middle", fontFace: FONT, fontSize: 11.5, color: key ? C.magenta : C.purple,
-    });
-  });
-  callout(
-    s,
-    "O que separa piloto de produção",
-    [
-      { text: "Todo piloto tem a camada de modelo. O que quase nenhum tem é ", options: {} },
-      { text: "orquestração", options: { bold: true } },
-      { text: " e ", options: {} },
-      { text: "eval", options: { bold: true } },
-      { text: " — e são exatamente as duas que decidem se aquilo sobrevive ao terceiro mês.", options: {} },
-    ],
-    5.92
-  );
-  footer(s, "04 · Ferramentas");
-  s.addNotes(
-    "Passe rápido, não venda ferramenta. As duas linhas destacadas são o recado. " +
-      "Sobre banco vetorial seja direto: na maioria dos casos a busca que a empresa já tem " +
-      "resolve. Se o tempo apertar, este é o slide para acelerar. ~1,5 min."
-  );
-}
-
-/* ================= 11 · EVAL SET ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "O artefato que separa automação de aposta", [
-    { text: "O eval set é um arquivo. ", options: { color: C.ink } },
-    { text: "Comece por ele", options: { color: C.magenta } },
-    { text: ", não pelo prompt.", options: { color: C.ink } },
-  ]);
-  codeCap(s, M, 2.4, "evals/triagem.yaml  ·  versionado no repo, revisado em PR");
-  codeBlock(s, M, 2.68, 7.5, 2.78, [
-    [["# 20 casos REAIS tirados do histórico — não inventados", "c"]],
-    [["- id: cob-001", "t"]],
-    [["  entrada: ", "t"], ['"não reconheço a cobrança de R$ 89,90 no cartão"', "s"]],
-    [["  esperado: { categoria: cobranca, escalona: ", "t"], ["false", "v"], [" }", "t"]],
-    [],
-    [["- id: frd-014", "t"]],
-    [["  entrada: ", "t"], ['"abriram conta no meu CPF, quero registrar fraude"', "s"]],
-    [["  esperado: { categoria: fraude, escalona: ", "t"], ["false", "v"], [" }", "t"]],
-    [],
-    [["# os casos de borda são os que importam:", "c"]],
-    [["# este é ambíguo de propósito e DEVE escalonar", "c"]],
-    [["- id: amb-007", "t"]],
-    [["  entrada: ", "t"], ['"cobrança que não fiz, acho que usaram meus dados"', "s"]],
-    [["  esperado: { escalona: ", "t"], ["true", "v"], [" }", "t"]],
-  ], 8.5);
-  codeCap(s, M, 5.58, "no CI, bloqueando merge");
-  codeBlock(s, M, 5.86, 7.5, 0.5, [
-    [["pytest", "w"], [" evals/ --limiar 0.85   ", "t"], ["# falha = não entra em produção", "c"]],
-  ], 9);
-
-  const cx = 8.5, cw = W - M - cx;
-  card(s, cx, 2.68, cw, 2.15, C.paper);
-  s.addText("Os três números", {
-    x: cx + 0.26, y: 2.86, w: cw - 0.52, h: 0.28,
-    margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: C.magenta,
-  });
-  [
-    ["Acerto por categoria", " — média esconde a categoria que vai mal.", C.inkSoft],
-    ["Taxa de escalonamento", " — o custo humano que você está criando.", C.inkSoft],
-    ["Erro confiante", " — errou com confiança acima do limiar. Este é o número que mata o projeto. Meta: zero.", C.magenta],
-  ].forEach(([b, r, rc], i) => {
-    s.addText(
-      [{ text: b, options: { bold: true, color: C.ink } }, { text: r, options: { color: rc } }],
-      { x: cx + 0.26, y: 3.2 + i * 0.54, w: cw - 0.52, h: 0.56, margin: 0, valign: "top", fontFace: FONT, fontSize: 10, lineSpacing: 13.5 }
-    );
-  });
-  card(s, cx, 4.98, cw, 1.38, C.lavender);
-  s.addText("Vinte casos bastam", {
-    x: cx + 0.26, y: 5.14, w: cw - 0.52, h: 0.28,
-    margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: C.purple,
-  });
-  s.addText(
-    [
-      { text: "Não espere ter mil. Vinte casos reais, sendo ", options: {} },
-      { text: "cinco de borda", options: { bold: true, color: C.ink } },
-      { text: ", já pegam quase toda regressão. O eval que existe vale mais que o eval perfeito que você faria depois.", options: {} },
-    ],
-    { x: cx + 0.26, y: 5.48, w: cw - 0.52, h: 0.8, margin: 0, valign: "top", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13.5 }
-  );
-  footer(s, "04 · Ferramentas");
-  s.addNotes(
-    "Insista na inversão: o eval vem ANTES do prompt. E no número que mata projeto: erro " +
-      "confiante. Se der abertura, conte que 20 casos com 5 de borda já pega quase tudo — " +
-      "tira a desculpa de 'não tenho dados suficientes'. ~2,5 min."
-  );
-}
-
-/* ================= 12 · PROMPT + REGISTRO ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "Os outros dois artefatos", [
-    { text: "O prompt tem anatomia. E toda decisão ", options: { color: C.ink } },
-    { text: "deixa rastro", options: { color: C.magenta } },
-    { text: ".", options: { color: C.ink } },
-  ]);
-  const half = (W - 2 * M) / 2 - 0.2;
-  codeCap(s, M, 2.32, "prompts/triagem.v4.md  ·  sete seções, sempre nessa ordem", 6.0);
-  codeBlock(s, M, 2.6, half, 3.85, [
-    [["## 1. Papel", "c"]],
-    [["Você tria solicitações de suporte de um bureau.", "t"]],
-    [],
-    [["## 2. Tarefa", "c"]],
-    [["Classifique em UMA categoria e informe a confiança.", "t"]],
-    [],
-    [["## 3. Dados", "c"]],
-    [["{{ticket}}  {{historico_do_cliente}}", "t"]],
-    [],
-    [["## 4. Regras de decisão", "c"]],
-    [["- CPF usado por terceiro -> sempre ", "t"], ["fraude", "s"], [".", "t"]],
-    [["- Valor contestado + suspeita -> escalone.", "t"]],
-    [],
-    [["## 5. Formato de saída", "c"]],
-    [["JSON no schema Triagem. Nada fora do JSON.", "t"]],
-    [],
-    [["## 6. Quando NÃO decidir", "c"]],
-    [["Falta histórico ou cabe em duas categorias ->", "t"]],
-    [["faltou_contexto: true", "s"], [". Não chute.", "t"]],
-    [],
-    [["## 7. Casos de borda", "c"]],
-    [["<3 exemplos vindos direto do eval set>", "t"]],
-  ], 8.5);
-
-  const x2 = M + half + 0.4;
-  codeCap(s, x2, 2.32, "o registro de cada decisão  ·  uma linha por execução", 6.0);
-  codeBlock(s, x2, 2.6, half, 2.5, [
-    [["{", "t"]],
-    [['  "ticket"', "v"], [': ', "t"], ['"T-88421"', "s"], [",", "t"]],
-    [['  "ts"', "v"], [': ', "t"], ['"2026-07-30T14:02:11Z"', "s"], [",", "t"]],
-    [['  "modelo"', "v"], [': ', "t"], ['"<id e versão fixados>"', "s"], [",", "t"]],
-    [['  "prompt_v"', "v"], [': ', "t"], ['"4"', "s"], [",", "t"]],
-    [['  "entrada"', "v"], [': ', "t"], ['"<hash + referência>"', "s"], [",", "t"]],
-    [['  "saida"', "v"], [': { ', "t"], ['"categoria"', "v"], [": ", "t"], ['"fraude"', "s"], [", ... },", "t"]],
-    [['  "confianca"', "v"], [": ", "t"], ["0.91", "v"], [",", "t"]],
-    [['  "decidiu"', "v"], [': ', "t"], ['"automatico"', "s"], [",", "t"]],
-    [['  "revisado_por"', "v"], [": ", "t"], ["null", "v"], [",", "t"]],
-    [['  "revertido_em"', "v"], [": ", "t"], ["null", "v"]],
-    [["}", "t"]],
-  ], 8.5);
-
-  card(s, x2, 5.25, half, 1.2, C.lavender);
-  s.addText("POR QUE EXATAMENTE ESSES CAMPOS", {
-    x: x2 + 0.26, y: 5.38, w: half - 0.52, h: 0.22,
-    margin: 0, fontFace: FONT, fontSize: 9, bold: true, color: C.magenta, charSpacing: 1.2,
-  });
-  s.addText(
-    [
-      { text: "modelo + prompt_v", options: { bold: true, color: C.ink } },
-      { text: " = reproduzir a decisão seis meses depois. ", options: {} },
-      { text: "decidiu + revisado_por", options: { bold: true, color: C.ink } },
-      { text: " = responder ao art. 20 sem arqueologia. ", options: {} },
-      { text: "revertido_em", options: { bold: true, color: C.ink } },
-      { text: " sempre null = ou está perfeito, ou ninguém está olhando.", options: {} },
-    ],
-    { x: x2 + 0.26, y: 5.64, w: half - 0.52, h: 0.72, margin: 0, valign: "top", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 13 }
-  );
-  footer(s, "04 · Ferramentas");
-  s.addNotes(
-    "Não leia as sete seções — aponte a 6 ('quando NÃO decidir'), que é a que quase todo " +
-      "prompt não tem. No registro, o campo mais interessante é revertido_em: se está sempre " +
-      "null, ou está perfeito ou ninguém olha. ~2,5 min."
-  );
-}
-
-/* ================= 13 · CHECKLIST ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "O portão antes de produção", [
-    { text: "Doze itens. Desmarcado é ", options: { color: C.ink } },
-    { text: "risco assumido", options: { color: C.magenta } },
-    { text: ", não esquecimento.", options: { color: C.ink } },
-  ]);
-  const items = [
-    ["Eval set no repo", ", 20 casos, rodando no CI e bloqueando merge."],
-    ["Versão do modelo fixada.", " Atualizar é deploy: eval antes, rollback previsto."],
-    ["Prompt versionado em arquivo", " e revisado em PR. Não mora em Google Doc."],
-    ["Saída estruturada com schema", " validado no código, não texto livre."],
-    ["Caminho de “não sei”", " existe, é permitido no prompt e é medido."],
-    ["Conta feita em código", ", não pedida ao modelo. Ferramenta antes de aritmética."],
-    ["Registro por execução", " com modelo, versão do prompt e quem decidiu."],
-    ["Retry e idempotência", " na orquestração. Reprocessar não duplica efeito."],
-    ["Custo por execução medido", " e multiplicado pelo volume do canvas."],
-    ["Você sabe qual campo de dado sai", " da empresa — o campo, não a ferramenta."],
-    ["Undo existe", " onde o padrão é supervisão. Sem undo, não é supervisão."],
-    ["Tem dono com nome", " e data de revisão na agenda. Não nome de squad."],
-  ];
-  const colW = (W - 2 * M) / 2 - 0.3, y0 = 2.46, rh = 0.6;
-  items.forEach(([lead, rest], i) => {
-    const col = i < 6 ? 0 : 1;
-    const row = i % 6;
-    const x = M + col * (colW + 0.6);
-    const y = y0 + row * rh;
-    s.addShape(pres.ShapeType.roundRect, {
-      x, y: y + 0.03, w: 0.22, h: 0.22, rectRadius: 0.04,
-      fill: { color: C.paper }, line: { color: C.magenta, width: 1.75 },
-    });
-    s.addText(
-      [{ text: lead, options: { bold: true, color: C.ink } }, { text: rest, options: { color: C.inkSoft } }],
-      { x: x + 0.38, y, w: colW - 0.38, h: 0.56, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, lineSpacing: 14.5 }
-    );
-  });
-  callout(
-    s,
-    "Como usar",
-    [
-      { text: "Não é lista de boas intenções, é ", options: {} },
-      { text: "portão de produção", options: { bold: true } },
-      { text: ". Rode antes de ligar o fluxo, e trate item desmarcado como risco aceito conscientemente — com nome e data ao lado.", options: {} },
-    ],
-    6.1,
-    0.82
-  );
-  footer(s, "04 · Práticas");
-  s.addNotes(
-    "Não leia os doze. Diga que é portão, não lista de desejos, e destaque três: eval no CI, " +
-      "caminho de 'não sei', e dono com nome. O resto é material de consulta. ~1,5 min."
-  );
-}
-
-/* ================= 14 · CASO: FLUXO ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "Caso prático · o processo", [
-    { text: "O meu fluxo, na mesma notação — e ", options: { color: C.ink } },
-    { text: "quem executa cada caixa", options: { color: C.magenta } },
-  ]);
-  // esqueleto de fluxo para preencher, na notação ensinada no slide 3
-  fnode(s, 70, 300, 120, 70, ["Início"], "term", { pill: true, size: 11 });
-  [1, 2, 3, 4].forEach((n, i) => {
-    const x = 240 + i * 215;
-    const kind = i === 2 ? "hum" : "code";
-    fnode(s, x, 300, 180, 70, ["Etapa " + n, "(preencher)"], kind, { size: 11, italic: true });
-    ftag(s, x + 90, 394, i === 2 ? "HUMANO APROVA" : "AUTOMÁTICO", i === 2 ? C.purple : C.navy);
-    edge(s, [[x - 50, 335], [x - 6, 335]]);
-  });
-  fnode(s, 1100, 300, 110, 70, ["Fim"], "term", { pill: true, size: 11 });
-  edge(s, [[1025, 335], [1094, 335]]);
-
-  callout(
-    s,
-    "A preencher com o seu caso",
-    [
-      {
-        text: "Troque as quatro caixas pelo fluxo real e pinte cada uma como no slide 6: azul = código, rosa = IA, lavanda = humano. Se o seu fluxo tem decisão, use losango e escreva a regra embaixo. O contraste de cor precisa deixar óbvio, de longe, onde você continuou na alça.",
-        options: { italic: true },
-      },
-    ],
-    5.35,
-    1.1
-  );
-  footer(s, "05 · Caso prático");
-  s.addNotes(
-    "PREENCHER com o seu caso. Conte como história, não como lista. Use a MESMA notação do " +
-      "slide 3 — o retorno visual é o que amarra a palestra. ~2 min."
-  );
-}
-
-/* ================= 15 · CASO: RESULTADO ================= */
-{
-  const s = pres.addSlide();
-  s.background = { color: C.paper };
-  header(s, "Caso prático · resultado e cicatrizes", [
-    { text: "O que ganhei, o que ", options: { color: C.ink } },
-    { text: "quebrou", options: { color: C.magenta } },
-    { text: ", e o que eu faria diferente", options: { color: C.ink } },
-  ]);
-  const blocks = [
-    ["Antes → depois", "Tempo por execução: de X para Y\nVolume que passou a caber: Z\nCusto por execução: R$ —\n\nUm número que você consiga defender vale mais que três estimados."],
-    ["O que quebrou", "A falha mais interessante do projeto — de preferência uma em que o modelo errou com confiança e você só descobriu depois.\n\nComo detectou, e qual guarda-corpo entrou depois."],
-    ["O que eu faria diferente", "Uma coisa concreta. Normalmente: “teria escrito o eval antes do prompt” ou “teria começado por uma etapa menor”."],
-  ];
-  const cw = 3.87, gap = 0.32, y = 2.65, ch = 2.75;
-  blocks.forEach(([t, d], i) => {
-    const x = M + i * (cw + gap);
-    s.addShape(pres.ShapeType.roundRect, {
-      x, y, w: cw, h: ch, rectRadius: 0.1,
-      fill: { color: "FEF6FA" },
-      line: { color: C.magenta, width: 1, dashType: "dash" },
-    });
-    s.addText(t.toUpperCase(), {
-      x: x + 0.3, y: y + 0.26, w: cw - 0.6, h: 0.26,
-      margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1.5,
-    });
-    s.addText(d, {
-      x: x + 0.3, y: y + 0.62, w: cw - 0.6, h: ch - 0.9,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 16,
-    });
-  });
-  callout(
-    s,
-    "Onde o humano ficou — e por quê",
-    [
-      {
-        text: "Amarre à árvore do slide 7: qual folha classificou cada etapa, e o que aconteceu quando você tentou tirar o humano de onde ele era necessário.",
-        options: { italic: true },
-      },
-    ],
-    5.85
-  );
-  footer(s, "05 · Caso prático");
-  s.addNotes(
-    "PREENCHER. O quadro do meio é o mais valioso: plateia técnica confia em quem mostra a " +
-      "falha. Feche amarrando à árvore de decisão. ~2,5 min."
-  );
-}
-
-/* ================= 16 · FECHO ================= */
+/* ================= 03 · A PERGUNTA ERRADA ================= */
 {
   const s = pres.addSlide();
   s.background = { color: C.deep };
-  s.addShape(pres.ShapeType.roundRect, {
-    x: 11.4, y: -0.9, w: 2.8, h: 2.8, rectRadius: 0.3,
-    fill: { color: "FFFFFF", transparency: 93 }, line: { width: 0 },
-  });
-  s.addText("PARA LEVAR", {
-    x: M, y: 0.85, w: 8, h: 0.3,
+  s.addText("COMO ISSO COMEÇA ERRADO", {
+    x: M, y: 1.35, w: 9, h: 0.3,
     margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.pink, charSpacing: 2.2,
   });
   s.addText(
     [
-      { text: "Três frases e ", options: { color: "FFFFFF" } },
-      { text: "um desafio de uma semana", options: { color: C.pink } },
+      { text: "“O que vocês querem automatizar?” só devolve ", options: { color: "FFFFFF" } },
+      { text: "a solução que a pessoa já imaginou", options: { color: C.pink } },
     ],
-    { x: M, y: 1.25, w: 11, h: 0.6, margin: 0, fontFace: FONT, fontSize: 26, bold: true }
+    { x: M, y: 1.78, w: 10.6, h: 1.7, margin: 0, valign: "top", fontFace: FONT, fontSize: 32, bold: true, lineSpacing: 38 }
   );
-  const three = [
-    [{ text: "Desenhe o fluxo ", options: {} }, { text: "antes", options: { bold: true } }, { text: " de escolher a ferramenta.", options: {} }],
-    [{ text: "Pinte cada caixa: código, IA ou humano. ", options: {} }, { text: "O desenho pintado é a arquitetura", options: { bold: true } }, { text: ".", options: {} }],
-    [{ text: "Sem eval e sem dono, nenhuma automação sobrevive ao ", options: {} }, { text: "terceiro mês", options: { bold: true } }, { text: ".", options: {} }],
+  s.addText(
+    [
+      { text: "Ninguém responde com o processo. Responde com “queria um bot que respondesse os chamados”. Aí você automatiza a imaginação de alguém, não o trabalho que existe.\n\n", options: { color: "E7DCEF" } },
+      { text: "A pergunta que funciona é outra: “me conta o que você fez ontem, na ordem.”", options: { color: "FFFFFF", bold: true } },
+    ],
+    { x: M, y: 3.62, w: 10.2, h: 1.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 15, lineSpacing: 22 }
+  );
+  s.addText(
+    [
+      { text: "O CAMINHO DE HOJE   ", options: { color: C.pink, bold: true } },
+      { text: "conversar → desenhar → decidir quem faz cada caixa → ferramentas → um caso → ", options: { color: "C9B6D4" } },
+      { text: "o kit pra baixar", options: { color: "FFFFFF", bold: true } },
+    ],
+    { x: M, y: 6.15, w: 11.9, h: 0.5, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 17 }
+  );
+  s.addNotes(
+    "Slide de pontuação. Fale a pergunta errada em voz alta e espere o riso de reconhecimento. " +
+      "A linha de baixo é o roteiro — aponte pra ela. ~1,5 min."
+  );
+}
+
+/* ================= 04 · AS SETE PERGUNTAS ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 1 · a conversa", [
+    { text: "Sete perguntas que arrancam o processo " },
+    { text: "inteiro", options: { color: C.magenta } },
+    { text: " em meia hora" },
+  ], { size: 27, lnspc: 31, titleH: 0.85 });
+
+  const QS = [
+    ["01", "“Me conta o que você fez ontem, na ordem.”",
+      [{ text: "Dá as etapas " }, { text: "reais", options: { bold: true } },
+       { text: ". A versão do gestor é a oficial; esta é a que acontece." }], false],
+    ["02", "“O que te faz parar e perguntar pra alguém?”",
+      [{ text: "Cada resposta é um " }, { text: "losango", options: { bold: true, color: C.magenta } },
+       { text: " — uma decisão. E quase sempre vem com a regra junto." }], true],
+    ["03", "“O que você copia de um lugar pro outro?”",
+      [{ text: "Digitação pura. É a " }, { text: "primeira caixa que vira script", options: { bold: true, color: C.magenta } },
+       { text: " — sem IA nenhuma." }], true],
+    ["04", "“Quando isso dá errado, como você descobre?”",
+      [{ text: "Se não houver resposta, " }, { text: "não automatize ainda", options: { bold: true } },
+       { text: ": você não teria como saber que quebrou." }], false],
+    ["05", "“Qual é o caso chato que sempre aparece?”",
+      [{ text: "As exceções. Anote as frases exatas — viram os " }, { text: "casos de teste", options: { bold: true } },
+       { text: " depois." }], false],
+    ["06", "“Quantas vezes você faz isso por dia?”",
+      [{ text: "Volume. Sem ele não dá pra priorizar: " }, { text: "etapa rara não paga automação", options: { bold: true } },
+       { text: "." }], false],
+    ["07", "“Se você errar aqui, o que acontece?”",
+      [{ text: "Custo do erro. É o número que decide se a etapa " }, { text: "pode", options: { bold: true } },
+       { text: " rodar sozinha." }], false],
   ];
-  three.forEach((runs, i) => {
-    const y = 2.35 + i * 0.82;
-    s.addText(String(i + 1).padStart(2, "0"), {
-      x: M, y, w: 0.5, h: 0.4,
-      margin: 0, valign: "middle", fontFace: FONT, fontSize: 13, bold: true, color: C.pink,
+
+  let y = 1.95;
+  const rowH = 0.56;
+  QS.forEach(([n, q, reveal, key]) => {
+    if (key) {
+      s.addShape(pres.ShapeType.roundRect, {
+        x: M, y: y - 0.04, w: W - 2 * M, h: rowH, rectRadius: 0.06,
+        fill: { color: C.pinkTint }, line: { width: 0 },
+      });
+    } else {
+      s.addShape(pres.ShapeType.rect, {
+        x: M, y: y - 0.04, w: W - 2 * M, h: 0.01,
+        fill: { color: C.line }, line: { width: 0 },
+      });
+    }
+    s.addText(n, {
+      x: M + 0.12, y: y + 0.06, w: 0.42, h: 0.28,
+      margin: 0, fontFace: MONO, fontSize: 10, bold: true, color: key ? C.magenta : "B9AFC9",
     });
-    s.addText(runs.map((r) => ({ text: r.text, options: Object.assign({ color: "FFFFFF" }, r.options) })), {
-      x: M + 0.62, y, w: 10.6, h: 0.5, margin: 0, valign: "middle", fontFace: FONT, fontSize: 17, lineSpacing: 23,
+    s.addText(q, {
+      x: M + 0.62, y: y + 0.04, w: 4.9, h: 0.4,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, color: C.ink, lineSpacing: 16,
+    });
+    s.addText(reveal, {
+      x: M + 5.68, y: y + 0.04, w: 6.15, h: 0.44,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 15,
+    });
+    y += rowH;
+  });
+
+  callout(
+    s, "Duas delas fazem 70% do trabalho",
+    [
+      { text: "A " }, { text: "2", options: { bold: true } },
+      { text: " te entrega os losangos e a " }, { text: "3", options: { bold: true } },
+      { text: " te entrega as caixas que viram script. As outras cinco servem pra você saber se vale a pena mexer. Grave a conversa (com permissão) e desenhe em cima da transcrição — não da memória." },
+    ],
+    5.98, 0.90
+  );
+  footer(s, "01 · Conversar");
+  s.addNotes(
+    "O artefato do slide. Leia as sete em voz alta, rápido, e pare na 2 e na 3 — são as duas destacadas. " +
+      "Diga que este slide está no kit. ~3 min."
+  );
+}
+
+/* ================= 05 · A NOTAÇÃO ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 2 · o desenho", [
+    { text: "Quatro formas e três regras. " },
+    { text: "Não precisa de BPMN.", options: { color: C.magenta } },
+  ], { size: 29, titleH: 0.65 });
+
+  const RULES = [
+    ["1", "Uma caixa = uma ação.", " Se o nome da caixa tem “e”, são duas caixas. “Registrar e classificar” esconde exatamente a etapa que você ia automatizar."],
+    ["2", "Todo losango tem a regra escrita embaixo.", " Losango sem regra é decisão que ninguém revisou — e é onde a automação quebra três meses depois."],
+    ["3", "Rotule as duas saídas.", " Seta sem rótulo esconde o caminho que ninguém tratou. Na dúvida entre ação e decisão, é decisão."],
+  ];
+  let ry = 2.05;
+  RULES.forEach(([n, lead, rest]) => {
+    s.addShape(pres.ShapeType.ellipse, {
+      x: M, y: ry, w: 0.32, h: 0.32,
+      fill: { color: C.magenta }, line: { width: 0 },
+    });
+    s.addText(n, {
+      x: M, y: ry, w: 0.32, h: 0.32, align: "center", valign: "middle", margin: 0,
+      fontFace: MONO, fontSize: 10.5, bold: true, color: "FFFFFF",
+    });
+    s.addText(
+      [{ text: lead, options: { bold: true, color: C.ink } }, { text: rest, options: { color: C.inkSoft } }],
+      { x: M + 0.48, y: ry - 0.03, w: 5.5, h: 0.75, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 17 }
+    );
+    ry += 0.88;
+  });
+
+  s.addShape(pres.ShapeType.roundRect, {
+    x: M, y: 4.78, w: 6.0, h: 1.0, rectRadius: 0.09,
+    fill: { color: C.lavender }, line: { width: 0 },
+  });
+  s.addShape(pres.ShapeType.rect, { x: M, y: 4.78, w: 0.05, h: 1.0, fill: { color: C.magenta }, line: { width: 0 } });
+  s.addText("COM O QUE DESENHAR", {
+    x: M + 0.24, y: 4.88, w: 5, h: 0.22,
+    margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1.8,
+  });
+  s.addText(
+    [
+      { text: "Papel, na frente da pessoa, na hora. Depois passe pra " },
+      { text: "Mermaid", options: { fontFace: MONO } },
+      { text: " ou " },
+      { text: "draw.io", options: { fontFace: MONO } },
+      { text: " — Mermaid é texto, então versiona no repo e o diff mostra quando o processo mudou." },
+    ],
+    { x: M + 0.24, y: 5.1, w: 5.5, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.ink, lineSpacing: 15 }
+  );
+
+  // a notação, no mesmo viewBox 440x350 do SVG
+  const F = frame(440, 350, 7.3, 2.0, 5.3, 3.9);
+  codeCap(s, F.X(0), 1.66, "A notação inteira", 3);
+  fnode(s, F, 14, 14, 150, 52, ["início / fim"], "term", { pill: true, size: 18 });
+  ftext(s, F, 184, 40, "onde o processo começa e termina", { size: 16, w: 250 });
+  fnode(s, F, 14, 98, 150, 52, ["ação"], "plain");
+  ftext(s, F, 184, 116, "uma caixa = uma ação.", { size: 16, w: 250 });
+  ftext(s, F, 184, 138, "Se tem “e” no nome, são duas.", { size: 16, w: 250 });
+  fdiamond(s, F, 89, 216, 75, 34, ["decisão"], "plain", { size: 19 });
+  ftext(s, F, 184, 206, "todo losango tem que ter", { size: 16, w: 250 });
+  ftext(s, F, 184, 228, "uma regra escrita embaixo", { size: 16, w: 250 });
+  edge(s, F, [[14, 300], [150, 300]]);
+  ftext(s, F, 40, 284, "sim", { bold: true, size: 15, color: "6E6684", w: 40 });
+  ftext(s, F, 184, 290, "seta condicional —", { size: 16, w: 250 });
+  ftext(s, F, 184, 312, "rotule sempre as duas saídas", { size: 16, w: 250 });
+
+  footer(s, "02 · Desenhar");
+  s.addNotes(
+    "Ensine a notação inteira aqui — são só quatro formas. A regra 2 (losango sem regra escrita) é a que " +
+      "mais gera pergunta; guarde um exemplo na manga. ~2,5 min."
+  );
+}
+
+/* ================= 06 · DA FALA AO DESENHO ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 2 · na prática", [
+    { text: "Da fala ao desenho: " },
+    { text: "cinco frases viram um fluxo", options: { color: C.magenta } },
+  ], { size: 28, titleH: 0.65 });
+
+  const SAYS = [
+    ["“Chega um e-mail, ou o cliente abre pelo formulário.”", "→ início", false],
+    ["“Aí eu jogo no sistema: copio nome, CPF e o texto do chamado.”", "→ ação · registrar chamado", false],
+    ["“Leio e vejo do que se trata — cobrança, fraude, cadastro.”", "→ ação · classificar assunto", false],
+    ["“Escrevo a resposta. Geralmente é parecida com outras que já mandei.”", "→ ação · redigir resposta", false],
+    ["“Se for desconto acima de 10%, eu paro e mando pro meu gestor.”", "→ losango + a regra, na mesma frase", true],
+  ];
+  let sy = 1.95;
+  SAYS.forEach(([q, to, key]) => {
+    s.addShape(pres.ShapeType.roundRect, {
+      x: M, y: sy, w: 5.75, h: 0.74, rectRadius: 0.07,
+      fill: { color: key ? C.pinkTint : C.lavender }, line: { width: 0 },
+    });
+    s.addShape(pres.ShapeType.rect, {
+      x: M, y: sy, w: 0.045, h: 0.74,
+      fill: { color: key ? C.magenta : "EAE3F3" }, line: { width: 0 },
+    });
+    s.addText(q, {
+      x: M + 0.22, y: sy + 0.06, w: 5.4, h: 0.42,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, italic: true, color: C.ink, lineSpacing: 14,
+    });
+    s.addText(to, {
+      x: M + 0.22, y: sy + 0.48, w: 5.4, h: 0.22,
+      margin: 0, fontFace: MONO, fontSize: 9, bold: key, color: key ? C.magenta : C.purple,
+    });
+    sy += 0.80;
+  });
+
+  const F = frame(650, 600, 6.9, 1.9, 5.7, 4.0);
+  triagem(s, F, false);
+
+  callout(
+    s, "O que acabou de acontecer",
+    [
+      { text: "A quinta frase entregou " },
+      { text: "o losango e a regra na mesma respiração", options: { bold: true } },
+      { text: " — é por isso que a pergunta 2 vale por três. E repare: até aqui " },
+      { text: "nada foi dito sobre IA", options: { bold: true } },
+      { text: ". Quem não consegue fechar as setas descobriu que tem dois processos, não um." },
+    ],
+    6.02, 0.84
+  );
+  footer(s, "02 · Desenhar");
+  s.addNotes(
+    "Aponte cada fala e a caixa que ela virou. O ponto alto é a quinta: losango + regra de graça. " +
+      "Diga que nada aqui é sobre IA ainda. ~2,5 min."
+  );
+}
+
+/* ================= 07 · FERRAMENTA VS. SOLUÇÃO ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 3 · onde a IA entra", [
+    { text: "Antes de escolher modelo: você quer a IA como " },
+    { text: "ferramenta", options: { color: C.magenta } },
+    { text: " ou como " },
+    { text: "solução", options: { color: C.purple } },
+    { text: "?" },
+  ], { size: 26, lnspc: 31, titleH: 0.9 });
+
+  const cw = (W - 2 * M - 0.4) / 2;
+  card(s, M, 2.1, cw, 3.5, C.paper);
+  s.addText("IA como ferramenta — um copiloto seu", {
+    x: M + 0.32, y: 2.34, w: cw - 0.64, h: 0.34,
+    margin: 0, fontFace: FONT, fontSize: 15, bold: true, color: C.magenta,
+  });
+  s.addText(
+    [{ text: "Você está no meio.", options: { bold: true, color: C.ink } },
+     { text: " Cada uso é uma decisão sua, e você vê a saída antes de qualquer coisa acontecer.", options: { color: C.inkSoft } }],
+    { x: M + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+  );
+  s.addText("Escrever o script · entender uma base nova · gerar o SQL · revisar um texto · virar 40 páginas de PDF em resumo", {
+    x: M + 0.32, y: 3.44, w: cw - 0.64, h: 0.9,
+    margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15,
+  });
+  s.addText(
+    [{ text: "Não precisa de eval, log nem dono.", options: { bold: true, color: C.ink } },
+     { text: " Precisa de você prestando atenção. Começa hoje, sem projeto e sem aprovação.", options: { color: C.inkSoft } }],
+    { x: M + 0.32, y: 4.5, w: cw - 0.64, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+  );
+
+  const x2 = M + cw + 0.4;
+  card(s, x2, 2.1, cw, 3.5, C.lavender);
+  s.addText("IA como solução — dentro do processo", {
+    x: x2 + 0.32, y: 2.34, w: cw - 0.64, h: 0.34,
+    margin: 0, fontFace: FONT, fontSize: 15, bold: true, color: C.purple,
+  });
+  s.addText(
+    [{ text: "Roda sem você", options: { bold: true, color: C.ink } },
+     { text: ", N vezes por dia, e o resultado vai direto pro cliente ou pro sistema seguinte.", options: { color: C.inkSoft } }],
+    { x: x2 + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+  );
+  s.addText("Classificar 12 mil chamados/mês · extrair campo de documento · redigir a primeira versão da resposta", {
+    x: x2 + 0.32, y: 3.44, w: cw - 0.64, h: 0.9,
+    margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15,
+  });
+  s.addText(
+    [{ text: "Precisa de tudo que um sistema precisa:", options: { bold: true, color: C.ink } },
+     { text: " saída com schema, limiar de confiança, log por execução, dono com nome e um conjunto de casos de teste.", options: { color: C.inkSoft } }],
+    { x: x2 + 0.32, y: 4.5, w: cw - 0.64, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+  );
+
+  callout(
+    s, "A confusão que mata projeto",
+    [
+      { text: "Quase todo piloto que morre no terceiro mês é " },
+      { text: "uma solução tratada como se fosse ferramenta", options: { bold: true } },
+      { text: ": funcionou lindo no chat de quem construiu, e ninguém desenhou o que acontece quando erra às 3 da manhã sem ninguém olhando. " },
+      { text: "A demo é ferramenta. Produção é solução.", options: { bold: true } },
+    ],
+    5.78, 0.88
+  );
+  footer(s, "03 · Decidir");
+  s.addNotes(
+    "Distinção central da palestra. Pergunte quem já usa IA no dia a dia (muitas mãos) e quem tem IA rodando " +
+      "sem supervisão em produção (poucas). A diferença entre as duas mãos é este slide. ~2 min."
+  );
+}
+
+/* ================= 08 · AS TRÊS CAIXAS ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 3 · a classificação", [
+    { text: "Cada caixa do fluxo vira uma de " },
+    { text: "três coisas", options: { color: C.magenta } },
+  ], { size: 28, titleH: 0.65 });
+
+  const BOXES = [
+    {
+      title: "Automação tradicional", accent: C.navy, fill: C.blueTint, chipBg: "DCE8F6",
+      stack: ["Python", "SQL", "API", "regex", "cron"],
+      when: "A regra é fixa, a entrada é estruturada e a saída é sempre a mesma.",
+      say: "“eu copio daqui pra lá” · “rodo esse relatório toda segunda”",
+      lastLab: "POR QUE NÃO IA AQUI",
+      last: [{ text: "Mais barato, determinístico e testável. " },
+             { text: "Um if você testa uma vez e confia pra sempre.", options: { bold: true, color: C.ink } }],
+    },
+    {
+      title: "IA", accent: C.magenta, fill: C.pinkTint, chipBg: "FBDCEC",
+      stack: ["LLM + schema", "limiar", "eval"],
+      when: "A entrada é linguagem, a regra é ambígua, e verificar custa menos que fazer.",
+      say: "“depende do que tá escrito” · “eu leio e decido na hora”",
+      lastLab: "O PREÇO QUE VEM JUNTO",
+      last: [{ text: "Não é determinística. Sem casos de teste, limiar e um caminho de “não sei”, você trocou trabalho por risco." }],
+    },
+    {
+      title: "Humano", accent: C.purple, fill: C.lavender, chipBg: "E6D8EE",
+      stack: ["julgamento"],
+      when: "O erro é caro e irreversível — ou a regra ainda nem existe.",
+      say: "“isso aí eu levo pro meu gestor” · “cada caso é um caso”",
+      lastLab: "A BOA NOTÍCIA",
+      last: [{ text: "Costuma ser pouco volume. " },
+             { text: "Manter gente ali é barato", options: { bold: true, color: C.ink } },
+             { text: " — e é o que te deixa automatizar o resto sem medo." }],
+    },
+  ];
+
+  const bw = (W - 2 * M - 0.6) / 3;
+  BOXES.forEach((b, i) => {
+    const x = M + i * (bw + 0.3);
+    card(s, x, 2.0, bw, 3.55, b.fill, b.accent);
+    s.addText(b.title, {
+      x: x + 0.28, y: 2.22, w: bw - 0.56, h: 0.32,
+      margin: 0, fontFace: FONT, fontSize: 14.5, bold: true, color: b.accent,
+    });
+    let sx = x + 0.28;
+    let sy2 = 2.64;
+    b.stack.forEach((t) => {
+      const tw = 0.16 + t.length * 0.075;
+      if (sx + tw > x + bw - 0.24) { sx = x + 0.28; sy2 += 0.32; }
+      s.addText(t, {
+        shape: pres.ShapeType.roundRect, rectRadius: 0.04,
+        x: sx, y: sy2, w: tw, h: 0.26,
+        fill: { color: b.chipBg }, line: { width: 0 },
+        align: "center", valign: "middle", margin: 0,
+        fontFace: MONO, fontSize: 8.5, color: b.accent,
+      });
+      sx += tw + 0.08;
+    });
+    const base = sy2 + 0.42;
+    s.addText("QUANDO", {
+      x: x + 0.28, y: base, w: bw - 0.56, h: 0.2,
+      margin: 0, fontFace: MONO, fontSize: 8, bold: true, color: b.accent, charSpacing: 1,
+    });
+    s.addText(b.when, {
+      x: x + 0.28, y: base + 0.2, w: bw - 0.56, h: 0.52,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14,
+    });
+    s.addText("COMO APARECE NA ENTREVISTA", {
+      x: x + 0.28, y: base + 0.78, w: bw - 0.56, h: 0.2,
+      margin: 0, fontFace: MONO, fontSize: 8, bold: true, color: b.accent, charSpacing: 1,
+    });
+    s.addText(b.say, {
+      x: x + 0.28, y: base + 0.98, w: bw - 0.56, h: 0.52,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, italic: true, color: C.ink, lineSpacing: 14,
+    });
+    s.addText(b.lastLab, {
+      x: x + 0.28, y: base + 1.56, w: bw - 0.56, h: 0.2,
+      margin: 0, fontFace: MONO, fontSize: 8, bold: true, color: b.accent, charSpacing: 1,
+    });
+    s.addText(b.last, {
+      x: x + 0.28, y: base + 1.76, w: bw - 0.56, h: 0.72,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14,
     });
   });
+
+  callout(
+    s, "A ordem de perguntar — uma vez por caixa",
+    [
+      { text: "1.", options: { bold: true } },
+      { text: " Dá pra fazer com um " }, { text: "if", options: { fontFace: MONO } },
+      { text: "? Se dá, faça com " }, { text: "if", options: { fontFace: MONO } },
+      { text: ".   " }, { text: "2.", options: { bold: true } },
+      { text: " Se não dá, o erro é caro e irreversível? Se é, humano decide (ou a IA propõe e o humano aprova).   " },
+      { text: "3.", options: { bold: true } },
+      { text: " Se não é, IA com revisão por amostragem.   " },
+      { text: "A IA é a terceira pergunta, nunca a primeira.", options: { color: C.magenta } },
+    ],
+    5.75, 0.9
+  );
+  footer(s, "03 · Decidir");
+  s.addNotes(
+    "O slide que a plateia fotografa. As três frases entre aspas são o gancho: elas vêm da entrevista do " +
+      "slide 4, então o método fecha aqui. Termine lendo a ordem de perguntar. ~3 min."
+  );
+}
+
+/* ================= 09 · O FLUXO PINTADO ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 3 · o entregável", [
+    { text: "O mesmo fluxo, pintado — e pronto: " },
+    { text: "essa é a arquitetura", options: { color: C.magenta } },
+  ], { size: 26, lnspc: 30, titleH: 0.9, titleW: 7.6 });
+
+  const F = frame(650, 570, 0.72, 2.05, 6.0, 4.5);
+  triagem(s, F, true);
+
+  card(s, 7.3, 2.15, 5.3, 1.42, C.paper);
+  s.addText("O placar", {
+    x: 7.58, y: 2.34, w: 4.8, h: 0.3,
+    margin: 0, fontFace: FONT, fontSize: 14, bold: true, color: C.magenta,
+  });
+  s.addText(
+    [
+      { text: "5 ações + 1 decisão", options: { bold: true, color: C.ink } },
+      { text: " → 3 viram ", options: { color: C.inkSoft } },
+      { text: "Python", options: { bold: true, color: C.navy } },
+      { text: ", 2 viram ", options: { color: C.inkSoft } },
+      { text: "IA", options: { bold: true, color: C.magenta } },
+      { text: ", 1 continua ", options: { color: C.inkSoft } },
+      { text: "humana", options: { bold: true, color: C.purple } },
+      { text: ".", options: { color: C.inkSoft } },
+    ],
+    { x: 7.58, y: 2.66, w: 4.8, h: 0.42, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 16 }
+  );
+  s.addText("Metade do processo foi resolvida sem IA nenhuma. Isso é bom sinal, não fracasso.", {
+    x: 7.58, y: 3.08, w: 4.8, h: 0.4,
+    margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14,
+  });
+
+  card(s, 7.3, 3.75, 5.3, 2.05, C.lavender);
+  s.addText("Como ler o desenho", {
+    x: 7.58, y: 3.94, w: 4.8, h: 0.3,
+    margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: C.purple,
+  });
+  s.addText(
+    [{ text: "As duas rosas são " }, { text: "21 mil decisões ambíguas por mês com erro tolerável", options: { bold: true, color: C.ink } },
+     { text: " — é ali que a IA se paga." }],
+    { x: 7.58, y: 4.26, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
+  );
+  s.addText(
+    [{ text: "A lavanda são " }, { text: "300 julgamentos irreversíveis", options: { bold: true, color: C.ink } },
+     { text: ": continua humana, e é barato que continue." }],
+    { x: 7.58, y: 4.76, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
+  );
+  s.addText(
+    [{ text: "O losango " }, { text: "parece", options: { italic: true } },
+     { text: " decisão de IA e não é — é " }, { text: "if desconto > 0.10", options: { fontFace: MONO } }, { text: "." }],
+    { x: 7.58, y: 5.26, w: 4.8, h: 0.44, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
+  );
+
+  // legenda
+  const LEG = [["Python", C.blueBg, C.navy], ["IA", C.pinkBg, C.magenta], ["humano", C.humBg, C.purple]];
+  const LEGX = [7.32, 8.72, 9.92];
+  LEG.forEach(([t, fill, ln], i) => {
+    s.addShape(pres.ShapeType.roundRect, {
+      x: LEGX[i], y: 6.02, w: 0.17, h: 0.17, rectRadius: 0.03,
+      fill: { color: fill }, line: { color: ln, width: 1.25 },
+    });
+    s.addText(t, {
+      x: LEGX[i] + 0.24, y: 5.98, w: 1.0, h: 0.24,
+      margin: 0, fontFace: FONT, fontSize: 11, color: C.inkSoft,
+    });
+  });
+
+  footer(s, "03 · Decidir");
+  s.addNotes(
+    "Ponto alto da primeira metade: a arquitetura apareceu sem ninguém escrever documento. " +
+      "Fale o placar em voz alta — 3 de 6 caixas viraram Python. ~2,5 min."
+  );
+}
+
+/* ================= 10 · HUMANO NA ALÇA ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "O ponto onde a IA vira solução de verdade", [
+    { text: "O humano na alça são " },
+    { text: "doze linhas", options: { color: C.magenta } },
+    { text: " — e um teste pra ver se ele é real" },
+  ], { size: 26, lnspc: 30, titleH: 0.9 });
+
+  codeCap(s, M, 2.06, "triagem.py", 3);
+  codeBlock(s, M, 2.32, 7.35, 3.35, [
+    [["# o schema é o contrato: sem ele não há limiar nem log", "c"]],
+    [["class ", "k"], ["Triagem", "w"], ["(BaseModel):"]],
+    [["    categoria: "], ["Literal", "v"], ["["], ['"cobranca"', "s"], [", "], ['"fraude"', "s"], [", "], ['"cadastro"', "s"], [", "], ['"outro"', "s"], ["]"]],
+    [["    confianca: "], ["float", "v"], ["        "], ["# 0-1, exigido no prompt", "c"]],
+    [["    justificativa: "], ["str", "v"], ["     "], ["# 1 frase — vai para o log", "c"]],
+    [["    faltou_contexto: "], ["bool", "v"], ["   "], ['# o caminho explícito de "não sei"', "c"]],
+    [],
+    [["r = "], ["classificar", "w"], ["(chamado)  "], ["# saída estruturada, não texto livre", "c"]],
+    [["if ", "k"], ["r.faltou_contexto "], ["or ", "k"], ["r.confianca < LIMIAR:"]],
+    [["    fila_humana."], ["enfileirar", "w"], ["(chamado, sugestao=r)  "], ["# COM a sugestão", "c"]],
+    [["else", "k"], [":"]],
+    [["    "], ["rotear", "w"], ["(chamado, r.categoria)"]],
+    [["registrar", "w"], ["(chamado.id, r, modelo=MODELO, prompt_v=PROMPT_V)"]],
+  ], 9);
+
+  card(s, 8.35, 2.32, 4.25, 1.85, C.paper);
+  s.addText("O checkpoint é real? Três perguntas", {
+    x: 8.6, y: 2.5, w: 3.8, h: 0.3,
+    margin: 0, fontFace: FONT, fontSize: 12, bold: true, color: C.magenta,
+  });
+  [
+    [{ text: "1.", options: { bold: true, color: C.ink } }, { text: " O revisor tem tempo e informação pra discordar?" }],
+    [{ text: "2.", options: { bold: true, color: C.ink } }, { text: " Existe registro de quando ele discordou? Rejeição de 0% é alarme, não é qualidade." }],
+    [{ text: "3.", options: { bold: true, color: C.ink } }, { text: " Se revisar por amostragem daria o mesmo, revisar item a item é teatro — e custa uma pessoa." }],
+  ].forEach((runs, i) => {
+    s.addText(runs, {
+      x: 8.6, y: 2.84 + i * 0.44, w: 3.8, h: 0.42,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 13.5,
+    });
+  });
+
+  card(s, 8.35, 4.32, 4.25, 1.35, C.lavender);
+  s.addText(
+    [
+      { text: "LGPD, art. 20.", options: { bold: true, color: C.purple } },
+      { text: " O titular pode pedir revisão de decisão tomada " },
+      { text: "unicamente", options: { italic: true } },
+      { text: " de forma automatizada. Em serviço financeiro isso define quais caixas " },
+      { text: "podem", options: { bold: true, color: C.ink } },
+      { text: " ser 100% automáticas — e obriga saber qual versão do modelo decidiu o quê." },
+    ],
+    { x: 8.6, y: 4.5, w: 3.8, h: 1.0, margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 13.5 }
+  );
+
+  callout(
+    s, "O detalhe que quase todo mundo esquece",
+    [
+      { text: "Sem faltou_contexto, o modelo nunca diz “não sei” — ele chuta com confiança alta.", options: { bold: true } },
+      { text: " “Não sei” precisa ser saída válida e explicitamente permitida no prompt. E escalone " },
+      { text: "com a sugestão junto", options: { bold: true } },
+      { text: ": fila que chega em branco custa o mesmo que não ter automação." },
+    ],
+    5.85, 0.85
+  );
+  footer(s, "03 · Decidir");
+  s.addNotes(
+    "Passe o código linha a linha, devagar. O campo faltou_contexto é o detalhe que ninguém espera — " +
+      "sem ele o modelo nunca diz 'não sei'. O limiar sai do eval, não do chute. ~3 min."
+  );
+}
+
+/* ================= 11 · PANORAMA DE FERRAMENTAS ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 4 · o panorama", [
+    { text: "Sete camadas — e as " },
+    { text: "duas", options: { color: C.magenta } },
+    { text: " que decidem se vai pra produção" },
+  ], { size: 27, lnspc: 31, titleH: 0.85 });
+
+  const LAYERS = [
+    ["Modelos", ["Claude Opus 5", "Sonnet 5", "Haiku 4.5", "GPT", "Gemini 2.5", "Llama / Qwen self-hosted"], "o motor, não o produto", false],
+    ["Chat", ["Claude", "ChatGPT", "Gemini"], "aqui a IA é ferramenta: você no meio, sem log e sem eval", false],
+    ["Agentes de código", ["Claude Code", "Cursor", "Codex", "Copilot"], "leem e escrevem no seu repo, rodam comando", false],
+    ["Skills e MCP", ["Skills", "MCP"], "skill = instrução reutilizável · MCP = um protocolo no lugar de N integrações", false],
+    ["SDK / API", ["Claude Agent SDK", "API direta", "LangGraph", "Pydantic AI"], "quando vira produto", false],
+    ["Orquestração", ["n8n", "Airflow", "Temporal", "Step Functions", "GitHub Actions"], "retry, idempotência, estado, quem dispara", true],
+    ["Eval e observabilidade", ["casos versionados no repo", "Langfuse", "Braintrust"], "sem isso, o terceiro mês te pega", true],
+  ];
+
+  let ly = 1.92;
+  const lh = 0.50;
+  LAYERS.forEach(([name, tools, note, key]) => {
+    s.addShape(pres.ShapeType.roundRect, {
+      x: M, y: ly, w: W - 2 * M, h: lh, rectRadius: 0.07,
+      fill: { color: key ? C.pinkTint : C.paper },
+      line: { color: key ? C.magenta : C.line, width: 1 },
+    });
+    s.addShape(pres.ShapeType.roundRect, {
+      x: M + 0.22, y: ly + 0.15, w: 0.05, h: 0.22, rectRadius: 0.02,
+      fill: { color: key ? C.magenta : C.navy }, line: { width: 0 },
+    });
+    s.addText(name, {
+      x: M + 0.4, y: ly + 0.1, w: 1.95, h: 0.32,
+      margin: 0, valign: "middle", fontFace: FONT, fontSize: 11.5, bold: true, color: C.ink,
+    });
+    let tx = M + 2.5;
+    tools.forEach((t) => {
+      const tw = 0.2 + t.length * 0.078;
+      s.addText(t, {
+        shape: pres.ShapeType.roundRect, rectRadius: 0.04,
+        x: tx, y: ly + 0.12, w: tw, h: 0.28,
+        fill: { color: key ? C.pinkBg : C.lavender }, line: { width: 0 },
+        align: "center", valign: "middle", margin: 0,
+        fontFace: MONO, fontSize: 8.5, color: key ? C.magenta : C.purple,
+      });
+      tx += tw + 0.08;
+    });
+    s.addText(note, {
+      x: tx + 0.04, y: ly + 0.12, w: W - M - tx - 0.24, h: 0.28,
+      margin: 0, valign: "middle", fontFace: FONT, fontSize: 9.5, italic: true,
+      color: key ? "B07093" : "8B84A0",
+    });
+    ly += lh + 0.07;
+  });
+
+  callout(
+    s, "Três confusões de vocabulário que atrapalham a conversa",
+    [
+      { text: "Claude Code não é modelo", options: { bold: true } },
+      { text: " — é um agente que usa modelos. " },
+      { text: "Cursor não é orquestrador", options: { bold: true } },
+      { text: " — é editor com agente dentro. " },
+      { text: "GitHub Actions não orquestra IA", options: { bold: true } },
+      { text: " — é gatilho: ótimo pra disparar, ruim pra manter estado entre etapas." },
+    ],
+    5.98, 0.90
+  );
+  footer(s, "04 · Ferramentas");
+  s.addNotes(
+    "Slide de consulta — não leia linha por linha. Fale as duas rosas (orquestração e eval) e as três " +
+      "confusões do rodapé. Se precisar cortar tempo, este é o slide que encurta. ~1,5 min."
+  );
+}
+
+/* ================= 12 · O CASO (a preencher) ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 5 · o caso", [
+    { text: "Um processo real, " },
+    { text: "na mesma notação", options: { color: C.magenta } },
+  ], { size: 28, titleH: 0.65 });
+
+  const PH = [
+    ["O processo e a conversa", "Qual era o processo, quem executava, quantas vezes por mês.",
+      "Uma frase literal de quem executava — a fala que virou losango. É o que amarra este slide ao slide 6."],
+    ["O fluxo pintado + o placar", "O mesmo desenho do slide 9, com as caixas reais.",
+      "“N caixas → X Python · Y IA · Z humano”. Se a maioria virou Python, diga isso em voz alta: é o ponto da palestra."],
+    ["O que quebrou", "Um número de antes → depois que você defenda no Q&A.",
+      "E a falha: de preferência uma em que o modelo errou com confiança e você só descobriu depois. Como detectou e qual guarda-corpo entrou."],
+  ];
+  const pw = (W - 2 * M - 0.6) / 3;
+  PH.forEach(([lab, line, hint], i) => {
+    const x = M + i * (pw + 0.3);
+    dashCard(s, x, 2.15, pw, 2.5);
+    s.addText(lab.toUpperCase(), {
+      x: x + 0.28, y: 2.38, w: pw - 0.56, h: 0.22,
+      margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.magenta, charSpacing: 1,
+    });
+    s.addText(line, {
+      x: x + 0.28, y: 2.66, w: pw - 0.56, h: 0.6,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 15,
+    });
+    s.addText(hint, {
+      x: x + 0.28, y: 3.3, w: pw - 0.56, h: 1.2,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 13.5,
+    });
+  });
+
+  callout(
+    s, "Ainda a preencher",
+    [
+      { text: "Este slide vira " }, { text: "dois ou três", options: { bold: true } },
+      { text: " quando o caso estiver definido: um do processo e da conversa, um do fluxo pintado, um do resultado e das cicatrizes. A estrutura já está de pé — falta o conteúdo." },
+    ],
+    5.3, 0.88
+  );
+  footer(s, "05 · O caso");
+  s.addNotes(
+    "PENDENTE: substituir pelos slides do caso real. Três blocos, na ordem: processo + a fala que virou " +
+      "losango; o fluxo pintado com placar; o resultado e o que quebrou. ~4 min quando estiver pronto."
+  );
+}
+
+/* ================= 13 · O KIT ================= */
+{
+  const s = pres.addSlide();
+  topbar(s);
+  header(s, "Passo 6 · pra levar embora", [
+    { text: "O kit — os arquivos que eu usei " },
+    { text: "pra montar tudo isso", options: { color: C.magenta } },
+  ], { size: 28, titleH: 0.65 });
+
+  const KIT = [
+    ["7-perguntas.md", "O roteiro de entrevista", " do slide 4, com o que anotar em cada resposta."],
+    ["notacao.mmd", "O fluxograma em Mermaid", " — copia, troca os nomes das caixas, versiona no repo."],
+    ["canvas.md", "Uma linha por caixa", ": entrada, saída, dono, volume/mês, exceções, custo do erro."],
+    ["classificar.md", "As três perguntas do slide 8", " em forma de checklist — rode uma vez por caixa."],
+    ["prompt.template.md", "As sete seções de um prompt de produção", ": papel, tarefa, dados, regras, formato de saída, quando NÃO decidir, casos de borda."],
+    ["evals/exemplo.yaml", "Vinte casos, cinco de borda", ", mais o comando que roda no CI e bloqueia o merge."],
+    ["checklist-producao.md", "Doze itens antes de ligar o fluxo.", " Item desmarcado é risco aceito, com nome e data ao lado."],
+  ];
+  let ky = 1.98;
+  const kh = 0.5;
+  KIT.forEach(([file, lead, rest]) => {
+    s.addShape(pres.ShapeType.roundRect, {
+      x: M, y: ky, w: W - 2 * M, h: kh, rectRadius: 0.07,
+      fill: { color: C.paper }, line: { color: C.line, width: 1 },
+    });
+    s.addText(file, {
+      x: M + 0.28, y: ky + 0.11, w: 2.6, h: 0.28,
+      margin: 0, valign: "middle", fontFace: MONO, fontSize: 10, color: C.magenta,
+    });
+    s.addText(
+      [{ text: lead, options: { bold: true, color: C.ink } }, { text: rest, options: { color: C.inkSoft } }],
+      { x: M + 3.05, y: ky + 0.05, w: W - 2 * M - 3.35, h: 0.40, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10.5, lineSpacing: 13.5 }
+    );
+    ky += kh + 0.08;
+  });
+
+  dashCard(s, M, 6.02, W - 2 * M, 0.72);
+  s.addText("LINK / QR A DEFINIR", {
+    x: M + 0.28, y: 6.24, w: 2.3, h: 0.28,
+    margin: 0, valign: "middle", fontFace: MONO, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1,
+  });
+  s.addText(
+    "Repositório público ou pasta compartilhada. Definir também se vai junto a versão instalável como skills, ou só os arquivos em Markdown — que funcionam com qualquer ferramenta.",
+    { x: M + 2.75, y: 6.14, w: W - 2 * M - 3.05, h: 0.5, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 13 }
+  );
+  footer(s, "06 · O kit");
+  s.addNotes(
+    "PENDENTE: publicar o repositório e trocar a caixa tracejada por link + QR. Diga que o kit é o " +
+      "motivo de ninguém precisar anotar nada durante a palestra. ~1 min."
+  );
+}
+
+/* ================= 14 · FECHO ================= */
+{
+  const s = pres.addSlide();
+  s.background = { color: C.deep };
+  s.addText("PARA LEVAR", {
+    x: M, y: 0.95, w: 8, h: 0.3,
+    margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.pink, charSpacing: 2.2,
+  });
+  s.addText(
+    [{ text: "Três frases e ", options: { color: "FFFFFF" } },
+     { text: "um desafio de uma hora", options: { color: C.pink } }],
+    { x: M, y: 1.35, w: 11, h: 0.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 26, bold: true }
+  );
+  const THREE = [
+    ["01", [{ text: "A conversa vem antes do desenho. O desenho vem antes da " }, { text: "ferramenta", options: { bold: true } }, { text: "." }]],
+    ["02", [{ text: "Se dá pra fazer com um " }, { text: "if", options: { bold: true } }, { text: ", faça com um if. IA é a terceira pergunta." }]],
+    ["03", [{ text: "Mantenha a pessoa onde " }, { text: "errar é caro", options: { bold: true } }, { text: " — e prove que ela consegue discordar." }]],
+  ];
+  let ty = 2.3;
+  THREE.forEach(([n, runs]) => {
+    s.addText(n, {
+      x: M, y: ty + 0.05, w: 0.5, h: 0.3,
+      margin: 0, fontFace: MONO, fontSize: 12, bold: true, color: C.pink,
+    });
+    s.addText(runs, {
+      x: M + 0.62, y: ty, w: 10.5, h: 0.6,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 18, color: "FFFFFF", lineSpacing: 24,
+    });
+    ty += 0.78;
+  });
+
   s.addShape(pres.ShapeType.roundRect, {
-    x: M, y: 5.1, w: W - 2 * M, h: 1.35, rectRadius: 0.1,
+    x: M, y: 5.05, w: W - 2 * M, h: 1.35, rectRadius: 0.1,
     fill: { color: "FFFFFF", transparency: 90 }, line: { width: 0 },
   });
-  s.addText("DESAFIO", {
-    x: M + 0.34, y: 5.28, w: 6, h: 0.24,
+  s.addShape(pres.ShapeType.rect, { x: M, y: 5.05, w: 0.05, h: 1.35, fill: { color: C.pink }, line: { width: 0 } });
+  s.addText("DESAFIO DE UMA HORA", {
+    x: M + 0.28, y: 5.18, w: 6, h: 0.24,
     margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.pink, charSpacing: 1.8,
   });
   s.addText(
     [
-      { text: "Escolha um processo que você executa toda semana. Desenhe o fluxo numa folha. Pinte as caixas. Automatize ", options: {} },
-      { text: "só a mais azul", options: { bold: true } },
-      { text: " — a mais determinística. Escreva os 20 casos de eval antes do prompt. Meça. Depois volte para a segunda caixa.", options: {} },
+      { text: "Pegue alguém do seu time que executa um processo toda semana. Faça as " },
+      { text: "sete perguntas", options: { bold: true } },
+      { text: ". Desenhe o fluxo na frente da pessoa. Marque a única caixa que é pura digitação — e automatize " },
+      { text: "só ela", options: { bold: true } },
+      { text: ". Depois volte pra segunda." },
     ],
-    { x: M + 0.34, y: 5.56, w: W - 2 * M - 0.68, h: 0.75, margin: 0, valign: "top", fontFace: FONT, fontSize: 13.5, color: "FFFFFF", lineSpacing: 19 }
+    { x: M + 0.28, y: 5.45, w: W - 2 * M - 0.56, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, color: "FFFFFF", lineSpacing: 18 }
   );
-  s.addText("Obrigado — perguntas?", {
-    x: M, y: 6.65, w: 8, h: 0.35,
-    margin: 0, fontFace: FONT, fontSize: 14, bold: true, color: C.pink,
-  });
   s.addNotes(
-    "Feche pelo desafio, não pelo agradecimento — dá algo concreto para segunda-feira. " +
-      "Deixe este slide no telão durante o Q&A. ~1,5 min."
+    "Fecho. As três frases são o resumo da palestra inteira — leia devagar. O desafio de uma hora é o " +
+      "call to action: não é 'automatize um processo', é 'faça uma entrevista'. ~1,5 min."
   );
 }
 
-pres.writeFile({ fileName: __dirname + "/deck.pptx" }).then((f) => console.log("gerado:", f));
+/* ---------------- escreve ---------------- */
+const path = require("path");
+pres.writeFile({ fileName: path.join(__dirname, "deck.pptx") }).then((f) => {
+  console.log("gerado:", f);
+});

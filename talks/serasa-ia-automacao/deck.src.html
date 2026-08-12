@@ -73,19 +73,9 @@ em.hlp{font-style:normal;color:var(--purple)}
 strong{font-weight:700;color:var(--ink)}
 
 /* ---------- signature devices ---------- */
-.dots{position:absolute;pointer-events:none}
 .dot{position:absolute;border-radius:50%}
 .dot.m{background:var(--magenta)}
 .dot.b{background:var(--navy)}
-
-.badge{
-  width:3.4cqw;height:3.4cqw;border-radius:50%;
-  background:var(--magenta);
-  display:grid;place-items:center;flex:none;
-}
-.badge svg{width:1.75cqw;height:1.75cqw;stroke:#fff;stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.badge.pu{background:var(--purple)}
-.badge.nv{background:var(--navy)}
 
 .card{
   background:var(--paper);
@@ -97,10 +87,6 @@ strong{font-weight:700;color:var(--ink)}
 }
 .card h3{font-size:1.6cqw}
 .card p{font-size:1.2cqw;line-height:1.45}
-.arrow{
-  margin-top:auto;font-size:1.15cqw;font-weight:700;color:var(--magenta);
-  letter-spacing:.01em;
-}
 .tint{background:var(--lavender);border:0}
 
 /* ---------- cover ---------- */
@@ -112,9 +98,7 @@ strong{font-weight:700;color:var(--ink)}
   flex:1;background:linear-gradient(158deg,var(--deep) 0%,var(--purple) 46%,var(--navy) 100%);
   position:relative;overflow:hidden;
 }
-.cover .right .sq{
-  position:absolute;border-radius:22%;
-}
+.cover .right .sq{position:absolute;border-radius:22%}
 .cover h1{font-size:5.1cqw;color:var(--ink)}
 .cover .sub{font-size:1.7cqw;font-weight:300;color:var(--ink-soft);margin-top:1.8cqw;max-width:30ch;line-height:1.4}
 .cover .by{margin-top:auto;display:flex;flex-direction:column;gap:.5cqw}
@@ -125,6 +109,28 @@ strong{font-weight:700;color:var(--ink)}
   background:var(--navy);
 }
 .cover .topbar{background:linear-gradient(90deg,var(--navy) 0 55%,var(--magenta) 55% 100%)}
+
+/* ---------- bio ---------- */
+.bio-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:3.4cqw;flex:1;min-height:0;align-items:center}
+.bio-name{font-size:4.2cqw;font-weight:700;line-height:1.05;letter-spacing:-.025em;color:var(--ink)}
+.bio-role{font-size:1.75cqw;font-weight:300;color:var(--ink-soft);margin-top:.9cqw}
+.chips{display:flex;flex-wrap:wrap;gap:.65cqw;margin-top:2.2cqw}
+.chip{
+  font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:500;
+  padding:.42cqw 1cqw;border-radius:.7cqw;background:var(--lavender);color:var(--purple);
+}
+.bio-meta{font-size:1.15cqw;color:#8B84A0;margin-top:1.2cqw}
+.bio-panel{
+  background:linear-gradient(150deg,var(--deep) 0%,#4E0E62 60%,var(--navy) 100%);
+  border-radius:1.6cqw;padding:2.6cqw;position:relative;overflow:hidden;
+}
+.bio-panel .lab{
+  font-family:'Roboto Mono',monospace;font-size:.9cqw;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:#FF8FC0;margin-bottom:1cqw;
+}
+.bio-panel p{font-size:1.42cqw;line-height:1.5;color:#EDE4F3}
+.bio-panel p b{color:#fff;font-weight:700}
+.bio-panel .sq{position:absolute;border-radius:24%;pointer-events:none}
 
 /* ---------- statement (dark punctuation) ---------- */
 .statement{
@@ -146,6 +152,65 @@ strong{font-weight:700;color:var(--ink)}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw}
 .fill{flex:1;min-height:0}
 
+/* ---------- as 7 perguntas ---------- */
+.qs{display:flex;flex-direction:column;flex:1;min-height:0;justify-content:center}
+.qrow{
+  display:grid;grid-template-columns:2.3cqw 1.15fr 1fr;gap:1.3cqw;align-items:baseline;
+  padding:.72cqw .9cqw;border-radius:.7cqw;
+}
+.qrow + .qrow{border-top:1px solid var(--line)}
+.qrow .qn{
+  font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:700;color:#B9AFC9;
+}
+.qrow .qq{font-size:1.28cqw;font-weight:500;line-height:1.34;color:var(--ink)}
+.qrow .qr{font-size:1.15cqw;line-height:1.34;color:var(--ink-soft)}
+.qrow .qr b{color:var(--ink);font-weight:700}
+.qrow.key{background:#FEF6FA;border-top-color:transparent}
+.qrow.key .qn{color:var(--magenta)}
+.qrow.key .qr b{color:var(--magenta)}
+
+/* ---------- três caixas (python / ia / humano) ---------- */
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5cqw;flex:1;min-height:0}
+.box3{
+  border-radius:1.3cqw;padding:1.7cqw 1.6cqw;display:flex;flex-direction:column;gap:.85cqw;
+  border:1.5px solid;
+}
+.box3 .bt{font-size:1.62cqw;font-weight:700;line-height:1.15}
+.box3 .stack{display:flex;flex-wrap:wrap;gap:.45cqw;margin-bottom:.25cqw}
+.box3 .stack span{
+  font-family:'Roboto Mono',monospace;font-size:.95cqw;font-weight:500;
+  padding:.24cqw .68cqw;border-radius:.5cqw;
+}
+.box3 .lab{
+  font-family:'Roboto Mono',monospace;font-size:.85cqw;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;margin-top:.3cqw;
+}
+.box3 p{font-size:1.1cqw;line-height:1.4}
+.box3 .say{font-size:1.08cqw;line-height:1.4;color:var(--ink);font-style:italic}
+.box3.py{background:#F2F7FC;border-color:var(--navy)}
+.box3.py .bt,.box3.py .lab{color:var(--navy)}
+.box3.py .stack span{background:#DCE8F6;color:var(--navy)}
+.box3.ia{background:#FEF4F9;border-color:var(--magenta)}
+.box3.ia .bt,.box3.ia .lab{color:var(--magenta)}
+.box3.ia .stack span{background:#FBDCEC;color:var(--magenta)}
+.box3.hu{background:var(--lavender);border-color:var(--purple)}
+.box3.hu .bt,.box3.hu .lab{color:var(--purple)}
+.box3.hu .stack span{background:#E6D8EE;color:var(--purple)}
+
+/* ---------- falas da entrevista ---------- */
+.says{display:flex;flex-direction:column;gap:.85cqw}
+.say-row{
+  background:var(--lavender);border-radius:.9cqw;padding:.85cqw 1.1cqw;
+  border-left:.28cqw solid var(--lavender-2);
+}
+.say-row .q{font-size:1.12cqw;line-height:1.36;color:var(--ink);font-style:italic}
+.say-row .to{
+  font-family:'Roboto Mono',monospace;font-size:.92cqw;font-weight:500;color:var(--purple);
+  margin-top:.4cqw;letter-spacing:.02em;
+}
+.say-row.key{background:#FEF6FA;border-left-color:var(--magenta)}
+.say-row.key .to{color:var(--magenta);font-weight:700}
+
 /* ---------- table ---------- */
 .tw{overflow-x:auto;border-radius:1.2cqw;border:1px solid var(--line);background:var(--paper)}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
@@ -160,16 +225,6 @@ td{
 }
 tbody tr:nth-child(even){background:#FBF9FD}
 td.k{color:var(--ink);font-weight:500}
-td .pill{
-  display:inline-block;padding:.22cqw .8cqw;border-radius:1cqw;
-  font-size:.92cqw;font-weight:700;letter-spacing:.02em;
-}
-.pill.code{background:#E4EDF8;color:var(--navy)}
-.pill.llm{background:#FBE0EE;color:var(--magenta)}
-.pill.hum{background:#EEE3F4;color:var(--purple)}
-.pill.lo{background:#E6F1EC;color:var(--ok)}
-.pill.md{background:#FBEEDF;color:var(--warn)}
-.pill.hi{background:#FBE0EE;color:var(--magenta)}
 
 /* ---------- callout ---------- */
 .callout{
@@ -182,25 +237,27 @@ td .pill{
   text-transform:uppercase;color:var(--magenta);margin-bottom:.6cqw;
 }
 
-/* ---------- layers (tools) ---------- */
-.layers{display:flex;flex-direction:column;gap:.6cqw;flex:1;justify-content:center}
+/* ---------- layers (ferramentas) ---------- */
+.layers{display:flex;flex-direction:column;gap:.5cqw;flex:1;justify-content:center}
 .layer{
-  display:grid;grid-template-columns:14cqw 1fr;gap:1.6cqw;align-items:center;
-  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:.9cqw 1.5cqw;
+  display:grid;grid-template-columns:13cqw 1fr;gap:1.4cqw;align-items:center;
+  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:.72cqw 1.4cqw;
 }
-.layer .ln{display:flex;align-items:center;gap:.9cqw}
-.layer .ln .t{font-size:1.25cqw;font-weight:700;color:var(--ink)}
-.layer .tools{display:flex;flex-wrap:wrap;gap:.55cqw}
+.layer .ln{display:flex;align-items:center;gap:.85cqw}
+.layer .ln .t{font-size:1.18cqw;font-weight:700;color:var(--ink);line-height:1.15}
+.layer .tools{display:flex;flex-wrap:wrap;gap:.45cqw;align-items:center}
 .tool{
-  font-family:'Roboto Mono',monospace;font-size:1cqw;padding:.3cqw .85cqw;border-radius:.6cqw;
+  font-family:'Roboto Mono',monospace;font-size:.95cqw;padding:.26cqw .75cqw;border-radius:.55cqw;
   background:var(--lavender);color:var(--purple);font-weight:500;
 }
+.tool.q{background:transparent;color:#8B84A0;font-family:'Roboto',sans-serif;font-style:italic;padding-left:.3cqw}
 .layer.key{border-color:var(--magenta);background:#FEF6FA}
 .layer.key .tool{background:#FBE0EE;color:var(--magenta)}
-.stripe{width:.3cqw;height:1.8cqw;border-radius:1cqw;background:var(--navy);flex:none}
+.layer.key .tool.q{background:transparent;color:#B07093}
+.stripe{width:.28cqw;height:1.7cqw;border-radius:1cqw;background:var(--navy);flex:none}
 .layer.key .stripe{background:var(--magenta)}
 
-/* ---------- case placeholders ---------- */
+/* ---------- placeholders ---------- */
 .ph{
   border:1.5px dashed var(--magenta);background:#FEF6FA;border-radius:1.2cqw;
   padding:1.4cqw 1.6cqw;display:flex;flex-direction:column;gap:.55cqw;
@@ -212,21 +269,15 @@ td .pill{
 .ph p{font-size:1.12cqw;line-height:1.42}
 .ph .hint{font-size:1cqw;color:#A08BAA;font-style:italic}
 
-/* ---------- flow ---------- */
-.flow{display:flex;gap:.9cqw;flex:1;align-items:center}
-.step{
-  flex:1;background:var(--paper);border:1px solid var(--line);border-radius:1.2cqw;
-  padding:1.4cqw 1.3cqw;display:flex;flex-direction:column;gap:.8cqw;
+/* ---------- kit ---------- */
+.kit{display:flex;flex-direction:column;gap:.6cqw;flex:1;justify-content:center}
+.kit-row{
+  display:grid;grid-template-columns:17cqw 1fr;gap:1.4cqw;align-items:baseline;
+  border:1px solid var(--line);border-radius:.9cqw;padding:.85cqw 1.4cqw;background:var(--paper);
 }
-.step .sn{font-family:'Roboto Mono',monospace;font-size:1cqw;color:var(--magenta);font-weight:700}
-.step .st{font-size:1.28cqw;font-weight:700;color:var(--ink);line-height:1.2}
-.step p{font-size:1.05cqw;line-height:1.4}
-.step .mode{margin-top:.4cqw;font-size:.92cqw;font-weight:700;letter-spacing:.04em;padding:.28cqw .75cqw;border-radius:1cqw;align-self:flex-start}
-.step.auto{background:#F5FAF7;border-color:#BFDDCE}
-.step.auto .mode{background:#E6F1EC;color:var(--ok)}
-.step.hitl{background:var(--lavender);border-color:var(--lavender-2)}
-.step.hitl .mode{background:#EEE3F4;color:var(--purple)}
-.chev{color:#B9AFC9;font-size:2.2cqw;flex:none;font-weight:300;line-height:1}
+.kit-row .f{font-family:'Roboto Mono',monospace;font-size:1.02cqw;font-weight:500;color:var(--magenta)}
+.kit-row .d{font-size:1.12cqw;line-height:1.38;color:var(--ink-soft)}
+.kit-row .d b{color:var(--ink);font-weight:700}
 
 /* ---------- close ---------- */
 .close .three{display:flex;flex-direction:column;gap:1.6cqw;margin-top:1cqw}
@@ -238,10 +289,7 @@ td .pill{
 .close .three .t .x{font-size:2cqw;font-weight:400;color:#fff;line-height:1.3;max-width:38ch}
 .close .three .t .x b{font-weight:700}
 
-/* ---------- fluxograma SVG ----------
-   viewBox 1280x720 = o slide inteiro, então as coordenadas dos nós são
-   absolutas e escalam junto com o palco sem cálculo nenhum. */
-.fc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* ---------- fluxograma SVG ---------- */
 .fc text{font-family:'Roboto',sans-serif;fill:var(--ink)}
 .fc .box{fill:#fff;stroke:var(--line);stroke-width:1.5}
 .fc .lbl{font-size:19px;font-weight:500;text-anchor:middle;dominant-baseline:middle}
@@ -251,7 +299,7 @@ td .pill{
 .fc .edge{stroke:#8E86A0;stroke-width:2;fill:none}
 .fc .etxt{font-size:15px;font-weight:700;fill:#6E6684}
 .fc .tag{font-size:14px;font-weight:700;text-anchor:middle;letter-spacing:.06em}
-/* classificação */
+.fc .tag.r{text-anchor:start}
 .fc .code .box{fill:#E4EDF8;stroke:var(--navy)}
 .fc .code .tag{fill:var(--navy)}
 .fc .ia .box{fill:#FBE0EE;stroke:var(--magenta)}
@@ -261,10 +309,12 @@ td .pill{
 .fc .todo .box{fill:#FEF6FA;stroke:var(--magenta);stroke-dasharray:7 5}
 .fc .todo .lbl{fill:#A08BAA;font-style:italic}
 
-.nota{position:static;inset:auto;height:22.5cqw;width:100%}
-.legend{display:flex;gap:1.6cqw;align-items:center;flex-wrap:wrap}
-.legend .li{display:flex;gap:.55cqw;align-items:center;font-size:1.08cqw;color:var(--ink-soft)}
-.legend .sw{width:1.1cqw;height:1.1cqw;border-radius:.25cqw;flex:none;border:1.5px solid}
+.nota{height:29cqw;width:100%}
+.flowbox{width:100%;height:100%;min-height:0}
+
+.legend{display:flex;gap:1.5cqw;align-items:center;flex-wrap:wrap}
+.legend .li{display:flex;gap:.5cqw;align-items:center;font-size:1.05cqw;color:var(--ink-soft)}
+.legend .sw{width:1.05cqw;height:1.05cqw;border-radius:.25cqw;flex:none;border:1.5px solid}
 .legend .sw.code{background:#E4EDF8;border-color:var(--navy)}
 .legend .sw.ia{background:#FBE0EE;border-color:var(--magenta)}
 .legend .sw.hum{background:#EEE3F4;border-color:var(--purple)}
@@ -286,7 +336,7 @@ td .pill{
   letter-spacing:.08em;text-transform:uppercase;color:var(--magenta);margin-bottom:.55cqw;
 }
 
-/* ---------- passos numerados (método) ---------- */
+/* ---------- regras numeradas ---------- */
 .steps{display:flex;flex-direction:column;gap:1.15cqw}
 .stp{display:flex;gap:1.15cqw;align-items:flex-start}
 .stp .sk{
@@ -296,17 +346,6 @@ td .pill{
 }
 .stp .sx{font-size:1.22cqw;line-height:1.42;color:var(--ink-soft)}
 .stp .sx b{color:var(--ink);font-weight:700}
-
-/* ---------- checklist ---------- */
-.chk{display:grid;grid-template-columns:1fr 1fr;gap:.85cqw 2.4cqw;flex:1;align-content:center}
-.ck{display:flex;gap:.9cqw;align-items:flex-start}
-.ck .bx{
-  width:1.35cqw;height:1.35cqw;border-radius:.28cqw;border:2px solid var(--magenta);
-  flex:none;margin-top:.22cqw;display:grid;place-items:center;
-}
-.ck .bx svg{width:.9cqw;height:.9cqw;stroke:var(--magenta);stroke-width:3;fill:none;stroke-linecap:round}
-.ck .cx{font-size:1.16cqw;line-height:1.4;color:var(--ink-soft)}
-.ck .cx b{color:var(--ink);font-weight:700}
 
 /* ---------- chrome ---------- */
 .foot{
@@ -329,12 +368,6 @@ td .pill{
   transition:opacity .8s ease;pointer-events:none;
 }
 
-/* logo lockup */
-.logo{display:flex;align-items:center;gap:.7cqw}
-.logo .sq{width:1.9cqw;height:1.9cqw;border-radius:28%;background:var(--magenta);flex:none}
-.logo .tx{font-size:1.1cqw;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-.01em}
-.logo .tx s{display:block;text-decoration:none;font-weight:400;color:var(--ink-soft);font-size:.88cqw}
-
 @media print{
   @page{size:1280px 720px;margin:0}
   body{overflow:visible;height:auto;display:block;background:#fff}
@@ -346,13 +379,13 @@ td .pill{
 
 <div class="stage" id="stage">
 
-<!-- 01 COVER -->
+<!-- 01 CAPA -->
 <section class="slide cover on" data-sec="Abertura">
   <div class="topbar"></div>
   <div class="left">
     <div class="eyebrow">Serasa Experian &middot; Tecnologia</div>
     <h1>Automação de processos com <em class="hl">IA</em></h1>
-    <div class="sub">Como mapear o processo, implementar com eval e levar para produção.</div>
+    <div class="sub">Onde a IA ajuda &mdash; e onde um script resolve melhor.</div>
     <div class="by">
       <div class="n">Bruno Prata</div>
       <div class="r">Palestra técnica &middot; 25 minutos</div>
@@ -367,37 +400,124 @@ td .pill{
   </div>
 </section>
 
-<!-- 02 HOOK -->
+<!-- 02 BIO -->
+<section class="slide" data-sec="Abertura">
+  <div class="topbar"></div>
+  <div class="head" style="margin-bottom:1.6cqw">
+    <div class="eyebrow">Quem está falando</div>
+  </div>
+  <div class="bio-grid">
+    <div>
+      <div class="bio-name">Bruno Prata</div>
+      <div class="bio-role">Especialista em Dados no <strong style="font-weight:700;color:var(--ink)">Nubank</strong></div>
+      <div class="chips">
+        <span class="chip">Grupo Boticário</span>
+        <span class="chip">iFood</span>
+        <span class="chip">EBANX</span>
+        <span class="chip">Nubank</span>
+      </div>
+      <div class="bio-meta">Administração &mdash; UFPR &nbsp;·&nbsp; 6+ anos entre análise de dados, BI e decisão</div>
+    </div>
+    <div class="bio-panel">
+      <div class="sq" style="width:12cqw;height:12cqw;background:rgba(255,255,255,.07);top:-3cqw;right:-3.5cqw"></div>
+      <div class="sq" style="width:5cqw;height:5cqw;background:rgba(232,0,112,.6);bottom:-1.5cqw;left:-1.5cqw"></div>
+      <div class="lab">O que eu faço</div>
+      <p>Os últimos anos foram automatizando processo de decisão: entender como ele acontece hoje e devolver a parte repetitiva pra máquina &mdash; <b>script quando dá, IA quando é linguagem, pessoa quando o erro custa caro</b>.</p>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1.6cqw">
+    <div class="lab">O combinado desta palestra</div>
+    <p>Não é demo de ferramenta. Em 25 minutos você sai com <strong>um roteiro de entrevista, uma notação de fluxograma e uma regra de decisão</strong> que dá pra aplicar no seu processo amanhã de manhã &mdash; mais um kit de arquivos pra baixar no fim.</p>
+  </div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">Abertura</span></div>
+</section>
+
+<!-- 03 STATEMENT: A PERGUNTA QUE ESTRAGA TUDO -->
 <section class="slide statement" data-sec="Abertura">
-  <div class="eyebrow">O ponto de partida</div>
-  <h2>A pergunta errada é <em class="hl">"o que a IA consegue fazer aqui?"</em></h2>
-  <div class="lede">A pergunta certa é: <strong style="color:#fff">neste processo, o que é decisão e o que é digitação?</strong><br><br>
-  Automação com IA é 80% desenho de processo e 20% modelo. Quem inverte essa conta entrega uma demo bonita que ninguém usa em produção.</div>
-  <div style="margin-top:auto;display:flex;align-items:center;gap:1cqw;font-size:1.15cqw;color:#C9B6D4;font-weight:500;flex-wrap:wrap">
-    <span style="color:#FF8FC0;font-weight:700;letter-spacing:.04em">NOS PRÓXIMOS 25 MIN</span>
-    <span>mapear</span><span style="color:#FF8FC0">→</span>
-    <span>decidir</span><span style="color:#FF8FC0">→</span>
-    <span>humano na alça</span><span style="color:#FF8FC0">→</span>
-    <span>levar para produção</span><span style="color:#FF8FC0">→</span>
-    <span style="color:#fff;font-weight:700">um caso real</span>
+  <div class="eyebrow">Como isso começa errado</div>
+  <h2>&ldquo;O que vocês querem automatizar?&rdquo; só devolve <em class="hl">a solução que a pessoa já imaginou</em></h2>
+  <div class="lede">Ninguém responde com o processo. Responde com <em>&ldquo;queria um bot que respondesse os chamados&rdquo;</em>. Aí você automatiza a imaginação de alguém, não o trabalho que existe.<br><br>
+  <strong style="color:#fff">A pergunta que funciona é outra: &ldquo;me conta o que você fez ontem, na ordem.&rdquo;</strong></div>
+  <div style="margin-top:auto;display:flex;align-items:center;gap:.9cqw;font-size:1.12cqw;color:#C9B6D4;font-weight:500;flex-wrap:wrap">
+    <span style="color:#FF8FC0;font-weight:700;letter-spacing:.04em">O CAMINHO DE HOJE</span>
+    <span>conversar</span><span style="color:#FF8FC0">→</span>
+    <span>desenhar</span><span style="color:#FF8FC0">→</span>
+    <span>decidir quem faz cada caixa</span><span style="color:#FF8FC0">→</span>
+    <span>ferramentas</span><span style="color:#FF8FC0">→</span>
+    <span>um caso</span><span style="color:#FF8FC0">→</span>
+    <span style="color:#fff;font-weight:700">o kit pra baixar</span>
   </div>
 </section>
 
-<!-- 03 COMO MAPEAR: MÉTODO + NOTAÇÃO -->
-<section class="slide" data-sec="01 Mapear">
+<!-- 04 AS 7 PERGUNTAS -->
+<section class="slide" data-sec="01 Conversar">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:2cqw">
-    <div class="eyebrow">O método</div>
-    <h2>Quatro passos e <em class="hl">quatro formas</em>. É só isso.</h2>
+  <div class="head" style="margin-bottom:1.4cqw">
+    <div class="eyebrow">Passo 1 · a conversa</div>
+    <h2 style="font-size:3.1cqw">Sete perguntas que arrancam o processo <em class="hl">inteiro</em> em meia hora</h2>
   </div>
-  <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:4cqw;flex:1;min-height:0">
-    <div class="steps">
-      <div class="stp"><span class="sk">1</span><span class="sx"><b>Desenhe o fluxo como ele acontece hoje</b>, sem melhorar nada. Entreviste quem executa: a versão do gerente é a oficial, a de quem executa é a real.</span></div>
-      <div class="stp"><span class="sk">2</span><span class="sx"><b>Uma caixa por ação, um losango por decisão.</b> Na dúvida, é decisão — decisão escondida dentro de ação é onde a automação quebra depois.</span></div>
-      <div class="stp"><span class="sk">3</span><span class="sx"><b>Tabele cada caixa</b>: entrada, saída, dono, volume/mês, taxa de exceção, custo do erro. Sem os dois últimos, o passo 4 é chute.</span></div>
-      <div class="stp"><span class="sk">4</span><span class="sx"><b>Volte ao desenho e pinte cada caixa</b>: código, IA ou humano. O fluxo pintado <b>é</b> a arquitetura.</span></div>
+  <div class="qs">
+    <div class="qrow">
+      <span class="qn">01</span>
+      <span class="qq">&ldquo;Me conta o que você fez ontem, na ordem.&rdquo;</span>
+      <span class="qr">Dá as etapas <b>reais</b>. A versão do gestor é a oficial; esta é a que acontece.</span>
     </div>
-    <div>
+    <div class="qrow key">
+      <span class="qn">02</span>
+      <span class="qq">&ldquo;O que te faz parar e perguntar pra alguém?&rdquo;</span>
+      <span class="qr">Cada resposta é um <b>losango</b> — uma decisão. E quase sempre vem com a regra junto.</span>
+    </div>
+    <div class="qrow key">
+      <span class="qn">03</span>
+      <span class="qq">&ldquo;O que você copia de um lugar pro outro?&rdquo;</span>
+      <span class="qr">Digitação pura. É a <b>primeira caixa que vira script</b> — sem IA nenhuma.</span>
+    </div>
+    <div class="qrow">
+      <span class="qn">04</span>
+      <span class="qq">&ldquo;Quando isso dá errado, como você descobre?&rdquo;</span>
+      <span class="qr">Se não houver resposta, <b>não automatize ainda</b>: você não teria como saber que quebrou.</span>
+    </div>
+    <div class="qrow">
+      <span class="qn">05</span>
+      <span class="qq">&ldquo;Qual é o caso chato que sempre aparece?&rdquo;</span>
+      <span class="qr">As exceções. Anote as frases exatas — viram os <b>casos de teste</b> depois.</span>
+    </div>
+    <div class="qrow">
+      <span class="qn">06</span>
+      <span class="qq">&ldquo;Quantas vezes você faz isso por dia?&rdquo;</span>
+      <span class="qr">Volume. Sem ele não dá pra priorizar: <b>etapa rara não paga automação</b>.</span>
+    </div>
+    <div class="qrow">
+      <span class="qn">07</span>
+      <span class="qq">&ldquo;Se você errar aqui, o que acontece?&rdquo;</span>
+      <span class="qr">Custo do erro. É o número que decide se a etapa <b>pode</b> rodar sozinha.</span>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:1.2cqw;padding:1.1cqw 1.6cqw">
+    <div class="lab">Duas delas fazem 70% do trabalho</div>
+    <p>A <strong>2</strong> te entrega os losangos e a <strong>3</strong> te entrega as caixas que viram script. As outras cinco servem pra você saber se vale a pena mexer. Grave a conversa (com permissão) e desenhe em cima da transcrição &mdash; não da memória.</p>
+  </div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">01 · Conversar</span></div>
+</section>
+
+<!-- 05 A NOTAÇÃO -->
+<section class="slide" data-sec="02 Desenhar">
+  <div class="topbar"></div>
+  <div class="head" style="margin-bottom:1.8cqw">
+    <div class="eyebrow">Passo 2 · o desenho</div>
+    <h2>Quatro formas e três regras. <em class="hl">Não precisa de BPMN.</em></h2>
+  </div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:3.6cqw;flex:1;min-height:0">
+    <div class="steps" style="justify-content:center">
+      <div class="stp"><span class="sk">1</span><span class="sx"><b>Uma caixa = uma ação.</b> Se o nome da caixa tem &ldquo;e&rdquo;, são duas caixas. &ldquo;Registrar <i>e</i> classificar&rdquo; esconde exatamente a etapa que você ia automatizar.</span></div>
+      <div class="stp"><span class="sk">2</span><span class="sx"><b>Todo losango tem a regra escrita embaixo.</b> Losango sem regra é decisão que ninguém revisou — e é onde a automação quebra três meses depois.</span></div>
+      <div class="stp"><span class="sk">3</span><span class="sx"><b>Rotule as duas saídas.</b> Seta sem rótulo esconde o caminho que ninguém tratou. Na dúvida entre ação e decisão, <b>é decisão</b>.</span></div>
+      <div class="callout" style="margin-top:.6cqw;padding:1.1cqw 1.5cqw">
+        <div class="lab">Com o que desenhar</div>
+        <p style="font-size:1.1cqw">Papel, na frente da pessoa, na hora. Depois passe pra <span class="mono">Mermaid</span> ou <span class="mono">draw.io</span> — Mermaid é texto, então versiona no repo e o diff mostra quando o processo mudou.</p>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center">
       <div class="code-cap">A notação inteira</div>
       <svg class="fc nota" viewBox="0 0 440 350" role="img" aria-label="Legenda das quatro formas do fluxograma">
         <g class="term">
@@ -409,7 +529,7 @@ td .pill{
         <rect class="box" x="14" y="98" width="150" height="52" rx="11"/>
         <text class="lbl" x="89" y="125">ação</text>
         <text x="184" y="122" font-size="16" fill="#4A5578">uma caixa = uma ação.</text>
-        <text x="184" y="142" font-size="16" fill="#4A5578">Se tem “e” no nome, são duas.</text>
+        <text x="184" y="142" font-size="16" fill="#4A5578">Se tem &ldquo;e&rdquo; no nome, são duas.</text>
 
         <g class="dec">
           <path class="box" d="M89 182 L164 216 L89 250 L14 216 Z"/>
@@ -430,255 +550,241 @@ td .pill{
       </svg>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.4cqw">
-    <div class="lab">Por que fluxograma e não texto</div>
-    <p>Processo em texto esconde decisão. Em fluxograma, decisão tem forma própria — e é exatamente onde você vai escolher entre código, IA e humano. <strong>O desenho não é documentação, é a ferramenta de decisão.</strong></p>
-  </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">01 · Mapear</span></div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">02 · Desenhar</span></div>
 </section>
 
-<!-- 04 FLUXOGRAMA: COMO É HOJE -->
-<section class="slide" data-sec="01 Mapear">
+<!-- 06 DA FALA AO DESENHO -->
+<section class="slide" data-sec="02 Desenhar">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:0">
-    <div class="eyebrow">Passos 1 e 2 · exemplo real</div>
-    <h2>Triagem de solicitação de suporte, <em class="hl">como acontece hoje</em></h2>
+  <div class="head" style="margin-bottom:1.6cqw">
+    <div class="eyebrow">Passo 2 · na prática</div>
+    <h2 style="font-size:3.05cqw">Da fala ao desenho: <em class="hl">cinco frases viram um fluxo</em></h2>
   </div>
-  <svg class="fc" viewBox="0 0 1280 720" role="img" aria-label="Fluxograma da triagem de suporte no estado atual">
-    <defs>
-      <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
-      </marker>
-    </defs>
-    <!-- linha de cima -->
-    <g class="term">
-      <rect class="box" x="70" y="250" width="120" height="70" rx="35"/>
-      <text class="lbl" x="130" y="278">Solicitação</text>
-      <text class="lbl" x="130" y="300">chega</text>
-    </g>
-    <g><rect class="box" x="228" y="250" width="165" height="70" rx="11"/>
-      <text class="lbl" x="310" y="278">Registrar</text><text class="lbl" x="310" y="300">ticket</text></g>
-    <g><rect class="box" x="431" y="250" width="175" height="70" rx="11"/>
-      <text class="lbl" x="518" y="278">Classificar</text><text class="lbl" x="518" y="300">assunto</text></g>
-    <g><rect class="box" x="644" y="250" width="165" height="70" rx="11"/>
-      <text class="lbl" x="726" y="278">Redigir</text><text class="lbl" x="726" y="300">resposta</text></g>
-    <g class="dec">
-      <path class="box" d="M932 220 L1017 285 L932 350 L847 285 Z"/>
-      <text class="lbl" x="932" y="275" font-size="17">Precisa</text>
-      <text class="lbl" x="932" y="296" font-size="17">aprovação?</text>
-    </g>
-    <!-- linha de baixo -->
-    <g><rect class="box" x="560" y="460" width="200" height="70" rx="11"/>
-      <text class="lbl" x="660" y="488">Gestor revisa</text><text class="lbl" x="660" y="510">e aprova</text></g>
-    <g><rect class="box" x="820" y="460" width="180" height="70" rx="11"/>
-      <text class="lbl" x="910" y="488">Enviar</text><text class="lbl" x="910" y="510">resposta</text></g>
-    <g class="term">
-      <rect class="box" x="1060" y="460" width="100" height="70" rx="35"/>
-      <text class="lbl" x="1110" y="499">Fim</text>
-    </g>
-    <!-- arestas -->
-    <path class="edge" d="M190 285 H222" marker-end="url(#a2)"/>
-    <path class="edge" d="M393 285 H425" marker-end="url(#a2)"/>
-    <path class="edge" d="M606 285 H638" marker-end="url(#a2)"/>
-    <path class="edge" d="M809 285 H841" marker-end="url(#a2)"/>
-    <path class="edge" d="M932 350 V400 H660 V454" marker-end="url(#a2)"/>
-    <text class="etxt" x="944" y="396">sim</text>
-    <path class="edge" d="M1017 285 H1200 V420 H910 V454" marker-end="url(#a2)"/>
-    <text class="etxt" x="1030" y="272">não</text>
-    <path class="edge" d="M760 495 H814" marker-end="url(#a2)"/>
-    <path class="edge" d="M1000 495 H1054" marker-end="url(#a2)"/>
-    <!-- regra do losango -->
-    <text x="80" y="432" font-size="15" font-weight="700" fill="#E80070">A REGRA DO LOSANGO, ESCRITA:</text>
-    <text x="80" y="456" font-size="16" fill="#4A5578">desconto &gt; 10% ou exceção contratual</text>
-    <text x="80" y="478" font-size="15" fill="#8E86A0">losango sem regra escrita = decisão que ninguém revisou</text>
-  </svg>
-  <div class="callout" style="position:absolute;left:7cqw;right:7cqw;bottom:4.2cqw;margin:0">
-    <div class="lab">O que este desenho já entrega</div>
-    <p>Seis ações, uma decisão, duas saídas rotuladas — e a regra do losango escrita. <strong>Nada aqui é sobre IA ainda.</strong> Quem tenta desenhar isso e não consegue fechar as setas descobriu que tem dois processos, não um.</p>
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:2.6cqw;flex:1;min-height:0">
+    <div class="says" style="justify-content:center">
+      <div class="say-row">
+        <div class="q">&ldquo;Chega um e-mail, ou o cliente abre pelo formulário.&rdquo;</div>
+        <div class="to">→ início</div>
+      </div>
+      <div class="say-row">
+        <div class="q">&ldquo;Aí eu jogo no sistema: copio nome, CPF e o texto do chamado.&rdquo;</div>
+        <div class="to">→ ação · registrar chamado</div>
+      </div>
+      <div class="say-row">
+        <div class="q">&ldquo;Leio e vejo do que se trata — cobrança, fraude, cadastro.&rdquo;</div>
+        <div class="to">→ ação · classificar assunto</div>
+      </div>
+      <div class="say-row">
+        <div class="q">&ldquo;Escrevo a resposta. Geralmente é parecida com outras que já mandei.&rdquo;</div>
+        <div class="to">→ ação · redigir resposta</div>
+      </div>
+      <div class="say-row key">
+        <div class="q">&ldquo;Se for desconto acima de 10%, eu paro e mando pro meu gestor.&rdquo;</div>
+        <div class="to">→ losango + a regra, na mesma frase</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;min-height:0">
+      <svg class="fc flowbox" viewBox="0 0 650 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Fluxograma da triagem de chamados como acontece hoje">
+        <defs>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
+          </marker>
+        </defs>
+        <g class="term"><rect class="box" x="20" y="6" width="230" height="50" rx="25"/>
+          <text class="lbl" x="135" y="32">Chamado chega</text></g>
+        <g><rect class="box" x="20" y="88" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="115">Registrar chamado</text></g>
+        <g><rect class="box" x="20" y="172" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="199">Classificar assunto</text></g>
+        <g><rect class="box" x="20" y="256" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="283">Redigir resposta</text></g>
+        <g class="dec"><path class="box" d="M135 344 L250 392 L135 440 L20 392 Z"/>
+          <text class="lbl" x="135" y="384" font-size="17">Desconto</text>
+          <text class="lbl" x="135" y="405" font-size="17">acima de 10%?</text></g>
+        <g><rect class="box" x="300" y="366" width="210" height="52" rx="11"/>
+          <text class="lbl" x="405" y="393">Gestor aprova</text></g>
+        <g><rect class="box" x="20" y="474" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="501">Enviar resposta</text></g>
+        <g class="term"><rect class="box" x="430" y="474" width="100" height="52" rx="26"/>
+          <text class="lbl" x="480" y="501">Fim</text></g>
+
+        <path class="edge" d="M135 56 V82" marker-end="url(#a2)"/>
+        <path class="edge" d="M135 140 V166" marker-end="url(#a2)"/>
+        <path class="edge" d="M135 224 V250" marker-end="url(#a2)"/>
+        <path class="edge" d="M135 308 V338" marker-end="url(#a2)"/>
+        <path class="edge" d="M250 392 H294" marker-end="url(#a2)"/>
+        <text class="etxt" x="258" y="382">sim</text>
+        <path class="edge" d="M135 440 V468" marker-end="url(#a2)"/>
+        <text class="etxt" x="146" y="460">não</text>
+        <path class="edge" d="M405 418 V450 H200 V468" marker-end="url(#a2)"/>
+        <path class="edge" d="M250 500 H424" marker-end="url(#a2)"/>
+
+        <text x="20" y="562" font-size="16" font-weight="700" fill="#E80070">A REGRA DO LOSANGO, ESCRITA:</text>
+        <text x="20" y="586" font-size="17" fill="#4A5578">desconto &gt; 10% ou exceção contratual</text>
+      </svg>
+    </div>
   </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">01 · Mapear</span></div>
+  <div class="callout" style="margin-top:1.2cqw;padding:1.05cqw 1.6cqw">
+    <div class="lab">O que acabou de acontecer</div>
+    <p>A quinta frase entregou <strong>o losango e a regra na mesma respiração</strong> — é por isso que a pergunta 2 vale por três. E repare: até aqui <strong>nada foi dito sobre IA</strong>. Quem não consegue fechar as setas descobriu que tem dois processos, não um.</p>
+  </div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">02 · Desenhar</span></div>
 </section>
 
-<!-- 05 CANVAS -->
-<section class="slide" data-sec="01 Mapear">
+<!-- 07 IA COMO FERRAMENTA VS. IA COMO SOLUÇÃO -->
+<section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
   <div class="head">
-    <div class="eyebrow">A ferramenta que resolve 80% do problema</div>
-    <h2>O canvas de mapeamento &mdash; <em class="hl">uma linha por etapa</em></h2>
-    <div class="lede">Exemplo: triagem de solicitações de suporte. As duas colunas destacadas decidem tudo.</div>
+    <div class="eyebrow">Passo 3 · onde a IA entra</div>
+    <h2>Antes de escolher modelo: você quer a IA como <em class="hl">ferramenta</em> ou como <em class="hlp">solução</em>?</h2>
   </div>
-  <div class="tw">
-    <table>
-      <thead>
-        <tr>
-          <th>Etapa</th><th>Entrada</th><th>Saída</th>
-          <th class="hi">É decisão?</th><th class="hi">Custo do erro</th>
-          <th>Exceções</th><th>Volume/mês</th><th>Dono</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="k">1. Receber e registrar</td><td>e-mail, formulário</td><td>ticket criado</td><td>Não</td><td><span class="pill lo">baixo</span></td><td>2%</td><td>12.000</td><td>Suporte</td></tr>
-        <tr><td class="k">2. Classificar assunto</td><td>texto livre</td><td>categoria</td><td>Sim — ambígua</td><td><span class="pill lo">baixo</span></td><td>15%</td><td>12.000</td><td>Suporte</td></tr>
-        <tr><td class="k">3. Verificar elegibilidade</td><td>dados do cliente</td><td>sim / não</td><td>Sim — regra fixa</td><td><span class="pill hi">alto</span></td><td>5%</td><td>4.000</td><td>Suporte</td></tr>
-        <tr><td class="k">4. Redigir resposta</td><td>contexto + histórico</td><td>texto</td><td>Sim — ambígua</td><td><span class="pill md">médio</span></td><td>20%</td><td>9.000</td><td>Suporte</td></tr>
-        <tr><td class="k">5. Aprovar exceção comercial</td><td>proposta</td><td>decisão</td><td>Sim — julgamento</td><td><span class="pill hi">alto, irreversível</span></td><td>—</td><td>300</td><td>Gestor</td></tr>
-      </tbody>
-    </table>
+  <div class="g2 fill" style="align-content:center">
+    <div class="card">
+      <h3 style="color:var(--magenta)">IA como ferramenta &mdash; um copiloto seu</h3>
+      <p><strong>Você está no meio.</strong> Cada uso é uma decisão sua, e você vê a saída antes de qualquer coisa acontecer.</p>
+      <p><span class="mono" style="color:var(--ink)">Escrever o script · entender uma base nova · gerar o SQL · revisar um texto · virar 40 páginas de PDF em resumo</span></p>
+      <p><strong>Não precisa de eval, log nem dono.</strong> Precisa de você prestando atenção. Começa hoje, sem projeto e sem aprovação.</p>
+    </div>
+    <div class="card tint">
+      <h3 style="color:var(--purple)">IA como solução &mdash; dentro do processo</h3>
+      <p><strong>Roda sem você</strong>, N vezes por dia, e o resultado vai direto pro cliente ou pro sistema seguinte.</p>
+      <p><span class="mono" style="color:var(--ink)">Classificar 12 mil chamados/mês · extrair campo de documento · redigir a primeira versão da resposta</span></p>
+      <p><strong>Precisa de tudo que um sistema precisa:</strong> saída com schema, limiar de confiança, log por execução, dono com nome e um conjunto de casos de teste.</p>
+    </div>
   </div>
   <div class="callout">
-    <div class="lab">Como ler</div>
-    <p>Linha 1 é digitação → <strong>código</strong>. Linhas 2 e 4 são decisão ambígua com erro tolerável → <strong>IA</strong>. Linha 3 é regra fixa → <strong>código</strong>, nunca LLM. Linha 5 é julgamento irreversível → <strong>humano</strong>. O mapa dá a arquitetura antes de você escrever uma linha.</p>
+    <div class="lab">A confusão que mata projeto</div>
+    <p>Quase todo piloto que morre no terceiro mês é <strong>uma solução tratada como se fosse ferramenta</strong>: funcionou lindo no chat de quem construiu, e ninguém desenhou o que acontece quando erra às 3 da manhã sem ninguém olhando. <strong>A demo é ferramenta. Produção é solução.</strong></p>
   </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">01 · Mapear</span></div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">03 · Decidir</span></div>
 </section>
 
-<!-- 06 FLUXOGRAMA CLASSIFICADO -->
-<section class="slide" data-sec="01 Mapear">
+<!-- 08 EM QUAL CAIXA CABE O QUÊ -->
+<section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:0">
-    <div class="eyebrow">Passo 4 · o entregável de verdade</div>
-    <h2>O mesmo fluxo, pintado &mdash; e pronto, <em class="hl">essa é a arquitetura</em></h2>
+  <div class="head" style="margin-bottom:1.8cqw">
+    <div class="eyebrow">Passo 3 · a classificação</div>
+    <h2 style="font-size:3.05cqw">Cada caixa do fluxo vira uma de <em class="hl">três coisas</em></h2>
   </div>
-  <svg class="fc" viewBox="0 0 1280 720" role="img" aria-label="O mesmo fluxograma com cada etapa classificada como código, IA ou humano">
-    <defs>
-      <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
-      </marker>
-    </defs>
-    <g class="term">
-      <rect class="box" x="70" y="250" width="120" height="70" rx="35"/>
-      <text class="lbl" x="130" y="278">Solicitação</text>
-      <text class="lbl" x="130" y="300">chega</text>
-    </g>
-    <g class="code"><rect class="box" x="228" y="250" width="165" height="70" rx="11"/>
-      <text class="lbl" x="310" y="278">Registrar</text><text class="lbl" x="310" y="300">ticket</text>
-      <text class="tag" x="310" y="342">CÓDIGO</text></g>
-    <g class="ia"><rect class="box" x="431" y="250" width="175" height="70" rx="11"/>
-      <text class="lbl" x="518" y="278">Classificar</text><text class="lbl" x="518" y="300">assunto</text>
-      <text class="tag" x="518" y="342">IA · 12.000/mês</text></g>
-    <g class="ia"><rect class="box" x="644" y="250" width="165" height="70" rx="11"/>
-      <text class="lbl" x="726" y="278">Redigir</text><text class="lbl" x="726" y="300">resposta</text>
-      <text class="tag" x="726" y="342">IA + revisão</text></g>
-    <g class="dec code">
-      <path class="box" d="M932 220 L1017 285 L932 350 L847 285 Z"/>
-      <text class="lbl" x="932" y="275" font-size="17">Precisa</text>
-      <text class="lbl" x="932" y="296" font-size="17">aprovação?</text>
-      <text class="tag" x="932" y="370">CÓDIGO · regra fixa</text></g>
-    <g class="hum"><rect class="box" x="560" y="460" width="200" height="70" rx="11"/>
-      <text class="lbl" x="660" y="488">Gestor revisa</text><text class="lbl" x="660" y="510">e aprova</text>
-      <text class="tag" x="660" y="552">HUMANO · 300/mês</text></g>
-    <g class="code"><rect class="box" x="820" y="460" width="180" height="70" rx="11"/>
-      <text class="lbl" x="910" y="488">Enviar</text><text class="lbl" x="910" y="510">resposta</text>
-      <text class="tag" x="910" y="552">CÓDIGO</text></g>
-    <g class="term">
-      <rect class="box" x="1060" y="460" width="100" height="70" rx="35"/>
-      <text class="lbl" x="1110" y="499">Fim</text>
-    </g>
-    <path class="edge" d="M190 285 H222" marker-end="url(#a3)"/>
-    <path class="edge" d="M393 285 H425" marker-end="url(#a3)"/>
-    <path class="edge" d="M606 285 H638" marker-end="url(#a3)"/>
-    <path class="edge" d="M809 285 H841" marker-end="url(#a3)"/>
-    <path class="edge" d="M932 350 V400 H660 V454" marker-end="url(#a3)"/>
-    <text class="etxt" x="944" y="396">sim</text>
-    <path class="edge" d="M1017 285 H1200 V420 H910 V454" marker-end="url(#a3)"/>
-    <text class="etxt" x="1030" y="272">não</text>
-    <path class="edge" d="M760 495 H814" marker-end="url(#a3)"/>
-    <path class="edge" d="M1000 495 H1054" marker-end="url(#a3)"/>
-  </svg>
-  <div class="callout" style="position:absolute;left:7cqw;right:7cqw;bottom:4.2cqw;margin:0;padding:1.2cqw 1.6cqw">
-    <div class="lab">Como ler o resultado</div>
-    <p>As duas caixas rosas são <strong>21.000 execuções/mês de decisão ambígua com erro tolerável</strong> — é aí que a IA se paga. A lavanda são 300 julgamentos irreversíveis por mês: continua humana, e é barato que continue. O losango parece decisão de IA e não é — é <span class="mono">if desconto &gt; 0.10</span>.</p>
+  <div class="tri">
+    <div class="box3 py">
+      <div class="bt">Automação tradicional</div>
+      <div class="stack"><span>Python</span><span>SQL</span><span>API</span><span>regex</span><span>cron</span></div>
+      <div class="lab">Quando</div>
+      <p>A regra é fixa, a entrada é estruturada e a saída é sempre a mesma.</p>
+      <div class="lab">Como aparece na entrevista</div>
+      <div class="say">&ldquo;eu copio daqui pra lá&rdquo; · &ldquo;rodo esse relatório toda segunda&rdquo;</div>
+      <div class="lab">Por que não IA aqui</div>
+      <p>Mais barato, determinístico e testável. <strong>Um <span class="mono">if</span> você testa uma vez e confia pra sempre.</strong></p>
+    </div>
+    <div class="box3 ia">
+      <div class="bt">IA</div>
+      <div class="stack"><span>LLM + schema</span><span>limiar</span><span>eval</span></div>
+      <div class="lab">Quando</div>
+      <p>A entrada é linguagem, a regra é ambígua, e <strong>verificar custa menos que fazer</strong>.</p>
+      <div class="lab">Como aparece na entrevista</div>
+      <div class="say">&ldquo;depende do que tá escrito&rdquo; · &ldquo;eu leio e decido na hora&rdquo;</div>
+      <div class="lab">O preço que vem junto</div>
+      <p>Não é determinística. Sem casos de teste, limiar e um caminho de &ldquo;não sei&rdquo;, você trocou trabalho por risco.</p>
+    </div>
+    <div class="box3 hu">
+      <div class="bt">Humano</div>
+      <div class="stack"><span>julgamento</span></div>
+      <div class="lab">Quando</div>
+      <p>O erro é caro e irreversível &mdash; ou a regra ainda nem existe.</p>
+      <div class="lab">Como aparece na entrevista</div>
+      <div class="say">&ldquo;isso aí eu levo pro meu gestor&rdquo; · &ldquo;cada caso é um caso&rdquo;</div>
+      <div class="lab">A boa notícia</div>
+      <p>Costuma ser pouco volume. <strong>Manter gente ali é barato</strong> — e é o que te deixa automatizar o resto sem medo.</p>
+    </div>
   </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">01 · Mapear</span></div>
+  <div class="callout" style="margin-top:1.4cqw;padding:1.1cqw 1.6cqw">
+    <div class="lab">A ordem de perguntar &mdash; uma vez por caixa</div>
+    <p><strong>1.</strong> Dá pra fazer com um <span class="mono">if</span>? Se dá, faça com <span class="mono">if</span>. &nbsp;<strong>2.</strong> Se não dá, o erro é caro e irreversível? Se é, humano decide (ou a IA propõe e o humano aprova). &nbsp;<strong>3.</strong> Se não é, IA com revisão por amostragem. &nbsp;<em class="hl">A IA é a terceira pergunta, nunca a primeira.</em></p>
+  </div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">03 · Decidir</span></div>
 </section>
 
-<!-- 07 ÁRVORE DE DECISÃO -->
-<section class="slide" data-sec="02 Decidir">
+<!-- 09 O MESMO FLUXO, PINTADO -->
+<section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:0">
-    <div class="eyebrow">A árvore &middot; rode uma vez por linha do canvas</div>
-    <h2 style="font-size:2.95cqw;max-width:30ch">Quatro perguntas e a etapa <em class="hl">se classifica sozinha</em></h2>
+  <div class="head" style="margin-bottom:1.4cqw">
+    <div class="eyebrow">Passo 3 · o entregável</div>
+    <h2 style="font-size:3.05cqw">O mesmo fluxo, pintado &mdash; e pronto: <em class="hl">essa é a arquitetura</em></h2>
   </div>
-  <svg class="fc" viewBox="0 0 1280 720" role="img" aria-label="Árvore de decisão para classificar cada etapa do processo">
-    <defs>
-      <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
-      </marker>
-    </defs>
+  <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:2.8cqw;flex:1;min-height:0">
+    <div style="display:flex;flex-direction:column;min-height:0">
+      <svg class="fc flowbox" viewBox="0 0 650 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="O mesmo fluxograma com cada etapa classificada como Python, IA ou humano">
+        <defs>
+          <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
+          </marker>
+        </defs>
+        <g class="term"><rect class="box" x="20" y="6" width="230" height="50" rx="25"/>
+          <text class="lbl" x="135" y="32">Chamado chega</text></g>
+        <g class="code"><rect class="box" x="20" y="88" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="115">Registrar chamado</text>
+          <text class="tag r" x="262" y="119">PYTHON · API do sistema</text></g>
+        <g class="ia"><rect class="box" x="20" y="172" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="199">Classificar assunto</text>
+          <text class="tag r" x="262" y="203">IA · 12.000/mês</text></g>
+        <g class="ia"><rect class="box" x="20" y="256" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="283">Redigir resposta</text>
+          <text class="tag r" x="262" y="287">IA · 9.000/mês + revisão</text></g>
+        <g class="dec code"><path class="box" d="M135 344 L250 392 L135 440 L20 392 Z"/>
+          <text class="lbl" x="135" y="384" font-size="17">Desconto</text>
+          <text class="lbl" x="135" y="405" font-size="17">acima de 10%?</text></g>
+        <g class="hum"><rect class="box" x="300" y="366" width="210" height="52" rx="11"/>
+          <text class="lbl" x="405" y="393">Gestor aprova</text>
+          <text class="tag r" x="518" y="397">HUMANO · 300/mês</text></g>
+        <g class="code"><rect class="box" x="20" y="474" width="230" height="52" rx="11"/>
+          <text class="lbl" x="135" y="501">Enviar resposta</text>
+          <text class="tag r" x="20" y="552">PYTHON</text></g>
+        <g class="term"><rect class="box" x="430" y="474" width="100" height="52" rx="26"/>
+          <text class="lbl" x="480" y="501">Fim</text></g>
 
-    <!-- o quinto caminho, fora da árvore (canto livre ao lado do título) -->
-    <text x="880" y="106" font-size="14.5" font-weight="700" fill="#6D2077">E O QUINTO CAMINHO</text>
-    <text x="880" y="136" font-size="15" fill="#4A5578">A árvore classifica <tspan font-weight="700">etapa de processo</tspan>.</text>
-    <text x="880" y="157" font-size="15" fill="#4A5578">Trabalho de especialista — código, análise,</text>
-    <text x="880" y="178" font-size="15" fill="#4A5578">redação — não entra: ali é <tspan font-weight="700" fill="#6D2077">copiloto</tspan>.</text>
-
-    <!-- perguntas (losangos), descendo pela esquerda -->
-    <g class="dec"><path class="box" d="M240 222 L390 256 L240 290 L90 256 Z"/>
-      <text class="lbl" x="240" y="249" font-size="16.5">A regra é fixa</text>
-      <text class="lbl" x="240" y="270" font-size="16.5">e estável?</text></g>
-    <g class="dec"><path class="box" d="M240 314 L390 348 L240 382 L90 348 Z"/>
-      <text class="lbl" x="240" y="341" font-size="16.5">Verificar custa menos</text>
-      <text class="lbl" x="240" y="362" font-size="16.5">que executar?</text></g>
-    <g class="dec"><path class="box" d="M240 406 L390 440 L240 474 L90 440 Z"/>
-      <text class="lbl" x="240" y="446" font-size="16.5">O erro é caro?</text></g>
-    <g class="dec"><path class="box" d="M240 498 L390 532 L240 566 L90 532 Z"/>
-      <text class="lbl" x="240" y="538" font-size="16.5">É reversível?</text></g>
-
-    <!-- descidas: a resposta que continua a árvore -->
-    <path class="edge" d="M240 290 V308" marker-end="url(#a4)"/>
-    <text class="etxt" x="250" y="306" font-size="14">não</text>
-    <path class="edge" d="M240 382 V400" marker-end="url(#a4)"/>
-    <text class="etxt" x="250" y="398" font-size="14">sim</text>
-    <path class="edge" d="M240 474 V492" marker-end="url(#a4)"/>
-    <text class="etxt" x="250" y="490" font-size="14">sim</text>
-
-    <!-- saídas -->
-    <path class="edge" d="M390 256 H464" marker-end="url(#a4)"/>
-    <text class="etxt" x="410" y="246" font-size="14">sim</text>
-    <g class="code"><rect class="box" x="470" y="228" width="330" height="56" rx="11"/>
-      <text class="lbl" x="635" y="257" font-weight="700" font-size="18">CÓDIGO — não use LLM</text></g>
-    <text x="820" y="250" font-size="15" fill="#4A5578">Um <tspan font-family="'Roboto Mono',monospace" fill="#1D4F91">if</tspan> você testa uma vez</text>
-    <text x="820" y="270" font-size="15" fill="#4A5578">e confia para sempre.</text>
-
-    <path class="edge" d="M390 348 H464" marker-end="url(#a4)"/>
-    <text class="etxt" x="410" y="338" font-size="14">não</text>
-    <g class="todo"><rect class="box" x="470" y="320" width="330" height="56" rx="11"/>
-      <text class="lbl" x="635" y="349" font-weight="700" font-size="18" font-style="normal" fill="#B4620A">AINDA NÃO AUTOMATIZE</text></g>
-    <text x="820" y="342" font-size="15" fill="#4A5578">Torne verificável primeiro. Senão</text>
-    <text x="820" y="362" font-size="15" fill="#4A5578">a automação vira trabalho novo.</text>
-
-    <path class="edge" d="M390 440 H464" marker-end="url(#a4)"/>
-    <text class="etxt" x="410" y="430" font-size="14">não</text>
-    <g class="ia"><rect class="box" x="470" y="412" width="330" height="56" rx="11"/>
-      <text class="lbl" x="635" y="441" font-weight="700" font-size="18">IA + revisão por amostragem</text></g>
-    <text x="820" y="434" font-size="15" fill="#4A5578">O ganho fácil. Comece por aqui,</text>
-    <text x="820" y="454" font-size="15" fill="#4A5578">não pelo processo mais visível.</text>
-
-    <path class="edge" d="M390 532 H464" marker-end="url(#a4)"/>
-    <text class="etxt" x="410" y="522" font-size="14">sim</text>
-    <g class="ia"><rect class="box" x="470" y="504" width="330" height="56" rx="11"/>
-      <text class="lbl" x="635" y="533" font-weight="700" font-size="18">IA + humano supervisiona</text></g>
-    <text x="820" y="526" font-size="15" fill="#4A5578">Só vale com <tspan font-weight="700">undo real</tspan> e alerta.</text>
-    <text x="820" y="546" font-size="15" fill="#4A5578">Painel que ninguém abre não conta.</text>
-
-    <path class="edge" d="M240 566 V624 H464" marker-end="url(#a4)"/>
-    <text class="etxt" x="250" y="590" font-size="14">não</text>
-    <g class="hum"><rect class="box" x="470" y="596" width="330" height="56" rx="11"/>
-      <text class="lbl" x="635" y="625" font-weight="700" font-size="18">IA propõe + humano aprova</text></g>
-    <text x="820" y="618" font-size="15" fill="#4A5578">Caro e irreversível. O clique</text>
-    <text x="820" y="638" font-size="15" fill="#4A5578">humano é o produto aqui.</text>
-  </svg>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">02 · Decidir</span></div>
+        <path class="edge" d="M135 56 V82" marker-end="url(#a3)"/>
+        <path class="edge" d="M135 140 V166" marker-end="url(#a3)"/>
+        <path class="edge" d="M135 224 V250" marker-end="url(#a3)"/>
+        <path class="edge" d="M135 308 V338" marker-end="url(#a3)"/>
+        <path class="edge" d="M250 392 H294" marker-end="url(#a3)"/>
+        <text class="etxt" x="258" y="382">sim</text>
+        <path class="edge" d="M135 440 V468" marker-end="url(#a3)"/>
+        <text class="etxt" x="146" y="460">não</text>
+        <path class="edge" d="M405 418 V456 H200 V468" marker-end="url(#a3)"/>
+        <path class="edge" d="M250 500 H424" marker-end="url(#a3)"/>
+      </svg>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1cqw;justify-content:center">
+      <div class="card" style="padding:1.5cqw 1.6cqw;gap:.6cqw">
+        <h3 style="font-size:1.5cqw;color:var(--magenta)">O placar</h3>
+        <p style="font-size:1.28cqw"><strong>5 ações + 1 decisão</strong> &rarr; 3 viram <strong style="color:var(--navy)">Python</strong>, 2 viram <strong style="color:var(--magenta)">IA</strong>, 1 continua <strong style="color:var(--purple)">humana</strong>.</p>
+        <p style="font-size:1.12cqw">Metade do processo foi resolvida sem IA nenhuma. Isso é bom sinal, não fracasso.</p>
+      </div>
+      <div class="card tint" style="padding:1.5cqw 1.6cqw;gap:.6cqw">
+        <h3 style="font-size:1.4cqw;color:var(--purple)">Como ler o desenho</h3>
+        <p style="font-size:1.12cqw">As duas rosas são <strong>21 mil decisões ambíguas por mês com erro tolerável</strong> — é ali que a IA se paga.</p>
+        <p style="font-size:1.12cqw">A lavanda são <strong>300 julgamentos irreversíveis</strong>: continua humana, e é barato que continue.</p>
+        <p style="font-size:1.12cqw">O losango <em>parece</em> decisão de IA e não é — é <span class="mono">if desconto &gt; 0.10</span>.</p>
+      </div>
+      <div class="legend" style="padding-left:.2cqw">
+        <span class="li"><span class="sw code"></span>Python</span>
+        <span class="li"><span class="sw ia"></span>IA</span>
+        <span class="li"><span class="sw hum"></span>humano</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">03 · Decidir</span></div>
 </section>
 
-<!-- 08 ESCALONAMENTO POR CONFIANÇA: CÓDIGO -->
-<section class="slide" data-sec="03 Humano na alça">
+<!-- 10 HUMANO NA ALÇA -->
+<section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">O padrão mais útil, na prática</div>
-    <h2>Escalonamento por confiança &mdash; <em class="hl">são doze linhas</em></h2>
+  <div class="head" style="margin-bottom:1.8cqw">
+    <div class="eyebrow">O ponto onde a IA vira solução de verdade</div>
+    <h2 style="font-size:3.05cqw">O humano na alça são <em class="hl">doze linhas</em> &mdash; e um teste pra ver se ele é real</h2>
   </div>
-  <div style="display:grid;grid-template-columns:1.55fr 1fr;gap:2.2cqw;height:24.4cqw">
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:2.2cqw;height:24.6cqw">
     <div>
       <div class="code-cap">triagem.py</div>
       <div class="code-blk"><span class="c"># o schema é o contrato: sem ele não há limiar nem log</span>
@@ -688,319 +794,163 @@ td .pill{
     justificativa: <span class="v">str</span>     <span class="c"># 1 frase — vai para o log</span>
     faltou_contexto: <span class="v">bool</span>   <span class="c"># o caminho explícito de "não sei"</span>
 
-r = <span class="w">classificar</span>(ticket)   <span class="c"># saída estruturada, não texto livre</span>
+r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estruturada, não texto livre</span>
 <span class="k">if</span> r.faltou_contexto <span class="k">or</span> r.confianca &lt; LIMIAR:
-    fila_humana.<span class="w">enfileirar</span>(ticket, sugestao=r)  <span class="c"># COM a sugestão</span>
+    fila_humana.<span class="w">enfileirar</span>(chamado, sugestao=r)  <span class="c"># COM a sugestão</span>
 <span class="k">else</span>:
-    <span class="w">rotear</span>(ticket, r.categoria)
-<span class="w">registrar</span>(ticket.id, r, modelo=MODELO, prompt_v=PROMPT_V)</div>
+    <span class="w">rotear</span>(chamado, r.categoria)
+<span class="w">registrar</span>(chamado.id, r, modelo=MODELO, prompt_v=PROMPT_V)</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:.85cqw">
-      <div class="card" style="padding:1cqw 1.2cqw;gap:.5cqw">
-        <h3 style="font-size:1.22cqw;color:var(--magenta)">O limiar sai do eval</h3>
-        <p style="font-size:1.1cqw;line-height:1.42">Rode os casos, veja onde o acerto cai, escolha ali. Começamos em <span class="mono">0.85</span> — o ponto em que o erro confiante zerou.</p>
-      </div>
-      <div class="card" style="padding:1cqw 1.2cqw;gap:.5cqw">
-        <h3 style="font-size:1.22cqw;color:var(--magenta)">Escalone com a sugestão</h3>
-        <p style="font-size:1.1cqw;line-height:1.42">Fila que chega em branco custa o mesmo que não ter automação. Com categoria sugerida + justificativa, o humano confirma em segundos.</p>
+    <div style="display:flex;flex-direction:column;gap:.8cqw">
+      <div class="card" style="padding:1cqw 1.2cqw;gap:.45cqw">
+        <h3 style="font-size:1.2cqw;color:var(--magenta)">O checkpoint é real? Três perguntas</h3>
+        <p style="font-size:1.05cqw;line-height:1.38"><strong>1.</strong> O revisor tem tempo e informação pra discordar?</p>
+        <p style="font-size:1.05cqw;line-height:1.38"><strong>2.</strong> Existe registro de quando ele discordou? Rejeição de 0% é alarme, não é qualidade.</p>
+        <p style="font-size:1.05cqw;line-height:1.38"><strong>3.</strong> Se revisar por amostragem daria o mesmo, revisar item a item é teatro &mdash; e custa uma pessoa.</p>
       </div>
       <div class="tint" style="border-radius:.9cqw;padding:1cqw 1.2cqw">
-        <p style="font-size:1.05cqw;line-height:1.4"><strong style="color:var(--purple)">Meça a taxa de escalonamento.</strong> Subiu? Mudou o contexto ou apareceu categoria nova — não é o modelo piorando.</p>
+        <p style="font-size:1.02cqw;line-height:1.38"><strong style="color:var(--purple)">LGPD, art. 20.</strong> O titular pode pedir revisão de decisão tomada <em>unicamente</em> de forma automatizada. Em serviço financeiro isso define quais caixas <strong>podem</strong> ser 100% automáticas &mdash; e obriga saber qual versão do modelo decidiu o quê.</p>
       </div>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.5cqw;padding:1cqw 1.6cqw">
+  <div class="callout" style="margin-top:1.4cqw;padding:1cqw 1.6cqw">
     <div class="lab">O detalhe que quase todo mundo esquece</div>
-    <p><strong>Sem <span class="mono">faltou_contexto</span>, o modelo nunca diz "não sei" — ele chuta com confiança alta.</strong> "Não sei" precisa ser uma saída válida e explicitamente permitida no prompt, senão você mediu confiança de um modelo que não tem como discordar de si mesmo.</p>
+    <p><strong>Sem <span class="mono">faltou_contexto</span>, o modelo nunca diz &ldquo;não sei&rdquo; &mdash; ele chuta com confiança alta.</strong> &ldquo;Não sei&rdquo; precisa ser saída válida e explicitamente permitida no prompt. E escalone <strong>com a sugestão junto</strong>: fila que chega em branco custa o mesmo que não ter automação.</p>
   </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">03 · Humano na alça</span></div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">03 · Decidir</span></div>
 </section>
 
-<!-- 09 RUBBER STAMPING -->
-<section class="slide" data-sec="03 Humano na alça">
-  <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">O anti-padrão que passa em toda auditoria</div>
-    <h2>Se o humano aprova 400 itens por dia, não existe humano na alça &mdash; existe um <em class="hl">ritual de aprovação</em></h2>
-  </div>
-  <div class="g2 fill" style="align-content:center">
-    <div class="card">
-      <h3 style="color:var(--magenta)">Três perguntas para saber se o checkpoint é real</h3>
-      <p><strong>1.</strong> O revisor tem tempo e informação suficientes para discordar?</p>
-      <p><strong>2.</strong> Existe registro de quando ele discordou? Taxa de rejeição de 0% é alarme, não é qualidade.</p>
-      <p><strong>3.</strong> Se a revisão por amostragem daria o mesmo resultado, a revisão item a item é teatro — e está te custando uma pessoa.</p>
-    </div>
-    <div class="card tint">
-      <h3 style="color:var(--purple)">O lado regulatório</h3>
-      <p>A <strong>LGPD, art. 20</strong> garante ao titular o direito de solicitar revisão de decisões tomadas <em>unicamente</em> com base em tratamento automatizado que afetem seus interesses.</p>
-      <p>Em serviço financeiro isso não é rodapé jurídico: é o que define quais etapas <strong>podem</strong> ser 100% automáticas — e obriga rastro de qual versão do modelo decidiu o quê, quando.</p>
-      <p style="color:var(--purple)"><strong>Consequência prática:</strong> desenhe o log de decisão junto com o fluxo, não depois da primeira solicitação de revisão.</p>
-    </div>
-  </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">03 · Humano na alça</span></div>
-</section>
-
-<!-- 10 CAMADAS -->
+<!-- 11 PANORAMA DE FERRAMENTAS -->
 <section class="slide" data-sec="04 Ferramentas">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.6cqw">
-    <div class="eyebrow">A stack por camada</div>
-    <h2>Seis camadas &mdash; e as <em class="hl">duas</em> que decidem se vai para produção</h2>
+  <div class="head" style="margin-bottom:1.4cqw">
+    <div class="eyebrow">Passo 4 · o panorama</div>
+    <h2 style="font-size:3.05cqw">Sete camadas &mdash; e as <em class="hl">duas</em> que decidem se vai pra produção</h2>
   </div>
   <div class="layers">
     <div class="layer">
-      <div class="ln"><span class="stripe"></span><span class="t">Modelo</span></div>
-      <div class="tools"><span class="tool">Claude</span><span class="tool">GPT</span><span class="tool">Gemini</span><span class="tool">modelo aberto self-hosted</span></div>
+      <div class="ln"><span class="stripe"></span><span class="t">Modelos</span></div>
+      <div class="tools"><span class="tool">Claude Opus 5</span><span class="tool">Sonnet 5</span><span class="tool">Haiku 4.5</span><span class="tool">GPT</span><span class="tool">Gemini 2.5</span><span class="tool">Llama / Qwen self-hosted</span><span class="tool q">o motor, não o produto</span></div>
     </div>
     <div class="layer">
-      <div class="ln"><span class="stripe"></span><span class="t">Agente e código</span></div>
-      <div class="tools"><span class="tool">Claude Code</span><span class="tool">Claude Agent SDK</span><span class="tool">Cursor</span><span class="tool">LangGraph</span></div>
+      <div class="ln"><span class="stripe"></span><span class="t">Chat</span></div>
+      <div class="tools"><span class="tool">Claude</span><span class="tool">ChatGPT</span><span class="tool">Gemini</span><span class="tool q">aqui a IA é ferramenta: você no meio, sem log e sem eval</span></div>
+    </div>
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">Agentes de código</span></div>
+      <div class="tools"><span class="tool">Claude Code</span><span class="tool">Cursor</span><span class="tool">Codex</span><span class="tool">Copilot</span><span class="tool q">leem e escrevem no seu repo, rodam comando</span></div>
+    </div>
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">Skills e MCP</span></div>
+      <div class="tools"><span class="tool">Skills</span><span class="tool">MCP</span><span class="tool q">skill = instrução reutilizável · MCP = um protocolo no lugar de N integrações</span></div>
+    </div>
+    <div class="layer">
+      <div class="ln"><span class="stripe"></span><span class="t">SDK / API</span></div>
+      <div class="tools"><span class="tool">Claude Agent SDK</span><span class="tool">API direta</span><span class="tool">LangGraph</span><span class="tool">Pydantic AI</span><span class="tool q">quando vira produto</span></div>
     </div>
     <div class="layer key">
       <div class="ln"><span class="stripe"></span><span class="t">Orquestração</span></div>
-      <div class="tools"><span class="tool">Temporal</span><span class="tool">Airflow</span><span class="tool">Step Functions</span><span class="tool">n8n</span><span class="tool">retry · idempotência · estado</span></div>
-    </div>
-    <div class="layer">
-      <div class="ln"><span class="stripe"></span><span class="t">Integração</span></div>
-      <div class="tools"><span class="tool">MCP</span><span class="tool">APIs internas</span><span class="tool">um protocolo no lugar de N integrações</span></div>
-    </div>
-    <div class="layer">
-      <div class="ln"><span class="stripe"></span><span class="t">Contexto e dados</span></div>
-      <div class="tools"><span class="tool">busca que você já tem</span><span class="tool">banco vetorial</span><span class="tool">só quando a busca simples falhar</span></div>
+      <div class="tools"><span class="tool">n8n</span><span class="tool">Airflow</span><span class="tool">Temporal</span><span class="tool">Step Functions</span><span class="tool">GitHub Actions</span><span class="tool q">retry, idempotência, estado, quem dispara</span></div>
     </div>
     <div class="layer key">
       <div class="ln"><span class="stripe"></span><span class="t">Eval e observabilidade</span></div>
-      <div class="tools"><span class="tool">conjunto de casos versionado</span><span class="tool">Langfuse</span><span class="tool">Braintrust</span><span class="tool">traço com input, output e versão</span></div>
+      <div class="tools"><span class="tool">casos versionados no repo</span><span class="tool">Langfuse</span><span class="tool">Braintrust</span><span class="tool q">sem isso, o terceiro mês te pega</span></div>
     </div>
   </div>
-  <div class="callout">
-    <div class="lab">O que separa piloto de produção</div>
-    <p>Todo piloto tem a camada de modelo. O que quase nenhum tem é <strong>orquestração</strong> e <strong>eval</strong> — e são exatamente as duas que decidem se aquilo sobrevive ao terceiro mês.</p>
+  <div class="callout" style="margin-top:1.1cqw;padding:1.05cqw 1.6cqw">
+    <div class="lab">Três confusões de vocabulário que atrapalham a conversa</div>
+    <p><strong>Claude Code não é modelo</strong> — é um agente que usa modelos. <strong>Cursor não é orquestrador</strong> — é editor com agente dentro. <strong>GitHub Actions não orquestra IA</strong> — é gatilho: ótimo pra disparar, ruim pra manter estado entre etapas. E todo piloto tem a camada de modelo; o que quase nenhum tem são as duas de baixo.</p>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
 </section>
 
-<!-- 11 O EVAL SET -->
-<section class="slide" data-sec="04 Ferramentas">
+<!-- 12 O CASO -->
+<section class="slide" data-sec="05 O caso">
   <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">O artefato que separa automação de aposta</div>
-    <h2>O eval set é um arquivo. <em class="hl">Comece por ele</em>, não pelo prompt.</h2>
-  </div>
-  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:2.4cqw;flex:1;min-height:0">
-    <div>
-      <div class="code-cap">evals/triagem.yaml &nbsp;·&nbsp; versionado no repo, revisado em PR</div>
-      <div class="code-blk"><span class="c"># 20 casos REAIS tirados do histórico — não inventados</span>
-- id: cob-001
-  entrada: <span class="s">"não reconheço a cobrança de R$ 89,90 no cartão"</span>
-  esperado: { categoria: cobranca, escalona: <span class="v">false</span> }
-
-- id: frd-014
-  entrada: <span class="s">"abriram conta no meu CPF, quero registrar fraude"</span>
-  esperado: { categoria: fraude, escalona: <span class="v">false</span> }
-
-<span class="c"># os casos de borda são os que importam:</span>
-<span class="c"># este é ambíguo de propósito e DEVE escalonar</span>
-- id: amb-007
-  entrada: <span class="s">"cobrança que não fiz, acho que usaram meus dados"</span>
-  esperado: { escalona: <span class="v">true</span> }</div>
-      <div class="code-cap" style="margin-top:1.1cqw">no CI, bloqueando merge</div>
-      <div class="code-blk" style="font-size:1.05cqw"><span class="w">pytest</span> evals/ --limiar 0.85   <span class="c"># falha = não entra em produção</span></div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:1.1cqw">
-      <div class="card" style="padding:1.4cqw">
-        <h3 style="font-size:1.3cqw;color:var(--magenta)">Os três números</h3>
-        <p><strong>Acerto por categoria</strong> — média esconde a categoria que vai mal.</p>
-        <p><strong>Taxa de escalonamento</strong> — o custo humano que você está criando.</p>
-        <p><strong>Erro confiante</strong> — errou com confiança acima do limiar. <span style="color:var(--magenta)">Este é o número que mata o projeto.</span> Meta: zero.</p>
-      </div>
-      <div class="card tint" style="padding:1.4cqw">
-        <h3 style="font-size:1.3cqw;color:var(--purple)">Vinte casos bastam</h3>
-        <p>Não espere ter mil. Vinte casos reais, sendo <strong>cinco de borda</strong>, já pegam quase toda regressão. O eval que existe vale infinitamente mais que o eval perfeito que você faria depois.</p>
-      </div>
-    </div>
-  </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
-</section>
-
-<!-- 12 PROMPT + REGISTRO -->
-<section class="slide" data-sec="04 Ferramentas">
-  <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">Os outros dois artefatos</div>
-    <h2>O prompt tem anatomia. E toda decisão <em class="hl">deixa rastro</em>.</h2>
-  </div>
-  <div class="g2 fill" style="align-content:start">
-    <div>
-      <div class="code-cap">prompts/triagem.v4.md &nbsp;·&nbsp; sete seções, sempre nessa ordem</div>
-      <div class="code-blk" style="font-size:.98cqw"><span class="c">## 1. Papel</span>
-Você tria solicitações de suporte de um bureau de crédito.
-
-<span class="c">## 2. Tarefa</span>
-Classifique em UMA categoria e informe sua confiança.
-
-<span class="c">## 3. Dados</span>
-{{ticket}}  {{historico_do_cliente}}
-
-<span class="c">## 4. Regras de decisão</span>
-- Menção a CPF usado por terceiro → sempre <span class="s">fraude</span>.
-- Valor contestado + suspeita de terceiro → escalone.
-
-<span class="c">## 5. Formato de saída</span>
-JSON no schema Triagem. Nada fora do JSON.
-
-<span class="c">## 6. Quando NÃO decidir</span>
-Falta histórico ou cabe em duas categorias →
-<span class="s">faltou_contexto: true</span>. Não chute.
-
-<span class="c">## 7. Casos de borda</span>
-&lt;3 exemplos vindos direto do eval set&gt;</div>
-    </div>
-    <div>
-      <div class="code-cap">o registro de cada decisão &nbsp;·&nbsp; uma linha por execução</div>
-      <div class="code-blk" style="font-size:.98cqw">{
-  <span class="v">"ticket"</span>: <span class="s">"T-88421"</span>,
-  <span class="v">"ts"</span>: <span class="s">"2026-07-30T14:02:11Z"</span>,
-  <span class="v">"modelo"</span>: <span class="s">"&lt;id e versão fixados&gt;"</span>,
-  <span class="v">"prompt_v"</span>: <span class="s">"4"</span>,
-  <span class="v">"entrada"</span>: <span class="s">"&lt;hash + referência&gt;"</span>,
-  <span class="v">"saida"</span>: { <span class="v">"categoria"</span>: <span class="s">"fraude"</span>, ... },
-  <span class="v">"confianca"</span>: <span class="v">0.91</span>,
-  <span class="v">"decidiu"</span>: <span class="s">"automatico"</span>,
-  <span class="v">"revisado_por"</span>: <span class="v">null</span>,
-  <span class="v">"revertido_em"</span>: <span class="v">null</span>
-}</div>
-      <div class="callout" style="margin-top:1.2cqw;padding:1.1cqw 1.5cqw">
-        <div class="lab">Por que exatamente esses campos</div>
-        <p><span class="mono">modelo</span> + <span class="mono">prompt_v</span> = você consegue reproduzir a decisão seis meses depois. <span class="mono">decidiu</span> + <span class="mono">revisado_por</span> = você responde a uma solicitação do <strong>art. 20 da LGPD</strong> sem arqueologia. <span class="mono">revertido_em</span> = você mede se a supervisão humana está pegando algo — se está sempre <span class="mono">null</span>, ou está perfeito, ou ninguém está olhando.</p>
-      </div>
-    </div>
-  </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
-</section>
-
-<!-- 13 BOAS PRÁTICAS -->
-<section class="slide" data-sec="04 Ferramentas">
-  <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">O portão antes de produção</div>
-    <h2>Doze itens. Desmarcado é <em class="hl">risco assumido</em>, não esquecimento.</h2>
-  </div>
-  <div class="chk">
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Eval set no repo</b>, 20 casos, rodando no CI e bloqueando merge.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Versão do modelo fixada.</b> Atualizar é deploy: eval antes, rollback previsto.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Prompt versionado em arquivo</b> e revisado em PR. Não mora em Google Doc.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Saída estruturada com schema</b> validado no código, não texto livre.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Caminho de "não sei"</b> existe, é permitido no prompt e é medido.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Conta feita em código</b>, não pedida ao modelo. Ferramenta &gt; aritmética.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Registro por execução</b> com modelo, versão do prompt e quem decidiu.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Retry e idempotência</b> na orquestração. Reprocessar não duplica efeito.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Custo por execução medido</b> e multiplicado pelo volume do canvas.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Você sabe qual campo de dado sai</b> da empresa — o campo, não a ferramenta.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Undo existe</b> onde o padrão é supervisão. Sem undo, não é supervisão.</span></div>
-    <div class="ck"><span class="bx"><svg viewBox="0 0 24 24"><path d="M4 13l5 5L20 6"/></svg></span><span class="cx"><b>Tem dono com nome</b> e data de revisão na agenda. Não nome de squad.</span></div>
-  </div>
-  <div class="callout" style="margin-top:.8cqw;padding:1cqw 1.6cqw">
-    <div class="lab">Como usar</div>
-    <p>Não é lista de boas intenções, é <strong>portão de produção</strong>. Rode antes de ligar o fluxo, e trate item desmarcado como risco aceito conscientemente — com nome e data ao lado.</p>
-  </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Práticas</span></div>
-</section>
-
-<!-- 14 CASO: O PROCESSO -->
-<section class="slide" data-sec="05 Caso prático">
-  <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">Caso prático · o processo</div>
-    <h2>O fluxo, etapa por etapa &mdash; e <em class="hl">quem executa cada uma</em></h2>
-  </div>
-  <div class="flow">
-    <div class="step auto">
-      <div class="sn">01</div>
-      <div class="st">Etapa</div>
-      <p>O que entra e o que sai desta etapa.</p>
-      <span class="mode">automatizado</span>
-    </div>
-    <span class="chev">›</span>
-    <div class="step auto">
-      <div class="sn">02</div>
-      <div class="st">Etapa</div>
-      <p>O que entra e o que sai desta etapa.</p>
-      <span class="mode">automatizado</span>
-    </div>
-    <span class="chev">›</span>
-    <div class="step hitl">
-      <div class="sn">03</div>
-      <div class="st">Etapa</div>
-      <p>Onde você entrou na alça — e por quê.</p>
-      <span class="mode">humano aprova</span>
-    </div>
-    <span class="chev">›</span>
-    <div class="step auto">
-      <div class="sn">04</div>
-      <div class="st">Etapa</div>
-      <p>O que entra e o que sai desta etapa.</p>
-      <span class="mode">automatizado</span>
-    </div>
-    <span class="chev">›</span>
-    <div class="step hitl">
-      <div class="sn">05</div>
-      <div class="st">Etapa</div>
-      <p>Decisão final que continuou sua.</p>
-      <span class="mode">humano decide</span>
-    </div>
-  </div>
-  <div class="ph" style="margin-top:1.8cqw">
-    <div class="lab">A preencher com o seu caso</div>
-    <p class="hint">Substitua as cinco etapas pelo fluxo real: nome da etapa, entrada → saída, e o modo (automatizado / humano aprova / humano decide / copiloto). Mantenha o contraste visual: verde = máquina, lavanda = você.</p>
-  </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">05 · Caso prático</span></div>
-</section>
-
-<!-- 15 CASO: RESULTADO -->
-<section class="slide" data-sec="05 Caso prático">
-  <div class="topbar"></div>
-  <div class="head">
-    <div class="eyebrow">Caso prático · resultado e cicatrizes</div>
-    <h2>O que ganhei, o que <em class="hl">quebrou</em>, e o que eu faria diferente</h2>
+  <div class="head" style="margin-bottom:1.6cqw">
+    <div class="eyebrow">Passo 5 · o caso</div>
+    <h2 style="font-size:3.05cqw">Um processo real, <em class="hl">na mesma notação</em></h2>
   </div>
   <div class="g3 fill" style="align-content:center">
     <div class="ph">
-      <div class="lab">Antes → depois</div>
-      <p><strong>Tempo por execução:</strong> de X para Y</p>
-      <p><strong>Volume que passou a caber:</strong> Z</p>
-      <p><strong>Custo por execução:</strong> R$ —</p>
-      <p class="hint">Um número que você consiga defender vale mais que três estimados.</p>
+      <div class="lab">O processo e a conversa</div>
+      <p>Qual era o processo, quem executava, quantas vezes por mês.</p>
+      <p class="hint">Uma frase literal de quem executava — a fala que virou losango. É o que amarra este slide ao slide 6.</p>
+    </div>
+    <div class="ph">
+      <div class="lab">O fluxo pintado + o placar</div>
+      <p>O mesmo desenho do slide 9, com as caixas reais.</p>
+      <p class="hint">&ldquo;N caixas → X Python · Y IA · Z humano&rdquo;. Se a maioria virou Python, diga isso em voz alta: é o ponto da palestra.</p>
     </div>
     <div class="ph">
       <div class="lab">O que quebrou</div>
-      <p class="hint">A falha mais interessante do projeto — de preferência uma em que o modelo errou com confiança e você só descobriu depois. É o slide que a plateia lembra.</p>
-      <p class="hint">Como você detectou, e qual guarda-corpo entrou depois.</p>
-    </div>
-    <div class="ph">
-      <div class="lab">O que eu faria diferente</div>
-      <p class="hint">Uma coisa concreta. Normalmente: "teria escrito os casos de teste antes do prompt" ou "teria começado por uma etapa menor".</p>
+      <p>Um número de antes → depois que você defenda no Q&amp;A.</p>
+      <p class="hint">E a falha: de preferência uma em que o modelo errou com confiança e você só descobriu depois. Como detectou e qual guarda-corpo entrou. É o bloco que a plateia lembra.</p>
     </div>
   </div>
   <div class="callout">
-    <div class="lab">Onde o humano ficou — e por quê</div>
-    <p class="hint" style="font-size:1.15cqw">Fechar amarrando ao Ato 3: qual dos quatro padrões você usou em cada ponto, e o que aconteceu quando tentou tirar o humano de onde ele era necessário.</p>
+    <div class="lab">Ainda a preencher</div>
+    <p>Este slide vira <strong>dois ou três</strong> quando o caso estiver definido: um do processo e da conversa, um do fluxo pintado, um do resultado e das cicatrizes. A estrutura já está de pé &mdash; falta o conteúdo.</p>
   </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">05 · Caso prático</span></div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">05 · O caso</span></div>
 </section>
 
-<!-- 16 FECHO -->
+<!-- 13 O KIT -->
+<section class="slide" data-sec="06 O kit">
+  <div class="topbar"></div>
+  <div class="head" style="margin-bottom:1.6cqw">
+    <div class="eyebrow">Passo 6 · pra levar embora</div>
+    <h2 style="font-size:3.05cqw">O kit &mdash; os arquivos que eu usei <em class="hl">pra montar tudo isso</em></h2>
+  </div>
+  <div class="kit">
+    <div class="kit-row">
+      <span class="f">7-perguntas.md</span>
+      <span class="d"><b>O roteiro de entrevista</b> do slide 4, com o que anotar em cada resposta.</span>
+    </div>
+    <div class="kit-row">
+      <span class="f">notacao.mmd</span>
+      <span class="d"><b>O fluxograma em Mermaid</b> — copia, troca os nomes das caixas, versiona no repo.</span>
+    </div>
+    <div class="kit-row">
+      <span class="f">canvas.md</span>
+      <span class="d"><b>Uma linha por caixa</b>: entrada, saída, dono, volume/mês, exceções, custo do erro.</span>
+    </div>
+    <div class="kit-row">
+      <span class="f">classificar.md</span>
+      <span class="d"><b>As três perguntas do slide 8</b> em forma de checklist — rode uma vez por caixa.</span>
+    </div>
+    <div class="kit-row">
+      <span class="f">prompt.template.md</span>
+      <span class="d"><b>As sete seções de um prompt de produção</b>: papel, tarefa, dados, regras, formato de saída, quando NÃO decidir, casos de borda.</span>
+    </div>
+    <div class="kit-row">
+      <span class="f">evals/exemplo.yaml</span>
+      <span class="d"><b>Vinte casos, cinco de borda</b>, mais o comando que roda no CI e bloqueia o merge.</span>
+    </div>
+    <div class="kit-row">
+      <span class="f">checklist-producao.md</span>
+      <span class="d"><b>Doze itens antes de ligar o fluxo.</b> Item desmarcado é risco aceito, com nome e data ao lado.</span>
+    </div>
+  </div>
+  <div class="ph" style="margin-top:1.2cqw;flex-direction:row;align-items:center;gap:1.4cqw">
+    <div class="lab" style="flex:none">Link / QR a definir</div>
+    <p class="hint" style="margin:0">Repositório público ou pasta compartilhada. Definir também se vai junto a versão instalável como skills, ou só os arquivos em Markdown — que funcionam com qualquer ferramenta.</p>
+  </div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">06 · O kit</span></div>
+</section>
+
+<!-- 14 FECHO -->
 <section class="slide statement close" data-sec="Fecho">
   <div class="eyebrow">Para levar</div>
-  <h2 style="font-size:2.6cqw">Três frases e <em class="hl">um desafio de uma semana</em></h2>
+  <h2 style="font-size:2.6cqw">Três frases e <em class="hl">um desafio de uma hora</em></h2>
   <div class="three">
-    <div class="t"><span class="n">01</span><span class="x">Mapeie o processo <b>antes</b> de escolher a ferramenta.</span></div>
-    <div class="t"><span class="n">02</span><span class="x">Automatize o que é digitação. Mantenha o humano onde <b>errar é caro</b>.</span></div>
-    <div class="t"><span class="n">03</span><span class="x">Sem eval e sem dono, nenhuma automação sobrevive ao <b>terceiro mês</b>.</span></div>
+    <div class="t"><span class="n">01</span><span class="x">A conversa vem antes do desenho. O desenho vem antes da <b>ferramenta</b>.</span></div>
+    <div class="t"><span class="n">02</span><span class="x">Se dá pra fazer com um <b>if</b>, faça com um if. IA é a terceira pergunta.</span></div>
+    <div class="t"><span class="n">03</span><span class="x">Mantenha a pessoa onde <b>errar é caro</b> — e prove que ela consegue discordar.</span></div>
   </div>
   <div class="callout" style="background:rgba(255,255,255,.1);border-left-color:#FF8FC0;margin-top:2.4cqw">
-    <div class="lab" style="color:#FF8FC0">Desafio</div>
-    <p style="color:#fff">Escolha um processo que você executa toda semana. Preencha o canvas de uma página. Marque a única linha que é pura digitação. Automatize <strong style="color:#fff">só ela</strong>. Meça. Depois volte para a segunda linha.</p>
+    <div class="lab" style="color:#FF8FC0">Desafio de uma hora</div>
+    <p style="color:#fff">Pegue alguém do seu time que executa um processo toda semana. Faça as <strong style="color:#fff">sete perguntas</strong>. Desenhe o fluxo na frente da pessoa. Marque a única caixa que é pura digitação &mdash; e automatize <strong style="color:#fff">só ela</strong>. Depois volte pra segunda.</p>
   </div>
 </section>
 

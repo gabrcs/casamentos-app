@@ -26,11 +26,39 @@ for (let i = 0; i < n; i++) {
     // content overflowing the slide box
     if (s.scrollHeight > s.clientHeight + 2) bad.push(`vertical overflow +${s.scrollHeight - s.clientHeight}px`);
     if (s.scrollWidth > s.clientWidth + 2) bad.push(`horizontal overflow +${s.scrollWidth - s.clientWidth}px`);
+    // rect após recorte pelos ancestrais com overflow:hidden — decoração que
+    // sangra de propósito dentro de um painel recortado não é problema
+    const clipped = el => {
+      let r = el.getBoundingClientRect();
+      let box = { top: r.top, right: r.right, bottom: r.bottom, left: r.left };
+      for (let a = el.parentElement; a && a !== s.parentElement; a = a.parentElement) {
+        const ov = getComputedStyle(a).overflow;
+        if (ov === 'visible') continue;
+        const ar = a.getBoundingClientRect();
+        box.top = Math.max(box.top, ar.top);
+        box.left = Math.max(box.left, ar.left);
+        box.right = Math.min(box.right, ar.right);
+        box.bottom = Math.min(box.bottom, ar.bottom);
+      }
+      return box;
+    };
     s.querySelectorAll('*').forEach(el => {
       const r = el.getBoundingClientRect();
       if (r.height === 0 || r.width === 0) return;
-      if (r.bottom > sr.bottom + 2) bad.push(`${el.className || el.tagName} bleeds ${Math.round(r.bottom - sr.bottom)}px below`);
-      if (r.right > sr.right + 2) bad.push(`${el.className || el.tagName} bleeds ${Math.round(r.right - sr.right)}px right`);
+      const c = clipped(el);
+      if (c.bottom > sr.bottom + 2) bad.push(`${el.className || el.tagName} bleeds ${Math.round(c.bottom - sr.bottom)}px below`);
+      if (c.right > sr.right + 2) bad.push(`${el.className || el.tagName} bleeds ${Math.round(c.right - sr.right)}px right`);
+      // texto sendo cortado por um ancestral com overflow:hidden.
+      // só olha quem carrega texto direto — decoração posicionada fora do
+      // painel é de propósito e não conta.
+      const ownText = [...el.childNodes]
+        .filter(nd => nd.nodeType === 3).map(nd => nd.textContent.trim()).join('');
+      if (ownText) {
+        if (c.bottom < r.bottom - 2 || c.top > r.top + 2)
+          bad.push(`texto cortado na vertical: "${ownText.slice(0, 30)}"`);
+        if (c.right < r.right - 2 || c.left > r.left + 2)
+          bad.push(`texto cortado na horizontal: "${ownText.slice(0, 30)}"`);
+      }
     });
     return { sec: s.dataset.sec, bad: [...new Set(bad)].slice(0, 6) };
   }, i);
