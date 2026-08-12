@@ -99,13 +99,15 @@ function callout(slide, label, runs, y, h, opts) {
     x: M, y, w: 0.05, h: hh,
     fill: { color: C.magenta }, line: { width: 0 },
   });
-  slide.addText(label.toUpperCase(), {
-    x: M + 0.28, y: y + 0.1, w: 8, h: 0.22,
-    margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1.8,
-  });
+  if (label) {
+    slide.addText(label.toUpperCase(), {
+      x: M + 0.28, y: y + 0.1, w: 8, h: 0.22,
+      margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1.8,
+    });
+  }
   slide.addText(runs, {
-    x: M + 0.28, y: y + 0.34, w: W - 2 * M - 0.56, h: hh - 0.42,
-    margin: 0, valign: "top", fontFace: FONT, fontSize: 12,
+    x: M + 0.28, y: y + (label ? 0.34 : 0.14), w: W - 2 * M - 0.56, h: hh - (label ? 0.42 : 0.28),
+    margin: 0, valign: label ? "top" : "middle", fontFace: FONT, fontSize: 12,
     color: o.color || C.ink, lineSpacing: 16,
   });
 }
@@ -240,7 +242,7 @@ function fdiamond(slide, F, cxp, cyp, hwp, hhp, lines, kind, opts) {
 /** rótulo de classificação, alinhado à esquerda a partir de xp */
 function ftag(slide, F, xp, yp, text, color, wp) {
   slide.addText(text, {
-    x: F.X(xp), y: F.Y(yp) - F.L(11), w: F.L(wp || 190), h: F.L(22),
+    x: F.X(xp), y: F.Y(yp) - F.L(14), w: F.L(wp || 190), h: F.L(28),
     margin: 0, align: "left", valign: "middle", fontFace: FONT,
     fontSize: F.pt(14), bold: true, color, charSpacing: 0.5,
   });
@@ -306,9 +308,9 @@ function triagem(slide, F, painted) {
 
   if (painted) {
     ftag(slide, F, 262, 114, "PYTHON · API do sistema", C.navy);
-    ftag(slide, F, 262, 198, "IA · 12.000/mês", C.magenta);
-    ftag(slide, F, 262, 282, "IA · 9.000/mês + revisão", C.magenta);
-    ftag(slide, F, 518, 392, "HUMANO · 300/mês", C.purple, 140);
+    ftag(slide, F, 262, 198, "IA · alto volume", C.magenta);
+    ftag(slide, F, 262, 282, "IA · alto volume + revisão", C.magenta);
+    ftag(slide, F, 518, 392, "HUMANO · baixo volume", C.purple, 210);
     ftag(slide, F, 20, 547, "PYTHON", C.navy, 100);
   } else {
     ftext(slide, F, 20, 557, "A REGRA DO LOSANGO, ESCRITA:", { bold: true, size: 16, color: C.magenta, w: 330 });
@@ -431,33 +433,57 @@ function triagem(slide, F, painted) {
   const s = pres.addSlide();
   s.background = { color: C.deep };
   s.addText("COMO ISSO COMEÇA ERRADO", {
-    x: M, y: 1.35, w: 9, h: 0.3,
+    x: M, y: 0.95, w: 9, h: 0.3,
     margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.pink, charSpacing: 2.2,
   });
   s.addText(
     [
-      { text: "“O que vocês querem automatizar?” só devolve ", options: { color: "FFFFFF" } },
-      { text: "a solução que a pessoa já imaginou", options: { color: C.pink } },
+      { text: "A primeira pergunta é sempre ", options: { color: "FFFFFF" } },
+      { text: "a errada", options: { color: C.pink } },
     ],
-    { x: M, y: 1.78, w: 10.6, h: 1.7, margin: 0, valign: "top", fontFace: FONT, fontSize: 32, bold: true, lineSpacing: 38 }
+    { x: M, y: 1.35, w: 11, h: 0.7, margin: 0, valign: "top", fontFace: FONT, fontSize: 32, bold: true }
   );
+
+  const DL = [
+    ["VOCÊ PERGUNTA", "“O que vocês querem automatizar?”", false],
+    ["A PESSOA RESPONDE", "“Queria um bot que respondesse os chamados.”", false],
+  ];
+  let dy = 2.5;
+  DL.forEach(([who, what]) => {
+    s.addText(who, {
+      x: M, y: dy + 0.06, w: 2.1, h: 0.26,
+      margin: 0, fontFace: MONO, fontSize: 9, color: "C9B6D4", charSpacing: 1.2,
+    });
+    s.addText(what, {
+      x: M + 2.35, y: dy, w: 9, h: 0.42,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 19, color: "FFFFFF",
+    });
+    dy += 0.72;
+  });
   s.addText(
-    [
-      { text: "Ninguém responde com o processo. Responde com “queria um bot que respondesse os chamados”. Aí você automatiza a imaginação de alguém, não o trabalho que existe.\n\n", options: { color: "E7DCEF" } },
-      { text: "A pergunta que funciona é outra: “me conta o que você fez ontem, na ordem.”", options: { color: "FFFFFF", bold: true } },
-    ],
-    { x: M, y: 3.62, w: 10.2, h: 1.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 15, lineSpacing: 22 }
+    "Isso não é o processo. É um palpite de solução — e quem constrói em cima dele automatiza o que alguém imaginou, não o trabalho que existe.",
+    { x: M + 2.35, y: dy + 0.02, w: 8.6, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 13.5, color: "E7DCEF", lineSpacing: 19 }
   );
+  dy += 0.95;
+  s.addText("PERGUNTE ASSIM", {
+    x: M, y: dy + 0.06, w: 2.1, h: 0.26,
+    margin: 0, fontFace: MONO, fontSize: 9, bold: true, color: C.pink, charSpacing: 1.2,
+  });
+  s.addText("“Me conta o que você fez ontem, na ordem.”", {
+    x: M + 2.35, y: dy, w: 9, h: 0.45,
+    margin: 0, valign: "top", fontFace: FONT, fontSize: 19, bold: true, color: "FFFFFF",
+  });
+
   s.addText(
     [
       { text: "O CAMINHO DE HOJE   ", options: { color: C.pink, bold: true } },
       { text: "conversar → desenhar → decidir quem faz cada caixa → ferramentas → um caso → ", options: { color: "C9B6D4" } },
       { text: "o kit pra baixar", options: { color: "FFFFFF", bold: true } },
     ],
-    { x: M, y: 6.15, w: 11.9, h: 0.5, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 17 }
+    { x: M, y: 6.25, w: 11.9, h: 0.45, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 17 }
   );
   s.addNotes(
-    "Slide de pontuação. Fale a pergunta errada em voz alta e espere o riso de reconhecimento. " +
+    "Slide de pontuação. Encene o diálogo: faça a pergunta errada em voz alta e dê a resposta que sempre vem. " +
       "A linha de baixo é o roteiro — aponte pra ela. ~1,5 min."
   );
 }
@@ -474,30 +500,28 @@ function triagem(slide, F, painted) {
 
   const QS = [
     ["01", "“Me conta o que você fez ontem, na ordem.”",
-      [{ text: "Dá as etapas " }, { text: "reais", options: { bold: true } },
-       { text: ". A versão do gestor é a oficial; esta é a que acontece." }], false],
+      [{ text: "As etapas " }, { text: "reais", options: { bold: true } },
+       { text: " — não a versão oficial do gestor." }], false],
     ["02", "“O que te faz parar e perguntar pra alguém?”",
       [{ text: "Cada resposta é um " }, { text: "losango", options: { bold: true, color: C.magenta } },
-       { text: " — uma decisão. E quase sempre vem com a regra junto." }], true],
+       { text: ". E vem com a regra junto." }], true],
     ["03", "“O que você copia de um lugar pro outro?”",
-      [{ text: "Digitação pura. É a " }, { text: "primeira caixa que vira script", options: { bold: true, color: C.magenta } },
-       { text: " — sem IA nenhuma." }], true],
+      [{ text: "Digitação pura. " }, { text: "A primeira caixa que vira script.", options: { bold: true, color: C.magenta } }], true],
     ["04", "“Quando isso dá errado, como você descobre?”",
-      [{ text: "Se não houver resposta, " }, { text: "não automatize ainda", options: { bold: true } },
-       { text: ": você não teria como saber que quebrou." }], false],
+      [{ text: "Sem resposta aqui, " }, { text: "não automatize ainda", options: { bold: true } },
+       { text: "." }], false],
     ["05", "“Qual é o caso chato que sempre aparece?”",
-      [{ text: "As exceções. Anote as frases exatas — viram os " }, { text: "casos de teste", options: { bold: true } },
+      [{ text: "As exceções. Viram os " }, { text: "casos de teste", options: { bold: true } },
        { text: " depois." }], false],
     ["06", "“Quantas vezes você faz isso por dia?”",
-      [{ text: "Volume. Sem ele não dá pra priorizar: " }, { text: "etapa rara não paga automação", options: { bold: true } },
-       { text: "." }], false],
+      [{ text: "Frequência. " }, { text: "Etapa rara não paga automação.", options: { bold: true } }], false],
     ["07", "“Se você errar aqui, o que acontece?”",
-      [{ text: "Custo do erro. É o número que decide se a etapa " }, { text: "pode", options: { bold: true } },
+      [{ text: "Custo do erro. Decide se a etapa " }, { text: "pode", options: { bold: true } },
        { text: " rodar sozinha." }], false],
   ];
 
-  let y = 1.95;
-  const rowH = 0.56;
+  let y = 1.9;
+  const rowH = 0.585;
   QS.forEach(([n, q, reveal, key]) => {
     if (key) {
       s.addShape(pres.ShapeType.roundRect, {
@@ -515,11 +539,11 @@ function triagem(slide, F, painted) {
       margin: 0, fontFace: MONO, fontSize: 10, bold: true, color: key ? C.magenta : "B9AFC9",
     });
     s.addText(q, {
-      x: M + 0.62, y: y + 0.04, w: 4.9, h: 0.4,
+      x: M + 0.62, y: y + 0.08, w: 4.2, h: 0.38,
       margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, color: C.ink, lineSpacing: 16,
     });
     s.addText(reveal, {
-      x: M + 5.68, y: y + 0.04, w: 6.15, h: 0.44,
+      x: M + 4.95, y: y + 0.08, w: 6.85, h: 0.38,
       margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 15,
     });
     y += rowH;
@@ -529,10 +553,10 @@ function triagem(slide, F, painted) {
     s, "Duas delas fazem 70% do trabalho",
     [
       { text: "A " }, { text: "2", options: { bold: true } },
-      { text: " te entrega os losangos e a " }, { text: "3", options: { bold: true } },
-      { text: " te entrega as caixas que viram script. As outras cinco servem pra você saber se vale a pena mexer. Grave a conversa (com permissão) e desenhe em cima da transcrição — não da memória." },
+      { text: " te entrega os losangos; a " }, { text: "3", options: { bold: true } },
+      { text: ", as caixas que viram script. Grave a conversa e desenhe em cima da transcrição — não da memória." },
     ],
-    5.98, 0.90
+    6.08, 0.66
   );
   footer(s, "01 · Conversar");
   s.addNotes(
@@ -652,19 +676,19 @@ function triagem(slide, F, painted) {
     sy += 0.80;
   });
 
-  const F = frame(650, 600, 6.9, 1.9, 5.7, 4.0);
+  const F = frame(570, 600, 6.9, 1.9, 5.7, 4.05);
   triagem(s, F, false);
 
   callout(
-    s, "O que acabou de acontecer",
+    s, "",
     [
       { text: "A quinta frase entregou " },
       { text: "o losango e a regra na mesma respiração", options: { bold: true } },
-      { text: " — é por isso que a pergunta 2 vale por três. E repare: até aqui " },
+      { text: ". E repare: até aqui " },
       { text: "nada foi dito sobre IA", options: { bold: true } },
-      { text: ". Quem não consegue fechar as setas descobriu que tem dois processos, não um." },
+      { text: "." },
     ],
-    6.02, 0.84
+    6.14, 0.58
   );
   footer(s, "02 · Desenhar");
   s.addNotes(
@@ -717,7 +741,7 @@ function triagem(slide, F, painted) {
      { text: ", N vezes por dia, e o resultado vai direto pro cliente ou pro sistema seguinte.", options: { color: C.inkSoft } }],
     { x: x2 + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
   );
-  s.addText("Classificar 12 mil chamados/mês · extrair campo de documento · redigir a primeira versão da resposta", {
+  s.addText("Classificar todo chamado que entra · extrair campo de documento · redigir a primeira versão da resposta", {
     x: x2 + 0.32, y: 3.44, w: cw - 0.64, h: 0.9,
     margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15,
   });
@@ -862,7 +886,7 @@ function triagem(slide, F, painted) {
     { text: "essa é a arquitetura", options: { color: C.magenta } },
   ], { size: 26, lnspc: 30, titleH: 0.9, titleW: 7.6 });
 
-  const F = frame(650, 570, 0.72, 2.05, 6.0, 4.5);
+  const F = frame(690, 570, 0.72, 2.05, 6.2, 4.5);
   triagem(s, F, true);
 
   card(s, 7.3, 2.15, 5.3, 1.42, C.paper);
@@ -894,12 +918,12 @@ function triagem(slide, F, painted) {
     margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: C.purple,
   });
   s.addText(
-    [{ text: "As duas rosas são " }, { text: "21 mil decisões ambíguas por mês com erro tolerável", options: { bold: true, color: C.ink } },
+    [{ text: "As duas rosas são " }, { text: "decisão ambígua em alto volume, com erro tolerável", options: { bold: true, color: C.ink } },
      { text: " — é ali que a IA se paga." }],
     { x: 7.58, y: 4.26, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
   );
   s.addText(
-    [{ text: "A lavanda são " }, { text: "300 julgamentos irreversíveis", options: { bold: true, color: C.ink } },
+    [{ text: "A lavanda são " }, { text: "poucos julgamentos, todos irreversíveis", options: { bold: true, color: C.ink } },
      { text: ": continua humana, e é barato que continue." }],
     { x: 7.58, y: 4.76, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
   );
@@ -1060,16 +1084,16 @@ function triagem(slide, F, painted) {
   });
 
   callout(
-    s, "Três confusões de vocabulário que atrapalham a conversa",
+    s, "",
     [
       { text: "Claude Code não é modelo", options: { bold: true } },
-      { text: " — é um agente que usa modelos. " },
+      { text: " — é agente. " },
       { text: "Cursor não é orquestrador", options: { bold: true } },
-      { text: " — é editor com agente dentro. " },
-      { text: "GitHub Actions não orquestra IA", options: { bold: true } },
-      { text: " — é gatilho: ótimo pra disparar, ruim pra manter estado entre etapas." },
+      { text: " — é editor com agente. " },
+      { text: "GitHub Actions é gatilho", options: { bold: true } },
+      { text: ", não orquestrador." },
     ],
-    5.98, 0.90
+    6.08, 0.58
   );
   footer(s, "04 · Ferramentas");
   s.addNotes(
@@ -1140,7 +1164,7 @@ function triagem(slide, F, painted) {
   const KIT = [
     ["7-perguntas.md", "O roteiro de entrevista", " do slide 4, com o que anotar em cada resposta."],
     ["notacao.mmd", "O fluxograma em Mermaid", " — copia, troca os nomes das caixas, versiona no repo."],
-    ["canvas.md", "Uma linha por caixa", ": entrada, saída, dono, volume/mês, exceções, custo do erro."],
+    ["canvas.md", "Uma linha por caixa", ": entrada, saída, dono, frequência, exceções, custo do erro."],
     ["classificar.md", "As três perguntas do slide 8", " em forma de checklist — rode uma vez por caixa."],
     ["prompt.template.md", "As sete seções de um prompt de produção", ": papel, tarefa, dados, regras, formato de saída, quando NÃO decidir, casos de borda."],
     ["evals/exemplo.yaml", "Vinte casos, cinco de borda", ", mais o comando que roda no CI e bloqueia o merge."],

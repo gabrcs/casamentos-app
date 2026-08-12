@@ -103,8 +103,10 @@ qualquer plateia e plausível num bureau de crédito, sem afirmar nada sobre pro
 internos reais da Serasa. Aparece nos slides 6, 9 e 10, sempre o mesmo, para a plateia
 acompanhar um caso só do começo ao fim.
 
-Os números (12.000 classificações/mês, 300 aprovações de gestor, limiar 0.85) são do
-exemplo, não medições reais — se alguém perguntar, diga que é ilustrativo.
+O deck **não cita volume em número** — fala em "alto volume" e "baixo volume". A escolha
+é proposital: número inventado num exemplo convida a plateia a discutir o número em vez
+do método. A única quantidade que aparece é a regra do losango (`desconto > 10%`), que é
+o conteúdo da decisão, não uma medição.
 
 ## Identidade visual
 

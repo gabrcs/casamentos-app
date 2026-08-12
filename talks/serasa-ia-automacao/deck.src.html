@@ -142,6 +142,21 @@ strong{font-weight:700;color:var(--ink)}
 .statement .lede{color:#E7DCEF;margin-top:2cqw}
 .statement em.hl{color:#FF8FC0}
 
+/* ---------- diálogo (slide da pergunta errada) ---------- */
+.dialog{display:flex;flex-direction:column;gap:1.7cqw;margin-top:2.8cqw;max-width:80cqw}
+.dl{display:grid;grid-template-columns:14cqw 1fr;gap:1.6cqw;align-items:baseline}
+.dl .who{
+  font-family:'Roboto Mono',monospace;font-size:.95cqw;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:#C9B6D4;
+}
+.dl .what{font-size:1.85cqw;font-weight:300;line-height:1.3;color:#fff}
+.dl.key .who{color:#FF8FC0;font-weight:700}
+.dl.key .what{font-weight:700;color:#fff}
+.dnote{
+  font-size:1.32cqw;line-height:1.5;color:#E7DCEF;max-width:58cqw;
+  padding-left:15.6cqw;
+}
+
 /* ---------- headers on content slides ---------- */
 .head{margin-bottom:2.6cqw}
 .head h2{max-width:40ch}
@@ -155,8 +170,8 @@ strong{font-weight:700;color:var(--ink)}
 /* ---------- as 7 perguntas ---------- */
 .qs{display:flex;flex-direction:column;flex:1;min-height:0;justify-content:center}
 .qrow{
-  display:grid;grid-template-columns:2.3cqw 1.15fr 1fr;gap:1.3cqw;align-items:baseline;
-  padding:.72cqw .9cqw;border-radius:.7cqw;
+  display:grid;grid-template-columns:2.3cqw 31cqw 1fr;gap:1.8cqw;align-items:baseline;
+  padding:1.05cqw .95cqw;border-radius:.7cqw;
 }
 .qrow + .qrow{border-top:1px solid var(--line)}
 .qrow .qn{
@@ -170,9 +185,9 @@ strong{font-weight:700;color:var(--ink)}
 .qrow.key .qr b{color:var(--magenta)}
 
 /* ---------- três caixas (python / ia / humano) ---------- */
-.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5cqw;flex:1;min-height:0}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:1.7cqw;flex:1;min-height:0}
 .box3{
-  border-radius:1.3cqw;padding:1.7cqw 1.6cqw;display:flex;flex-direction:column;gap:.85cqw;
+  border-radius:1.3cqw;padding:1.85cqw 1.7cqw;display:flex;flex-direction:column;gap:1.02cqw;
   border:1.5px solid;
 }
 .box3 .bt{font-size:1.62cqw;font-weight:700;line-height:1.15}
@@ -198,15 +213,15 @@ strong{font-weight:700;color:var(--ink)}
 .box3.hu .stack span{background:#E6D8EE;color:var(--purple)}
 
 /* ---------- falas da entrevista ---------- */
-.says{display:flex;flex-direction:column;gap:.85cqw}
+.says{display:flex;flex-direction:column;gap:.9cqw}
 .say-row{
-  background:var(--lavender);border-radius:.9cqw;padding:.85cqw 1.1cqw;
+  background:var(--lavender);border-radius:.9cqw;padding:.92cqw 1.25cqw;
   border-left:.28cqw solid var(--lavender-2);
 }
 .say-row .q{font-size:1.12cqw;line-height:1.36;color:var(--ink);font-style:italic}
 .say-row .to{
   font-family:'Roboto Mono',monospace;font-size:.92cqw;font-weight:500;color:var(--purple);
-  margin-top:.4cqw;letter-spacing:.02em;
+  margin-top:.55cqw;letter-spacing:.02em;
 }
 .say-row.key{background:#FEF6FA;border-left-color:var(--magenta)}
 .say-row.key .to{color:var(--magenta);font-weight:700}
@@ -238,10 +253,10 @@ td.k{color:var(--ink);font-weight:500}
 }
 
 /* ---------- layers (ferramentas) ---------- */
-.layers{display:flex;flex-direction:column;gap:.5cqw;flex:1;justify-content:center}
+.layers{display:flex;flex-direction:column;gap:.75cqw;flex:1;justify-content:center}
 .layer{
   display:grid;grid-template-columns:13cqw 1fr;gap:1.4cqw;align-items:center;
-  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:.72cqw 1.4cqw;
+  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:.88cqw 1.4cqw;
 }
 .layer .ln{display:flex;align-items:center;gap:.85cqw}
 .layer .ln .t{font-size:1.18cqw;font-weight:700;color:var(--ink);line-height:1.15}
@@ -270,10 +285,10 @@ td.k{color:var(--ink);font-weight:500}
 .ph .hint{font-size:1cqw;color:#A08BAA;font-style:italic}
 
 /* ---------- kit ---------- */
-.kit{display:flex;flex-direction:column;gap:.6cqw;flex:1;justify-content:center}
+.kit{display:flex;flex-direction:column;gap:.85cqw;flex:1;justify-content:center}
 .kit-row{
   display:grid;grid-template-columns:17cqw 1fr;gap:1.4cqw;align-items:baseline;
-  border:1px solid var(--line);border-radius:.9cqw;padding:.85cqw 1.4cqw;background:var(--paper);
+  border:1px solid var(--line);border-radius:.9cqw;padding:1cqw 1.4cqw;background:var(--paper);
 }
 .kit-row .f{font-family:'Roboto Mono',monospace;font-size:1.02cqw;font-weight:500;color:var(--magenta)}
 .kit-row .d{font-size:1.12cqw;line-height:1.38;color:var(--ink-soft)}
@@ -435,9 +450,22 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 03 STATEMENT: A PERGUNTA QUE ESTRAGA TUDO -->
 <section class="slide statement" data-sec="Abertura">
   <div class="eyebrow">Como isso começa errado</div>
-  <h2>&ldquo;O que vocês querem automatizar?&rdquo; só devolve <em class="hl">a solução que a pessoa já imaginou</em></h2>
-  <div class="lede">Ninguém responde com o processo. Responde com <em>&ldquo;queria um bot que respondesse os chamados&rdquo;</em>. Aí você automatiza a imaginação de alguém, não o trabalho que existe.<br><br>
-  <strong style="color:#fff">A pergunta que funciona é outra: &ldquo;me conta o que você fez ontem, na ordem.&rdquo;</strong></div>
+  <h2 style="font-size:3.2cqw">A primeira pergunta é sempre <em class="hl">a errada</em></h2>
+  <div class="dialog">
+    <div class="dl">
+      <span class="who">Você pergunta</span>
+      <span class="what">&ldquo;O que vocês querem automatizar?&rdquo;</span>
+    </div>
+    <div class="dl">
+      <span class="who">A pessoa responde</span>
+      <span class="what">&ldquo;Queria um bot que respondesse os chamados.&rdquo;</span>
+    </div>
+    <div class="dnote">Isso não é o processo. É um palpite de solução &mdash; e quem constrói em cima dele automatiza o que alguém imaginou, não o trabalho que existe.</div>
+    <div class="dl key">
+      <span class="who">Pergunte assim</span>
+      <span class="what">&ldquo;Me conta o que você fez ontem, na ordem.&rdquo;</span>
+    </div>
+  </div>
   <div style="margin-top:auto;display:flex;align-items:center;gap:.9cqw;font-size:1.12cqw;color:#C9B6D4;font-weight:500;flex-wrap:wrap">
     <span style="color:#FF8FC0;font-weight:700;letter-spacing:.04em">O CAMINHO DE HOJE</span>
     <span>conversar</span><span style="color:#FF8FC0">→</span>
@@ -460,42 +488,42 @@ td.k{color:var(--ink);font-weight:500}
     <div class="qrow">
       <span class="qn">01</span>
       <span class="qq">&ldquo;Me conta o que você fez ontem, na ordem.&rdquo;</span>
-      <span class="qr">Dá as etapas <b>reais</b>. A versão do gestor é a oficial; esta é a que acontece.</span>
+      <span class="qr">As etapas <b>reais</b> — não a versão oficial do gestor.</span>
     </div>
     <div class="qrow key">
       <span class="qn">02</span>
       <span class="qq">&ldquo;O que te faz parar e perguntar pra alguém?&rdquo;</span>
-      <span class="qr">Cada resposta é um <b>losango</b> — uma decisão. E quase sempre vem com a regra junto.</span>
+      <span class="qr">Cada resposta é um <b>losango</b>. E vem com a regra junto.</span>
     </div>
     <div class="qrow key">
       <span class="qn">03</span>
       <span class="qq">&ldquo;O que você copia de um lugar pro outro?&rdquo;</span>
-      <span class="qr">Digitação pura. É a <b>primeira caixa que vira script</b> — sem IA nenhuma.</span>
+      <span class="qr">Digitação pura. <b>A primeira caixa que vira script.</b></span>
     </div>
     <div class="qrow">
       <span class="qn">04</span>
       <span class="qq">&ldquo;Quando isso dá errado, como você descobre?&rdquo;</span>
-      <span class="qr">Se não houver resposta, <b>não automatize ainda</b>: você não teria como saber que quebrou.</span>
+      <span class="qr">Sem resposta aqui, <b>não automatize ainda</b>.</span>
     </div>
     <div class="qrow">
       <span class="qn">05</span>
       <span class="qq">&ldquo;Qual é o caso chato que sempre aparece?&rdquo;</span>
-      <span class="qr">As exceções. Anote as frases exatas — viram os <b>casos de teste</b> depois.</span>
+      <span class="qr">As exceções. Viram os <b>casos de teste</b> depois.</span>
     </div>
     <div class="qrow">
       <span class="qn">06</span>
       <span class="qq">&ldquo;Quantas vezes você faz isso por dia?&rdquo;</span>
-      <span class="qr">Volume. Sem ele não dá pra priorizar: <b>etapa rara não paga automação</b>.</span>
+      <span class="qr">Frequência. <b>Etapa rara não paga automação.</b></span>
     </div>
     <div class="qrow">
       <span class="qn">07</span>
       <span class="qq">&ldquo;Se você errar aqui, o que acontece?&rdquo;</span>
-      <span class="qr">Custo do erro. É o número que decide se a etapa <b>pode</b> rodar sozinha.</span>
+      <span class="qr">Custo do erro. Decide se a etapa <b>pode</b> rodar sozinha.</span>
     </div>
   </div>
   <div class="callout" style="margin-top:1.2cqw;padding:1.1cqw 1.6cqw">
     <div class="lab">Duas delas fazem 70% do trabalho</div>
-    <p>A <strong>2</strong> te entrega os losangos e a <strong>3</strong> te entrega as caixas que viram script. As outras cinco servem pra você saber se vale a pena mexer. Grave a conversa (com permissão) e desenhe em cima da transcrição &mdash; não da memória.</p>
+    <p>A <strong>2</strong> te entrega os losangos; a <strong>3</strong>, as caixas que viram script. Grave a conversa e desenhe em cima da transcrição &mdash; não da memória.</p>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">01 · Conversar</span></div>
 </section>
@@ -584,7 +612,7 @@ td.k{color:var(--ink);font-weight:500}
       </div>
     </div>
     <div style="display:flex;flex-direction:column;min-height:0">
-      <svg class="fc flowbox" viewBox="0 0 650 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Fluxograma da triagem de chamados como acontece hoje">
+      <svg class="fc flowbox" viewBox="0 0 570 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Fluxograma da triagem de chamados como acontece hoje">
         <defs>
           <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
             <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
@@ -624,9 +652,8 @@ td.k{color:var(--ink);font-weight:500}
       </svg>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.2cqw;padding:1.05cqw 1.6cqw">
-    <div class="lab">O que acabou de acontecer</div>
-    <p>A quinta frase entregou <strong>o losango e a regra na mesma respiração</strong> — é por isso que a pergunta 2 vale por três. E repare: até aqui <strong>nada foi dito sobre IA</strong>. Quem não consegue fechar as setas descobriu que tem dois processos, não um.</p>
+  <div class="callout" style="margin-top:1.5cqw;padding:.95cqw 1.6cqw">
+    <p>A quinta frase entregou <strong>o losango e a regra na mesma respiração</strong>. E repare: até aqui <strong>nada foi dito sobre IA</strong>.</p>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">02 · Desenhar</span></div>
 </section>
@@ -648,7 +675,7 @@ td.k{color:var(--ink);font-weight:500}
     <div class="card tint">
       <h3 style="color:var(--purple)">IA como solução &mdash; dentro do processo</h3>
       <p><strong>Roda sem você</strong>, N vezes por dia, e o resultado vai direto pro cliente ou pro sistema seguinte.</p>
-      <p><span class="mono" style="color:var(--ink)">Classificar 12 mil chamados/mês · extrair campo de documento · redigir a primeira versão da resposta</span></p>
+      <p><span class="mono" style="color:var(--ink)">Classificar todo chamado que entra · extrair campo de documento · redigir a primeira versão da resposta</span></p>
       <p><strong>Precisa de tudo que um sistema precisa:</strong> saída com schema, limiar de confiança, log por execução, dono com nome e um conjunto de casos de teste.</p>
     </div>
   </div>
@@ -714,7 +741,7 @@ td.k{color:var(--ink);font-weight:500}
   </div>
   <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:2.8cqw;flex:1;min-height:0">
     <div style="display:flex;flex-direction:column;min-height:0">
-      <svg class="fc flowbox" viewBox="0 0 650 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="O mesmo fluxograma com cada etapa classificada como Python, IA ou humano">
+      <svg class="fc flowbox" viewBox="0 0 690 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="O mesmo fluxograma com cada etapa classificada como Python, IA ou humano">
         <defs>
           <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
             <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
@@ -727,16 +754,16 @@ td.k{color:var(--ink);font-weight:500}
           <text class="tag r" x="262" y="119">PYTHON · API do sistema</text></g>
         <g class="ia"><rect class="box" x="20" y="172" width="230" height="52" rx="11"/>
           <text class="lbl" x="135" y="199">Classificar assunto</text>
-          <text class="tag r" x="262" y="203">IA · 12.000/mês</text></g>
+          <text class="tag r" x="262" y="203">IA · alto volume</text></g>
         <g class="ia"><rect class="box" x="20" y="256" width="230" height="52" rx="11"/>
           <text class="lbl" x="135" y="283">Redigir resposta</text>
-          <text class="tag r" x="262" y="287">IA · 9.000/mês + revisão</text></g>
+          <text class="tag r" x="262" y="287">IA · alto volume + revisão</text></g>
         <g class="dec code"><path class="box" d="M135 344 L250 392 L135 440 L20 392 Z"/>
           <text class="lbl" x="135" y="384" font-size="17">Desconto</text>
           <text class="lbl" x="135" y="405" font-size="17">acima de 10%?</text></g>
         <g class="hum"><rect class="box" x="300" y="366" width="210" height="52" rx="11"/>
           <text class="lbl" x="405" y="393">Gestor aprova</text>
-          <text class="tag r" x="518" y="397">HUMANO · 300/mês</text></g>
+          <text class="tag r" x="518" y="397">HUMANO · baixo volume</text></g>
         <g class="code"><rect class="box" x="20" y="474" width="230" height="52" rx="11"/>
           <text class="lbl" x="135" y="501">Enviar resposta</text>
           <text class="tag r" x="20" y="552">PYTHON</text></g>
@@ -763,8 +790,8 @@ td.k{color:var(--ink);font-weight:500}
       </div>
       <div class="card tint" style="padding:1.5cqw 1.6cqw;gap:.6cqw">
         <h3 style="font-size:1.4cqw;color:var(--purple)">Como ler o desenho</h3>
-        <p style="font-size:1.12cqw">As duas rosas são <strong>21 mil decisões ambíguas por mês com erro tolerável</strong> — é ali que a IA se paga.</p>
-        <p style="font-size:1.12cqw">A lavanda são <strong>300 julgamentos irreversíveis</strong>: continua humana, e é barato que continue.</p>
+        <p style="font-size:1.12cqw">As duas rosas são <strong>decisão ambígua em alto volume, com erro tolerável</strong> — é ali que a IA se paga.</p>
+        <p style="font-size:1.12cqw">A lavanda são <strong>poucos julgamentos, todos irreversíveis</strong>: continua humana, e é barato que continue.</p>
         <p style="font-size:1.12cqw">O losango <em>parece</em> decisão de IA e não é — é <span class="mono">if desconto &gt; 0.10</span>.</p>
       </div>
       <div class="legend" style="padding-left:.2cqw">
@@ -857,9 +884,8 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
       <div class="tools"><span class="tool">casos versionados no repo</span><span class="tool">Langfuse</span><span class="tool">Braintrust</span><span class="tool q">sem isso, o terceiro mês te pega</span></div>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.1cqw;padding:1.05cqw 1.6cqw">
-    <div class="lab">Três confusões de vocabulário que atrapalham a conversa</div>
-    <p><strong>Claude Code não é modelo</strong> — é um agente que usa modelos. <strong>Cursor não é orquestrador</strong> — é editor com agente dentro. <strong>GitHub Actions não orquestra IA</strong> — é gatilho: ótimo pra disparar, ruim pra manter estado entre etapas. E todo piloto tem a camada de modelo; o que quase nenhum tem são as duas de baixo.</p>
+  <div class="callout" style="margin-top:1.2cqw;padding:.95cqw 1.6cqw">
+    <p><strong>Claude Code não é modelo</strong> — é agente. <strong>Cursor não é orquestrador</strong> — é editor com agente. <strong>GitHub Actions é gatilho</strong>, não orquestrador.</p>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
 </section>
@@ -913,7 +939,7 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
     </div>
     <div class="kit-row">
       <span class="f">canvas.md</span>
-      <span class="d"><b>Uma linha por caixa</b>: entrada, saída, dono, volume/mês, exceções, custo do erro.</span>
+      <span class="d"><b>Uma linha por caixa</b>: entrada, saída, dono, frequência, exceções, custo do erro.</span>
     </div>
     <div class="kit-row">
       <span class="f">classificar.md</span>
