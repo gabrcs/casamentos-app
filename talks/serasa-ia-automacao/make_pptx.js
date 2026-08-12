@@ -1112,7 +1112,7 @@ function triagem(slide, F, painted) {
   ], { size: 28, titleH: 0.65 });
 
   const PH = [
-    ["O processo e a conversa", "Qual era o processo, quem executava, quantas vezes por mês.",
+    ["O processo e a conversa", "Qual era o processo, quem executava, com que frequência acontecia.",
       "Uma frase literal de quem executava — a fala que virou losango. É o que amarra este slide ao slide 6."],
     ["O fluxo pintado + o placar", "O mesmo desenho do slide 9, com as caixas reais.",
       "“N caixas → X Python · Y IA · Z humano”. Se a maioria virou Python, diga isso em voz alta: é o ponto da palestra."],

@@ -80,7 +80,7 @@ Dois pontos estão marcados em rosa tracejado no deck e nas notas do apresentado
 **Slide 12 — o caso.** É o único slide sem conteúdo real. Vira **dois ou três** slides
 quando estiver definido:
 
-1. *O processo e a conversa* — qual era, quem executava, quantas vezes por mês, e uma
+1. *O processo e a conversa* — qual era, quem executava, com que frequência, e uma
    frase literal de quem executava (de preferência a que virou losango). É o que amarra
    o caso ao slide 6.
 2. *O fluxo pintado + o placar* — o mesmo desenho do slide 9 com as caixas reais, e o
@@ -139,7 +139,7 @@ mais próximo. Se a máquina da apresentação tiver Roboto instalada, troque a 
 
 ### Como os fluxogramas ficam idênticos nos dois decks
 
-Os SVG do HTML têm viewBox próprio (`650x600` no slide 6, `650x570` no slide 9). No
+Os SVG do HTML têm viewBox próprio (`570x600` no slide 6, `690x570` no slide 9). No
 `.pptx`, a função `frame(vbW, vbH, x, y, w, h)` mapeia esse mesmo viewBox para uma região
 do slide, mantendo proporção e centralizando — exatamente o que
 `preserveAspectRatio="xMidYMid meet"` faz no HTML. **As mesmas coordenadas servem nos
