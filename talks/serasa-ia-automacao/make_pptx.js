@@ -464,65 +464,71 @@ function triagem(slide, F, painted) {
   });
   s.addText(
     [
-      { text: "A mesma conversa, duas perguntas — ", options: { color: "FFFFFF" } },
-      { text: "e respostas muito diferentes", options: { color: C.pink } },
+      { text: "Duas perguntas para o ", options: { color: "FFFFFF" } },
+      { text: "mesmo processo", options: { color: C.pink } },
     ],
-    { x: M, y: 1.35, w: 11.4, h: 1.1, margin: 0, valign: "top", fontFace: FONT, fontSize: 28, bold: true, charSpacing: -0.62, lineSpacing: 30 }
+    { x: M, y: 1.35, w: 11.4, h: 0.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 29, bold: true, charSpacing: -0.64 }
   );
 
-  const COL = [
-    {
-      x: M, key: false,
+  // duas cartas com a mesma anatomia; muda só o desfecho, em corpo grande
+  const cw2 = (W - 2 * M - 0.4) / 2;
+  const CARDS = [
+    { x: M, key: false, tag: "PERGUNTA 1",
       q: "“O que vocês querem automatizar?”",
       a: "“Queria um bot que respondesse os chamados.”",
-      g: [{ text: "Vem ", options: { color: "EDE4F3" } },
-          { text: "uma solução pronta", options: { color: "FFFFFF", bold: true } },
-          { text: " — sem o processo que ela deveria resolver.", options: { color: "EDE4F3" } }],
-    },
-    {
-      x: 7.0, key: true,
+      big: "uma solução" },
+    { x: M + cw2 + 0.4, key: true, tag: "PERGUNTA 2",
       q: "“Me conta o que você fez ontem, na ordem.”",
       a: "“Chega um e-mail, aí eu jogo no sistema, copio nome e CPF…”",
-      g: [{ text: "Vêm ", options: { color: "EDE4F3" } },
-          { text: "as etapas reais", options: { color: "FFFFFF", bold: true } },
-          { text: ", na ordem em que acontecem.", options: { color: "EDE4F3" } }],
-    },
+      big: "o processo" },
   ];
-  COL.forEach((c) => {
-    s.addText("SE A PERGUNTA É", {
-      x: c.x, y: 2.72, w: 5.4, h: 0.24,
-      margin: 0, fontFace: MONO, fontSize: 8.5, bold: c.key,
-      color: c.key ? C.pink : "B79ACB", charSpacing: 1.2,
+  const cy = 2.15, chh = 3.4, pad = 0.32;
+  CARDS.forEach((c) => {
+    s.addShape(pres.ShapeType.roundRect, {
+      x: c.x, y: cy, w: cw2, h: chh, rectRadius: 0.11,
+      fill: { color: c.key ? "6A1350" : "5C2470" },
+      line: { color: c.key ? "FF8FC0" : "8E6FA6", width: 1 },
+    });
+    s.addText(c.tag, {
+      x: c.x + pad, y: cy + 0.26, w: cw2 - 2 * pad, h: 0.22,
+      margin: 0, fontFace: MONO, fontSize: 9, bold: true,
+      color: c.key ? C.pink : "B79ACB", charSpacing: 1.3,
     });
     s.addText(c.q, {
-      x: c.x, y: 3.0, w: 5.4, h: 0.78,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 19, charSpacing: -0.19, color: "FFFFFF", lineSpacing: 25,
+      x: c.x + pad, y: cy + 0.58, w: cw2 - 2 * pad, h: 0.88,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 18,
+      charSpacing: -0.18, color: "FFFFFF", lineSpacing: 24,
     });
     s.addShape(pres.ShapeType.rect, {
-      x: c.x, y: 3.92, w: 0.035, h: 0.52,
-      fill: { color: c.key ? C.magenta : "8E7FA0" }, line: { width: 0 },
+      x: c.x + pad, y: cy + 1.58, w: cw2 - 2 * pad, h: 0.012,
+      fill: { color: c.key ? "C26A8A" : "8E6FA6" }, line: { width: 0 },
+    });
+    s.addText("A RESPOSTA QUE VEM", {
+      x: c.x + pad, y: cy + 1.74, w: cw2 - 2 * pad, h: 0.2,
+      margin: 0, fontFace: MONO, fontSize: 8, color: c.key ? "C98BAC" : "9B84AE", charSpacing: 1.1,
     });
     s.addText(c.a, {
-      x: c.x + 0.2, y: 3.9, w: 5.2, h: 0.56,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 13, italic: true, color: "D9C8E4", lineSpacing: 18.5,
+      x: c.x + pad, y: cy + 1.96, w: cw2 - 2 * pad, h: 0.6,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, italic: true, color: "DCCCE7", lineSpacing: 17,
     });
-    s.addText(c.g, {
-      x: c.x, y: 4.6, w: 5.4, h: 0.56,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 19,
+    s.addText("VOCÊ RECEBE", {
+      x: c.x + pad, y: cy + 2.62, w: cw2 - 2 * pad, h: 0.2,
+      margin: 0, fontFace: MONO, fontSize: 8, color: c.key ? "C98BAC" : "9B84AE", charSpacing: 1.1,
+    });
+    s.addText(c.big, {
+      x: c.x + pad, y: cy + 2.84, w: cw2 - 2 * pad, h: 0.46,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 24, bold: true,
+      charSpacing: -0.53, color: c.key ? C.pink : "EDE4F3",
     });
   });
 
-  s.addShape(pres.ShapeType.rect, {
-    x: M, y: 5.38, w: W - 2 * M, h: 0.012,
-    fill: { color: "FFFFFF", transparency: 84 }, line: { width: 0 },
-  });
   s.addText(
     [
-      { text: "A segunda não é uma pergunta mais esperta: é uma pergunta mais ", options: { color: "C9B6D4" } },
+      { text: "A segunda não é mais esperta — é mais ", options: { color: "C9B6D4" } },
       { text: "fácil de responder", options: { color: "FFFFFF", bold: true } },
-      { text: ". A primeira pede um julgamento sobre o próprio trabalho; a segunda pede só uma memória — e memória sai mais fiel.", options: { color: "C9B6D4" } },
+      { text: ". A primeira pede um julgamento sobre o próprio trabalho; a segunda pede só uma memória.", options: { color: "C9B6D4" } },
     ],
-    { x: M, y: 5.6, w: W - 2 * M, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 13.5, lineSpacing: 19 }
+    { x: M, y: 5.75, w: W - 2 * M, h: 0.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 19.5 }
   );
 
   s.addText(
@@ -534,8 +540,9 @@ function triagem(slide, F, painted) {
     { x: M, y: 6.42, w: 11.9, h: 0.45, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 17 }
   );
   s.addNotes(
-    "Não é 'vocês perguntam errado'. É que a primeira pergunta pede um julgamento e a segunda pede " +
-      "uma memória — e memória sai mais fiel. Leia as duas respostas em voz alta. ~1,5 min."
+    "As duas cartas têm a mesma anatomia de propósito: a plateia compara direto o desfecho, " +
+      "'uma solução' contra 'o processo'. Não é que a pergunta 1 seja proibida — ela pede um " +
+      "julgamento, e a 2 pede uma memória. ~1,5 min."
   );
 }
 
