@@ -54,14 +54,14 @@ Para PDF: imprimir pelo navegador em paisagem, sem margens.
 |---|---|---|---|
 | 1 | Capa | — | 1 min |
 | 2 | **Bio** — Bruno Prata, e a tese em uma frase | — | 1 min |
-| 3 | A pergunta que estraga tudo (&ldquo;o que vocês querem automatizar?&rdquo;) | — | 1,5 min |
+| 3 | **Duas perguntas, duas respostas** — por que "me conta o que você fez ontem" funciona | — | 1,5 min |
 | 4 | **As sete perguntas** da entrevista | o roteiro | 3 min |
 | 5 | **A notação** — 4 formas + 3 regras | a notação | 2,5 min |
 | 6 | **Da fala ao desenho** — 5 frases viram um fluxograma | o desenho | 2,5 min |
 | 7 | IA como **ferramenta** vs. IA como **solução** | a distinção | 2 min |
 | 8 | **Em qual caixa cabe o quê** — Python / IA / humano | a regra de decisão | 3 min |
 | 9 | **O mesmo fluxo, pintado** + o placar | a arquitetura | 2,5 min |
-| 10 | **Humano na alça** — o código, 12 linhas + o teste de rubber stamping | o schema + limiar | 3 min |
+| 10 | **Quando a IA não tem certeza, ela passa pra uma pessoa** — o código + o teste de rubber stamping | o schema + limiar | 3 min |
 | 11 | Panorama de ferramentas — 7 camadas | o mapa | 1,5 min |
 | 12 | **O caso** — *a preencher* | — | 4 min |
 | 13 | **O kit** — os arquivos pra baixar | o kit | 1 min |
@@ -104,6 +104,11 @@ O processo de exemplo é **triagem de chamado de suporte** — genérico o basta
 qualquer plateia e plausível num bureau de crédito, sem afirmar nada sobre processos
 internos reais da Serasa. Aparece nos slides 6, 9 e 10, sempre o mesmo, para a plateia
 acompanhar um caso só do começo ao fim.
+
+O slide 3 é deliberadamente **descritivo, não corretivo**: não diz que a plateia pergunta
+errado, e sim que a primeira pergunta pede um julgamento sobre o próprio trabalho enquanto
+a segunda pede só uma memória — por isso a segunda sai mais fiel. A ferramenta de desenho
+recomendada é o **Miro**, uma só, e é a mesma que aparece no kit.
 
 O deck **não cita volume em número** — fala em "alto volume" e "baixo volume". A escolha
 é proposital: número inventado num exemplo convida a plateia a discutir o número em vez

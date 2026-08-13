@@ -415,15 +415,6 @@ function triagem(slide, F, painted) {
     { x: 7.98, y: 1.98, w: 4.34, h: 1.9, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 18.5 }
   );
 
-  callout(
-    s, "O combinado desta palestra",
-    [
-      { text: "Não é demo de ferramenta. Em 25 minutos você sai com " },
-      { text: "um roteiro de entrevista, uma notação de fluxograma e uma regra de decisão", options: { bold: true } },
-      { text: " que dá pra aplicar no seu processo amanhã de manhã — mais um kit de arquivos pra baixar no fim." },
-    ],
-    4.55, 1.0
-  );
   footer(s, "Abertura");
   s.addNotes(
     "Credencial em 30 segundos, não currículo. A frase do painel escuro é a tese da palestra inteira: " +
@@ -431,51 +422,76 @@ function triagem(slide, F, painted) {
   );
 }
 
-/* ================= 03 · A PERGUNTA ERRADA ================= */
+/* ================= 03 · DUAS PERGUNTAS ================= */
 {
   const s = pres.addSlide();
   s.background = { color: C.deep };
-  s.addText("COMO ISSO COMEÇA ERRADO", {
+  s.addText("POR ONDE A CONVERSA COMEÇA", {
     x: M, y: 0.95, w: 9, h: 0.3,
     margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.pink, charSpacing: 2.2,
   });
   s.addText(
     [
-      { text: "A primeira pergunta é sempre ", options: { color: "FFFFFF" } },
-      { text: "a errada", options: { color: C.pink } },
+      { text: "A mesma conversa, duas perguntas — ", options: { color: "FFFFFF" } },
+      { text: "e respostas muito diferentes", options: { color: C.pink } },
     ],
-    { x: M, y: 1.35, w: 11, h: 0.7, margin: 0, valign: "top", fontFace: FONT, fontSize: 32, bold: true, charSpacing: -0.96 }
+    { x: M, y: 1.35, w: 11.4, h: 1.1, margin: 0, valign: "top", fontFace: FONT, fontSize: 28, bold: true, charSpacing: -0.62, lineSpacing: 30 }
   );
 
-  const DL = [
-    ["VOCÊ PERGUNTA", "“O que vocês querem automatizar?”", false],
-    ["A PESSOA RESPONDE", "“Queria um bot que respondesse os chamados.”", false],
+  const COL = [
+    {
+      x: M, key: false,
+      q: "“O que vocês querem automatizar?”",
+      a: "“Queria um bot que respondesse os chamados.”",
+      g: [{ text: "Vem ", options: { color: "EDE4F3" } },
+          { text: "uma solução pronta", options: { color: "FFFFFF", bold: true } },
+          { text: " — sem o processo que ela deveria resolver.", options: { color: "EDE4F3" } }],
+    },
+    {
+      x: 7.0, key: true,
+      q: "“Me conta o que você fez ontem, na ordem.”",
+      a: "“Chega um e-mail, aí eu jogo no sistema, copio nome e CPF…”",
+      g: [{ text: "Vêm ", options: { color: "EDE4F3" } },
+          { text: "as etapas reais", options: { color: "FFFFFF", bold: true } },
+          { text: ", na ordem em que acontecem.", options: { color: "EDE4F3" } }],
+    },
   ];
-  let dy = 2.5;
-  DL.forEach(([who, what]) => {
-    s.addText(who, {
-      x: M, y: dy + 0.06, w: 2.1, h: 0.26,
-      margin: 0, fontFace: MONO, fontSize: 9, color: "C9B6D4", charSpacing: 1.2,
+  COL.forEach((c) => {
+    s.addText("SE A PERGUNTA É", {
+      x: c.x, y: 2.72, w: 5.4, h: 0.24,
+      margin: 0, fontFace: MONO, fontSize: 8.5, bold: c.key,
+      color: c.key ? C.pink : "B79ACB", charSpacing: 1.2,
     });
-    s.addText(what, {
-      x: M + 2.35, y: dy, w: 9, h: 0.42,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 19, charSpacing: -0.19, color: "FFFFFF",
+    s.addText(c.q, {
+      x: c.x, y: 3.0, w: 5.4, h: 0.78,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 19, charSpacing: -0.19, color: "FFFFFF", lineSpacing: 25,
     });
-    dy += 0.72;
+    s.addShape(pres.ShapeType.rect, {
+      x: c.x, y: 3.92, w: 0.035, h: 0.52,
+      fill: { color: c.key ? C.magenta : "8E7FA0" }, line: { width: 0 },
+    });
+    s.addText(c.a, {
+      x: c.x + 0.2, y: 3.9, w: 5.2, h: 0.56,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 13, italic: true, color: "D9C8E4", lineSpacing: 18.5,
+    });
+    s.addText(c.g, {
+      x: c.x, y: 4.6, w: 5.4, h: 0.56,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 19,
+    });
+  });
+
+  s.addShape(pres.ShapeType.rect, {
+    x: M, y: 5.38, w: W - 2 * M, h: 0.012,
+    fill: { color: "FFFFFF", transparency: 84 }, line: { width: 0 },
   });
   s.addText(
-    "Isso não é o processo. É um palpite de solução — e quem constrói em cima dele automatiza o que alguém imaginou, não o trabalho que existe.",
-    { x: M + 2.35, y: dy + 0.02, w: 8.6, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 13.5, color: "E7DCEF", lineSpacing: 19 }
+    [
+      { text: "A segunda não é uma pergunta mais esperta: é uma pergunta mais ", options: { color: "C9B6D4" } },
+      { text: "fácil de responder", options: { color: "FFFFFF", bold: true } },
+      { text: ". A primeira pede um julgamento sobre o próprio trabalho; a segunda pede só uma memória — e memória sai mais fiel.", options: { color: "C9B6D4" } },
+    ],
+    { x: M, y: 5.6, w: W - 2 * M, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 13.5, lineSpacing: 19 }
   );
-  dy += 0.95;
-  s.addText("PERGUNTE ASSIM", {
-    x: M, y: dy + 0.06, w: 2.1, h: 0.26,
-    margin: 0, fontFace: MONO, fontSize: 9, bold: true, color: C.pink, charSpacing: 1.2,
-  });
-  s.addText("“Me conta o que você fez ontem, na ordem.”", {
-    x: M + 2.35, y: dy, w: 9, h: 0.45,
-    margin: 0, valign: "top", fontFace: FONT, fontSize: 19, bold: true, charSpacing: -0.19, color: "FFFFFF",
-  });
 
   s.addText(
     [
@@ -483,11 +499,11 @@ function triagem(slide, F, painted) {
       { text: "conversar → desenhar → decidir quem faz cada caixa → ferramentas → um caso → ", options: { color: "C9B6D4" } },
       { text: "o kit pra baixar", options: { color: "FFFFFF", bold: true } },
     ],
-    { x: M, y: 6.25, w: 11.9, h: 0.45, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 18 }
+    { x: M, y: 6.42, w: 11.9, h: 0.45, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 17 }
   );
   s.addNotes(
-    "Slide de pontuação. Encene o diálogo: faça a pergunta errada em voz alta e dê a resposta que sempre vem. " +
-      "A linha de baixo é o roteiro — aponte pra ela. ~1,5 min."
+    "Não é 'vocês perguntam errado'. É que a primeira pergunta pede um julgamento e a segunda pede " +
+      "uma memória — e memória sai mais fiel. Leia as duas respostas em voz alta. ~1,5 min."
   );
 }
 
@@ -498,12 +514,11 @@ function triagem(slide, F, painted) {
   header(s, "Passo 1 · a conversa", [
     { text: "Sete perguntas que arrancam o processo " },
     { text: "inteiro", options: { color: C.magenta } },
-    { text: " em meia hora" },
-  ], { size: 27, lnspc: 31, titleH: 0.85 });
+  ], { size: 29, titleH: 0.65 });
 
   const QS = [
     ["01", "“Me conta o que você fez ontem, na ordem.”",
-      [{ text: "As etapas " }, { text: "reais", options: { bold: true } },
+      [{ text: "As etapas " }, { text: "reais", options: { bold: true, color: C.ink } },
        { text: " — não a versão oficial do gestor." }], false],
     ["02", "“O que te faz parar e perguntar pra alguém?”",
       [{ text: "Cada resposta é um " }, { text: "losango", options: { bold: true, color: C.magenta } },
@@ -511,60 +526,69 @@ function triagem(slide, F, painted) {
     ["03", "“O que você copia de um lugar pro outro?”",
       [{ text: "Digitação pura. " }, { text: "A primeira caixa que vira script.", options: { bold: true, color: C.magenta } }], true],
     ["04", "“Quando isso dá errado, como você descobre?”",
-      [{ text: "Sem resposta aqui, " }, { text: "não automatize ainda", options: { bold: true } },
+      [{ text: "Sem resposta aqui, " }, { text: "não automatize ainda", options: { bold: true, color: C.ink } },
        { text: "." }], false],
     ["05", "“Qual é o caso chato que sempre aparece?”",
-      [{ text: "As exceções. Viram os " }, { text: "casos de teste", options: { bold: true } },
+      [{ text: "As exceções. Viram os " }, { text: "casos de teste", options: { bold: true, color: C.ink } },
        { text: " depois." }], false],
     ["06", "“Quantas vezes você faz isso por dia?”",
-      [{ text: "Frequência. " }, { text: "Etapa rara não paga automação.", options: { bold: true } }], false],
+      [{ text: "Frequência. " }, { text: "Etapa rara não paga automação.", options: { bold: true, color: C.ink } }], false],
     ["07", "“Se você errar aqui, o que acontece?”",
-      [{ text: "Custo do erro. Decide se a etapa " }, { text: "pode", options: { bold: true } },
+      [{ text: "Custo do erro. Decide se a etapa " }, { text: "pode", options: { bold: true, color: C.ink } },
        { text: " rodar sozinha." }], false],
   ];
 
-  let y = 1.9;
-  const rowH = 0.585;
-  QS.forEach(([n, q, reveal, key]) => {
-    if (key) {
-      s.addShape(pres.ShapeType.roundRect, {
-        x: M, y: y - 0.04, w: W - 2 * M, h: rowH, rectRadius: 0.06,
-        fill: { color: C.pinkTint }, line: { width: 0 },
-      });
-    } else {
-      s.addShape(pres.ShapeType.rect, {
-        x: M, y: y - 0.04, w: W - 2 * M, h: 0.01,
-        fill: { color: C.line }, line: { width: 0 },
-      });
-    }
+  const gap = 0.2;
+  const cw = (W - 2 * M - 3 * gap) / 4;
+  const ch = 2.12;
+  const y0 = 2.05;
+
+  const cell = (i) => ({ x: M + (i % 4) * (cw + gap), y: y0 + Math.floor(i / 4) * (ch + gap) });
+
+  QS.forEach(([n, q, reveal, key], i) => {
+    const { x, y } = cell(i);
+    card(s, x, y, cw, ch, key ? C.pinkTint : C.paper, key ? C.magenta : C.line);
     s.addText(n, {
-      x: M + 0.12, y: y + 0.06, w: 0.42, h: 0.28,
-      margin: 0, fontFace: MONO, fontSize: 10, bold: true, color: key ? C.magenta : "B9AFC9",
+      x: x + 0.22, y: y + 0.16, w: 0.6, h: 0.22,
+      margin: 0, fontFace: MONO, fontSize: 9.5, bold: true,
+      color: key ? C.magenta : "B9AFC9", charSpacing: 0.6,
     });
     s.addText(q, {
-      x: M + 0.62, y: y + 0.08, w: 4.2, h: 0.38,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, color: C.ink, lineSpacing: 19,
+      x: x + 0.22, y: y + 0.44, w: cw - 0.44, h: 0.78,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.ink, lineSpacing: 17,
+    });
+    s.addShape(pres.ShapeType.rect, {
+      x: x + 0.22, y: y + 1.32, w: cw - 0.44, h: 0.012,
+      fill: { color: key ? "F5C7DD" : C.line }, line: { width: 0 },
     });
     s.addText(reveal, {
-      x: M + 4.95, y: y + 0.08, w: 6.85, h: 0.38,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 17,
+      x: x + 0.22, y: y + 1.44, w: cw - 0.44, h: 0.5,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10, color: C.inkSoft, lineSpacing: 14.5,
     });
-    y += rowH;
   });
 
-  callout(
-    s, "Duas delas fazem 70% do trabalho",
-    [
-      { text: "A " }, { text: "2", options: { bold: true } },
-      { text: " te entrega os losangos; a " }, { text: "3", options: { bold: true } },
-      { text: ", as caixas que viram script. Grave a conversa e desenhe em cima da transcrição — não da memória." },
-    ],
-    6.08, 0.66
-  );
+  // oitava célula: a nota
+  {
+    const { x, y } = cell(7);
+    card(s, x, y, cw, ch, C.lavender, "EAE3F3");
+    s.addText("DUAS FAZEM 70% DO TRABALHO", {
+      x: x + 0.22, y: y + 0.42, w: cw - 0.44, h: 0.24,
+      margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.magenta, charSpacing: 0.9,
+    });
+    s.addText(
+      [
+        { text: "A " }, { text: "2", options: { bold: true, color: C.magenta } },
+        { text: " te entrega os losangos; a " }, { text: "3", options: { bold: true, color: C.magenta } },
+        { text: ", as caixas que viram script. Grave a conversa e desenhe em cima da transcrição — não da memória." },
+      ],
+      { x: x + 0.22, y: y + 0.72, w: cw - 0.44, h: 1.2, margin: 0, valign: "top", fontFace: FONT, fontSize: 10, color: C.ink, lineSpacing: 14.5 }
+    );
+  }
+
   footer(s, "01 · Conversar");
   s.addNotes(
-    "O artefato do slide. Leia as sete em voz alta, rápido, e pare na 2 e na 3 — são as duas destacadas. " +
-      "Diga que este slide está no kit. ~3 min."
+    "O artefato do slide. Leia as sete rápido e pare na 2 e na 3 — são as duas em rosa. " +
+      "Diga que este slide está no kit, então ninguém precisa anotar. ~3 min."
   );
 }
 
@@ -610,11 +634,9 @@ function triagem(slide, F, painted) {
   });
   s.addText(
     [
-      { text: "Papel, na frente da pessoa, na hora. Depois passe pra " },
-      { text: "Mermaid", options: { fontFace: MONO } },
-      { text: " ou " },
-      { text: "draw.io", options: { fontFace: MONO } },
-      { text: " — Mermaid é texto, então versiona no repo e o diff mostra quando o processo mudou." },
+      { text: "Papel, na frente da pessoa, na hora. Depois passe pro " },
+      { text: "Miro", options: { bold: true, color: C.ink } },
+      { text: " — todo mundo já tem, dá pra editar junto na chamada, e o quadro vira o documento do processo em vez de virar mais um anexo." },
     ],
     { x: M + 0.24, y: 5.4, w: 5.5, h: 0.72, margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.ink, lineSpacing: 17 }
   );
@@ -859,20 +881,50 @@ function triagem(slide, F, painted) {
     });
   });
 
-  callout(
-    s, "A ordem de perguntar — uma vez por caixa",
-    [
-      { text: "1.", options: { bold: true } },
-      { text: " Dá pra fazer com um " }, { text: "if", options: { fontFace: MONO } },
-      { text: "? Se dá, faça com " }, { text: "if", options: { fontFace: MONO } },
-      { text: ".   " }, { text: "2.", options: { bold: true } },
-      { text: " Se não dá, o erro é caro e irreversível? Se é, humano decide (ou a IA propõe e o humano aprova).   " },
-      { text: "3.", options: { bold: true } },
-      { text: " Se não é, IA com revisão por amostragem.   " },
-      { text: "A IA é a terceira pergunta, nunca a primeira.", options: { color: C.magenta } },
-    ],
-    5.75, 0.9
-  );
+  // a ordem de perguntar — faixa própria, separada dos cartões
+  {
+    const y = 5.82, h = 0.95;
+    s.addShape(pres.ShapeType.roundRect, {
+      x: M, y, w: W - 2 * M, h, rectRadius: 0.1,
+      fill: { color: C.lavender }, line: { width: 0 },
+    });
+    s.addShape(pres.ShapeType.rect, { x: M, y, w: 0.05, h, fill: { color: C.magenta }, line: { width: 0 } });
+    s.addText("A ORDEM DE\nPERGUNTAR", {
+      x: M + 0.28, y: y + 0.2, w: 1.3, h: 0.56,
+      margin: 0, valign: "middle", fontFace: MONO, fontSize: 8.5, bold: true, color: C.magenta, charSpacing: 0.9, lineSpacing: 13,
+    });
+    const STEPS = [
+      [2.4, [{ text: "Dá pra fazer com um if?\n", options: { bold: true, color: C.ink } },
+             { text: "Se dá, faça com if.", options: { color: C.inkSoft } }]],
+      [5.15, [{ text: "O erro é caro e irreversível?\n", options: { bold: true, color: C.ink } },
+              { text: "Se é, a pessoa decide.", options: { color: C.inkSoft } }]],
+      [7.9, [{ text: "Nenhum dos dois?\n", options: { bold: true, color: C.ink } },
+             { text: "IA com revisão por amostragem.", options: { color: C.inkSoft } }]],
+    ];
+    STEPS.forEach(([x, runs], i) => {
+      s.addShape(pres.ShapeType.ellipse, {
+        x, y: y + 0.26, w: 0.26, h: 0.26,
+        fill: { color: C.magenta }, line: { width: 0 },
+      });
+      s.addText(String(i + 1), {
+        x, y: y + 0.26, w: 0.26, h: 0.26, align: "center", valign: "middle", margin: 0,
+        fontFace: MONO, fontSize: 9, bold: true, color: "FFFFFF",
+      });
+      s.addText(runs, {
+        x: x + 0.36, y: y + 0.22, w: 2.3, h: 0.56,
+        margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, lineSpacing: 15.5,
+      });
+    });
+    s.addShape(pres.ShapeType.rect, {
+      x: 10.5, y: y + 0.18, w: 0.012, h: 0.6,
+      fill: { color: "E7C9DA" }, line: { width: 0 },
+    });
+    s.addText(
+      [{ text: "A IA é a " }, { text: "terceira", options: { bold: true } },
+       { text: " pergunta,\nnunca a primeira." }],
+      { x: 10.72, y: y + 0.22, w: 1.9, h: 0.56, margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.magenta, lineSpacing: 15.5 }
+    );
+  }
   footer(s, "03 · Decidir");
   s.addNotes(
     "O slide que a plateia fotografa. As três frases entre aspas são o gancho: elas vêm da entrevista do " +
@@ -961,13 +1013,12 @@ function triagem(slide, F, painted) {
 {
   const s = pres.addSlide();
   topbar(s);
-  header(s, "O ponto onde a IA vira solução de verdade", [
-    { text: "O humano na alça são " },
-    { text: "doze linhas", options: { color: C.magenta } },
-    { text: " — e um teste pra ver se ele é real" },
-  ], { size: 26, lnspc: 30, titleH: 0.9 });
+  header(s, "Passo 3 · como IA e pessoa dividem o trabalho", [
+    { text: "Quando a IA não tem certeza, " },
+    { text: "ela passa pra uma pessoa", options: { color: C.magenta } },
+  ], { size: 29, titleH: 0.65 });
 
-  codeCap(s, M, 2.06, "triagem.py", 3);
+  codeCap(s, M, 2.06, "triagem.py · a regra do repasse, em doze linhas", 5.5);
   codeBlock(s, M, 2.32, 7.35, 3.35, [
     [["# o schema é o contrato: sem ele não há limiar nem log", "c"]],
     [["class ", "k"], ["Triagem", "w"], ["(BaseModel):"]],
@@ -985,7 +1036,7 @@ function triagem(slide, F, painted) {
   ], 9);
 
   card(s, 8.35, 2.32, 4.25, 1.85, C.paper);
-  s.addText("O checkpoint é real? Três perguntas", {
+  s.addText("E a pessoa revisa mesmo? Três perguntas", {
     x: 8.6, y: 2.5, w: 3.8, h: 0.3,
     margin: 0, fontFace: FONT, fontSize: 12, bold: true, charSpacing: -0.12, color: C.magenta,
   });
@@ -1014,19 +1065,23 @@ function triagem(slide, F, painted) {
   );
 
   callout(
-    s, "O detalhe que quase todo mundo esquece",
+    s, "Os dois detalhes que decidem se isso funciona",
     [
-      { text: "Sem faltou_contexto, o modelo nunca diz “não sei” — ele chuta com confiança alta.", options: { bold: true } },
-      { text: " “Não sei” precisa ser saída válida e explicitamente permitida no prompt. E escalone " },
-      { text: "com a sugestão junto", options: { bold: true } },
-      { text: ": fila que chega em branco custa o mesmo que não ter automação." },
+      { text: "1.", options: { bold: true } },
+      { text: " Sem o campo faltou_contexto, o modelo " },
+      { text: "nunca diz “não sei”", options: { bold: true } },
+      { text: " — ele chuta com confiança alta. “Não sei” precisa ser uma saída permitida no prompt.   " },
+      { text: "2.", options: { bold: true } },
+      { text: " Mande a sugestão junto com o caso: " },
+      { text: "fila que chega em branco custa o mesmo que não ter automação", options: { bold: true } },
+      { text: "." },
     ],
     5.87, 0.92
   );
   footer(s, "03 · Decidir");
   s.addNotes(
-    "Passe o código linha a linha, devagar. O campo faltou_contexto é o detalhe que ninguém espera — " +
-      "sem ele o modelo nunca diz 'não sei'. O limiar sai do eval, não do chute. ~3 min."
+    "Título é a frase inteira: a IA decide quando tem certeza e passa adiante quando não tem. " +
+      "Passe o código devagar. O campo faltou_contexto é o detalhe que ninguém espera. ~3 min."
   );
 }
 
@@ -1166,7 +1221,7 @@ function triagem(slide, F, painted) {
 
   const KIT = [
     ["7-perguntas.md", "O roteiro de entrevista", " do slide 4, com o que anotar em cada resposta."],
-    ["notacao.mmd", "O fluxograma em Mermaid", " — copia, troca os nomes das caixas, versiona no repo."],
+    ["quadro-notacao", "O quadro de notação no Miro", " — duplica, troca os nomes das caixas, e já sai pronto pra editar junto."],
     ["canvas.md", "Uma linha por caixa", ": entrada, saída, dono, frequência, exceções, custo do erro."],
     ["classificar.md", "As três perguntas do slide 8", " em forma de checklist — rode uma vez por caixa."],
     ["prompt.template.md", "As sete seções de um prompt de produção", ": papel, tarefa, dados, regras, formato de saída, quando NÃO decidir, casos de borda."],
