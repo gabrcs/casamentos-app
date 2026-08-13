@@ -1,0 +1,62 @@
+{
+  "processo": "Triagem de currículos por vaga",
+  "resumo": "De ~200 currículos por vaga até a lista de quem vai para entrevista, passando por corte de requisito obrigatório, leitura do RH e escolha do gestor.",
+  "nodes": [
+    { "id": "n1", "tipo": "inicio", "label": "Currículos chegam" },
+
+    { "id": "n2", "tipo": "decisao", "label": "Tem o requisito obrigatório?",
+      "regra": "campo de registro profissional preenchido e ativo (ex.: CRM para vaga de médico)",
+      "classe": "automacao",
+      "porque": "A própria pessoa disse que 'não tem discussão'. Regra fixa, verificável contra uma base — é a definição de if. Parece a etapa mais crítica do processo e é a mais barata de automatizar.",
+      "precisa": "O requisito declarado por vaga, num campo estruturado, e a consulta ao conselho quando existir",
+      "frequencia": "~200 por vaga",
+      "custo_erro": "alto e invisível — cortar um candidato bom não gera reclamação de ninguém" },
+
+    { "id": "n3", "tipo": "acao", "label": "Ler e separar quem atende ao mínimo",
+      "classe": "ia",
+      "porque": "Entrada em linguagem: currículo é texto livre e cada um escreve de um jeito. A regra é ambígua ('o mínimo de requisito') e conferir a triagem de um candidato custa muito menos que ler o currículo inteiro.",
+      "precisa": "Os critérios da vaga escritos, saída com schema (atende / não atende / não sei + justificativa), limiar de confiança, e revisão por amostragem dos reprovados",
+      "frequencia": "~200 por vaga",
+      "custo_erro": "médio se houver amostragem dos reprovados; alto se não houver" },
+
+    { "id": "n4", "tipo": "acao", "label": "Escrever resumo para o gestor",
+      "classe": "ia",
+      "porque": "Texto padronizado a partir de um currículo, e o gestor lê antes de decidir — então a revisão já existe no processo.",
+      "precisa": "Formato fixo de resumo e o currículo original acessível ao lado, para o gestor conferir",
+      "frequencia": "~20 por vaga",
+      "custo_erro": "médio — o gestor decide em cima do resumo, então um resumo que omite algo enviesa a escolha" },
+
+    { "id": "n5", "tipo": "acao", "label": "Gestor escolhe quem entrevista",
+      "classe": "humano",
+      "porque": "Julgamento sobre pessoas, com consequência para a vida delas e responsabilidade de quem contrata. A IA pode ordenar e resumir; a escolha continua sendo do gestor.",
+      "precisa": "Registro de quem foi escolhido e por quê — tanto para medir se a triagem anterior está boa quanto para responder a uma contestação",
+      "frequencia": "~20 por vaga",
+      "custo_erro": "alto e irreversível para o candidato" },
+
+    { "id": "n6", "tipo": "acao", "label": "Descartar candidato",
+      "classe": "ainda_nao",
+      "porque": "Tecnicamente é só marcar um status. Mas o processo não tem como perceber que descartou alguém que deveria ter passado: candidato reprovado não reclama, e ninguém revisa a pilha dos cortados. Automatizar o descarte antes de existir essa conferência transforma um erro em algo que nunca aparece.",
+      "precisa": "Amostragem periódica dos reprovados, revisada por uma pessoa, com registro de quantas vezes a revisão discordou. Taxa de discordância zero é alarme, não qualidade.",
+      "custo_erro": "alto, e hoje invisível" },
+
+    { "id": "n7", "tipo": "fim", "label": "Lista de entrevistas" }
+  ],
+  "edges": [
+    { "from": "n1", "to": "n2" },
+    { "from": "n2", "to": "n3", "label": "sim" },
+    { "from": "n2", "to": "n6", "label": "não" },
+    { "from": "n3", "to": "n4" },
+    { "from": "n4", "to": "n5" },
+    { "from": "n5", "to": "n7" }
+  ],
+  "flows": [
+    { "nome": "Candidato segue", "steps": ["n1","n2","n3","n4","n5","n7"] },
+    { "nome": "Corte por requisito", "steps": ["n1","n2","n6"] }
+  ],
+  "placar": { "automacao": 1, "ia": 2, "humano": 1, "ainda_nao": 1, "indefinido": 0 },
+  "perguntas_abertas": [
+    "Hoje alguém revisa a pilha dos reprovados, nem que seja por amostragem? Se não, essa é a primeira coisa a criar — antes de automatizar qualquer corte.",
+    "O que é 'o mínimo de requisito' de uma vaga? Está escrito em algum lugar ou é conhecimento de quem faz a triagem?",
+    "Decisão sobre candidato tomada só por sistema tem implicação de LGPD (art. 20 — direito a revisão). Vale checar com o jurídico onde exatamente a automação pode chegar."
+  ]
+}

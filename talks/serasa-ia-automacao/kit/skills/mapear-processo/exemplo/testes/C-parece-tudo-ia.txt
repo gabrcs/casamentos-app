@@ -1,0 +1,7 @@
+A gente recebe uns 200 currículos por vaga. Alguém do RH lê todos e separa os
+que têm o mínimo de requisito. Desses, uns 20 vão pra uma triagem mais
+detalhada, onde a pessoa olha a experiência e escreve um resuminho pro gestor.
+O gestor escolhe quem vai pra entrevista.
+
+Ah, e se o candidato não tem o requisito obrigatório — tipo CRM ativo pra vaga
+de médico — é corte automático, isso não tem discussão.

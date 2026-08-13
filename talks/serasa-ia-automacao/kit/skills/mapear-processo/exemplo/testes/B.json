@@ -1,0 +1,53 @@
+{
+  "processo": "Resumo semanal de vendas",
+  "resumo": "Toda segunda: puxa os dados da semana, monta gráficos, escreve o resumo do que mudou e manda para o time comercial.",
+  "nodes": [
+    { "id": "n1", "tipo": "inicio", "label": "Segunda de manhã" },
+
+    { "id": "n2", "tipo": "acao", "label": "Puxar dados no BigQuery",
+      "classe": "automacao",
+      "porque": "Consulta fixa, mesma janela de datas toda semana, saída sempre no mesmo formato. É o caso mais claro de script que existe.",
+      "precisa": "A query salva num arquivo e um agendamento — cron, Airflow ou o próprio scheduler do BigQuery",
+      "frequencia": "1 por semana",
+      "custo_erro": "baixo — quebra visível" },
+
+    { "id": "n3", "tipo": "acao", "label": "Jogar no Sheets e fazer gráficos",
+      "classe": "automacao",
+      "porque": "Os gráficos são sempre os mesmos; o que muda são os números. Formatação repetida com entrada estruturada.",
+      "precisa": "API do Sheets, ou trocar a planilha por um painel que lê a query direto",
+      "frequencia": "1 por semana",
+      "custo_erro": "baixo" },
+
+    { "id": "n4", "tipo": "acao", "label": "Escrever o resumo do que mudou",
+      "classe": "humano",
+      "porque": "Hoje isso é IA como ferramenta, não como solução: você cola os números no chat e ajusta o texto antes de mandar. Você está no meio, e é a sua revisão que faz o resumo estar certo. Virar uma caixa de IA no fluxo significaria rodar sem ninguém olhando — o que exige schema, limiar e log que hoje não existem.",
+      "precisa": "Para virar caixa de IA: os números entrando estruturados em vez de colados, um formato de saída fixo, e uma regra de quando escalar (por exemplo, variação fora do esperado vai para revisão obrigatória)",
+      "frequencia": "1 por semana",
+      "custo_erro": "médio — vai para o time comercial, e um número interpretado errado vira decisão errada",
+      "pergunta": "Quando você 'ajusta' o texto do ChatGPT, o que costuma ajustar? Se for sempre a mesma coisa, isso vira regra." },
+
+    { "id": "n5", "tipo": "acao", "label": "Mandar no Slack",
+      "classe": "automacao",
+      "porque": "Postar mensagem num canal fixo. Chamada de API.",
+      "precisa": "Webhook do Slack",
+      "frequencia": "1 por semana",
+      "custo_erro": "baixo" },
+
+    { "id": "n6", "tipo": "fim", "label": "Time informado" }
+  ],
+  "edges": [
+    { "from": "n1", "to": "n2" },
+    { "from": "n2", "to": "n3" },
+    { "from": "n3", "to": "n4" },
+    { "from": "n4", "to": "n5" },
+    { "from": "n5", "to": "n6" }
+  ],
+  "flows": [
+    { "nome": "Toda segunda", "steps": ["n1","n2","n3","n4","n5","n6"] }
+  ],
+  "placar": { "automacao": 3, "ia": 0, "humano": 1, "ainda_nao": 0, "indefinido": 0 },
+  "perguntas_abertas": [
+    "Quando você ajusta o texto que o ChatGPT devolve, o que costuma ajustar? Se for sempre a mesma coisa, isso é regra e entra no prompt.",
+    "O processo tem alguma decisão? A descrição não menciona nenhum caso em que você para e faz diferente — se existir (semana atípica, número fora da curva), ele deveria virar um losango aqui."
+  ]
+}

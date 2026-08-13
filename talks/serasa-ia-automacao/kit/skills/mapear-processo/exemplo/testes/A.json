@@ -1,0 +1,42 @@
+{
+  "processo": "Onboarding de fornecedor novo",
+  "resumo": "Cadastro de um fornecedor novo, do documento à aprovação do jurídico. A descrição ainda não tem detalhe suficiente para classificar as etapas — este mapa serve para guiar a próxima conversa.",
+  "nodes": [
+    { "id": "n1", "tipo": "inicio", "label": "Fornecedor novo aparece" },
+
+    { "id": "n2", "tipo": "acao", "label": "Checar documento",
+      "classe": "indefinido",
+      "porque": "'Checar documento' pode ser três coisas muito diferentes: conferir se o arquivo chegou (automação), extrair campos de um PDF que varia de fornecedor para fornecedor (IA), ou julgar se a documentação é aceitável (humano). A descrição não diz qual.",
+      "pergunta": "Quais documentos são, e o que exatamente você confere em cada um? Você digita algum dado que está dentro deles?" },
+
+    { "id": "n3", "tipo": "acao", "label": "Cadastrar no sistema",
+      "classe": "indefinido",
+      "porque": "Se os dados vêm de um formulário estruturado, é digitação — a caixa mais barata de automatizar. Se vêm de documentos em formato livre, depende da etapa anterior. A descrição não diz de onde vem o dado.",
+      "pergunta": "Os dados que você cadastra vêm de um formulário que o fornecedor preenche, ou você lê dos documentos?" },
+
+    { "id": "n4", "tipo": "acao", "label": "Jurídico aprova",
+      "classe": "humano",
+      "porque": "É a única etapa que a descrição deixa clara: uma aprovação com nome e responsabilidade. Contratar fornecedor errado é caro e difícil de desfazer.",
+      "precisa": "A IA pode preparar o resumo do que o jurídico precisa olhar; a aprovação continua sendo dele",
+      "custo_erro": "alto e difícil de reverter" },
+
+    { "id": "n5", "tipo": "fim", "label": "Fornecedor ativo" }
+  ],
+  "edges": [
+    { "from": "n1", "to": "n2" },
+    { "from": "n2", "to": "n3" },
+    { "from": "n3", "to": "n4" },
+    { "from": "n4", "to": "n5" }
+  ],
+  "flows": [
+    { "nome": "Caminho descrito", "steps": ["n1","n2","n3","n4","n5"] }
+  ],
+  "placar": { "automacao": 0, "ia": 0, "humano": 1, "ainda_nao": 0, "indefinido": 2 },
+  "perguntas_abertas": [
+    "Quais documentos são, e o que exatamente você confere em cada um? Você digita algum dado que está dentro deles?",
+    "Os dados que você cadastra vêm de um formulário que o fornecedor preenche, ou você lê dos documentos?",
+    "Os 3 dias são de trabalho ou de espera? Qual etapa segura mais tempo?",
+    "O que faz um fornecedor ser reprovado? Já aconteceu, e como vocês perceberam?",
+    "Quantos fornecedores novos entram por mês? Se forem poucos, pode não valer automatizar nada."
+  ]
+}

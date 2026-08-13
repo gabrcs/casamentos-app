@@ -1,0 +1,3 @@
+Preciso automatizar o onboarding de fornecedor novo. Hoje é tudo manual e
+demora uns 3 dias. Tem uma parte de checar documento, uma de cadastrar no
+sistema e o jurídico aprova no fim.

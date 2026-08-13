@@ -1,0 +1,4 @@
+Toda segunda de manhã eu puxo os dados de venda da semana no BigQuery, jogo
+num Sheets e faço uns gráficos. Aí escrevo um resumo do que mudou — uso o
+ChatGPT pra isso, colo os números lá e ele me dá um texto que eu ajusto antes
+de mandar. Depois mando pro time comercial no Slack.

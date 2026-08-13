@@ -82,6 +82,22 @@ depende do valor", o losango existe mas a regra é uma pergunta aberta — "a pa
 qual valor?". Losango sem regra é decisão que ninguém revisou, e é onde a automação
 quebra três meses depois.
 
+## Dois casos que a descrição sozinha não resolve
+
+**Nenhum losango apareceu.** Se você desenhou o processo inteiro e não achou nenhuma
+decisão, desconfie antes de entregar. Processo sem decisão existe, mas é raro — o mais
+comum é que a pessoa contou a versão feliz e não mencionou o caso chato. Pergunte
+diretamente: "tem alguma vez em que você para e faz diferente?". Se ela disser que não,
+registre isso em `perguntas_abertas` para quem for automatizar saber que a pergunta foi
+feita, e não apenas esquecida.
+
+**Metade ou mais do mapa ficou `indefinido`.** Aconteceu porque a descrição era curta
+demais — normal, é o que as pessoas escrevem quando pedem ajuda pela primeira vez. Nesse
+caso o entregável muda de natureza: o valor não está no desenho, está nas perguntas.
+Diga isso no resumo, com essas palavras: **"isso ainda não é um mapa, é uma lista de
+perguntas"**, e coloque as perguntas antes do link do arquivo. Entregar um diagrama
+bonito e quase vazio como se fosse um resultado é pior que dizer o que falta.
+
 ## Como ler a descrição
 
 Duas armadilhas comuns:
