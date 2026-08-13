@@ -478,7 +478,7 @@ function triagem(slide, F, painted) {
       a: "“Queria um bot que respondesse os chamados.”",
       big: "uma solução" },
     { x: M + cw2 + 0.4, key: true, tag: "PERGUNTA 2",
-      q: "“Me conta o que você fez ontem, na ordem.”",
+      q: "“Como você faz esse processo hoje?”",
       a: "“Chega um e-mail, aí eu jogo no sistema, copio nome e CPF…”",
       big: "o processo" },
   ];
@@ -524,9 +524,9 @@ function triagem(slide, F, painted) {
 
   s.addText(
     [
-      { text: "A segunda não é mais esperta — é mais ", options: { color: "C9B6D4" } },
-      { text: "fácil de responder", options: { color: "FFFFFF", bold: true } },
-      { text: ". A primeira pede um julgamento sobre o próprio trabalho; a segunda pede só uma memória.", options: { color: "C9B6D4" } },
+      { text: "A segunda não é mais esperta — ela só pergunta sobre o ", options: { color: "C9B6D4" } },
+      { text: "presente", options: { color: "FFFFFF", bold: true } },
+      { text: ". A primeira pede um palpite sobre o que deveria mudar; a segunda pede a descrição do que já acontece, e isso qualquer pessoa dá com precisão.", options: { color: "C9B6D4" } },
     ],
     { x: M, y: 5.75, w: W - 2 * M, h: 0.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 19.5 }
   );
@@ -541,8 +541,8 @@ function triagem(slide, F, painted) {
   );
   s.addNotes(
     "As duas cartas têm a mesma anatomia de propósito: a plateia compara direto o desfecho, " +
-      "'uma solução' contra 'o processo'. Não é que a pergunta 1 seja proibida — ela pede um " +
-      "julgamento, e a 2 pede uma memória. ~1,5 min."
+      "'uma solução' contra 'o processo'. Não é que a pergunta 1 seja proibida — ela pergunta sobre " +
+      "o futuro que a pessoa imagina, e a 2 pergunta sobre o presente que ela executa. ~1,5 min."
   );
 }
 
@@ -556,7 +556,7 @@ function triagem(slide, F, painted) {
   ], { size: 29, titleH: 0.65 });
 
   const QS = [
-    ["01", "“Me conta o que você fez ontem, na ordem.”",
+    ["01", "“Como você faz esse processo hoje? Me conta na ordem.”",
       [{ text: "As etapas " }, { text: "reais", options: { bold: true, color: C.ink } },
        { text: " — não a versão oficial do gestor." }], false],
     ["02", "“O que te faz parar e perguntar pra alguém?”",

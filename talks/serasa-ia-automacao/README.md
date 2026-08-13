@@ -55,7 +55,7 @@ Para PDF: imprimir pelo navegador em paisagem, sem margens.
 |---|---|---|---|
 | 1 | Capa | — | 1 min |
 | 2 | **Bio** — foto, credenciais e a tese em uma frase | — | 1 min |
-| 3 | **Duas perguntas, duas respostas** — por que "me conta o que você fez ontem" funciona | — | 1,5 min |
+| 3 | **Duas perguntas para o mesmo processo** — "o que querem automatizar?" vs. "como você faz hoje?" | — | 1,5 min |
 | 4 | **As sete perguntas** da entrevista | o roteiro | 3 min |
 | 5 | **A notação** — 4 formas + 3 regras | a notação | 2,5 min |
 | 6 | **Da fala ao desenho** — 5 frases viram um fluxograma | o desenho | 2,5 min |
@@ -112,8 +112,8 @@ internos reais da Serasa. Aparece nos slides 6, 9 e 10, sempre o mesmo, para a p
 acompanhar um caso só do começo ao fim.
 
 O slide 3 é deliberadamente **descritivo, não corretivo**: não diz que a plateia pergunta
-errado, e sim que a primeira pergunta pede um julgamento sobre o próprio trabalho enquanto
-a segunda pede só uma memória — por isso a segunda sai mais fiel. A ferramenta de desenho
+errado, e sim que a primeira pergunta é sobre o futuro que a pessoa imagina e a segunda é
+sobre o presente que ela executa — e o presente é observável, então sai mais fiel. A ferramenta de desenho
 recomendada é o **Miro**, uma só, e é a mesma que aparece no kit.
 
 O deck **não cita volume em número** — fala em "alto volume" e "baixo volume". A escolha
