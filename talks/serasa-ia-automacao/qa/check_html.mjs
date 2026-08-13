@@ -26,6 +26,18 @@ for (let i = 0; i < n; i++) {
     // content overflowing the slide box
     if (s.scrollHeight > s.clientHeight + 2) bad.push(`vertical overflow +${s.scrollHeight - s.clientHeight}px`);
     if (s.scrollWidth > s.clientWidth + 2) bad.push(`horizontal overflow +${s.scrollWidth - s.clientWidth}px`);
+    // filho em fluxo que desce além do padding do slide — invade a faixa do rodapé
+    // sem aumentar scrollHeight, porque irmãos com flex:1 encolhem para compensar
+    {
+      const cs = getComputedStyle(s);
+      const limite = sr.bottom - parseFloat(cs.paddingBottom);
+      [...s.children].forEach(el => {
+        if (getComputedStyle(el).position === 'absolute') return;
+        const r = el.getBoundingClientRect();
+        if (r.height && r.bottom > limite + 2)
+          bad.push(`${el.className || el.tagName} invade o rodapé em ${Math.round(r.bottom - limite)}px`);
+      });
+    }
     // rect após recorte pelos ancestrais com overflow:hidden — decoração que
     // sangra de propósito dentro de um painel recortado não é problema
     const clipped = el => {

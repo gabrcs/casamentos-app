@@ -19,6 +19,26 @@
   --stage:#DDD6E6;
   --ok:#1F7A5C;
   --warn:#B4620A;
+
+  /* Espaçamento — grade de 8px sobre um palco de 1280px (1cqw = 12,8px).
+     Toda distância no deck sai daqui: nenhum valor é chutado. */
+  --s0:.3125cqw;   /*  4px  — dentro de um par (rótulo ↔ valor) */
+  --s1:.625cqw;    /*  8px  — rótulo ↔ conteúdo */
+  --s1h:.9375cqw;  /* 12px  — item ↔ item dentro de um bloco */
+  --s2:1.25cqw;    /* 16px  — respiro interno de card */
+  --s3:1.875cqw;   /* 24px  — bloco ↔ bloco */
+  --s4:2.5cqw;     /* 32px  — grupo ↔ grupo */
+  --s5:3.75cqw;    /* 48px  — coluna ↔ coluna */
+  --s6:5cqw;       /* 64px  — margem inferior do slide */
+
+  /* Tracking por tamanho. Um valor só serve pra um tamanho só:
+     texto grande lê espaçado demais, texto pequeno lê apertado demais. */
+  --tr-display:-.03em;   /* 4,2-5,6cqw */
+  --tr-title:-.022em;    /* 2,6-3,5cqw */
+  --tr-head:-.01em;      /* 1,5-2,0cqw */
+  --tr-body:0em;         /* 1,2-1,4cqw */
+  --tr-small:.006em;     /* 1,0-1,2cqw */
+  --tr-micro:.1em;       /* caixa alta abaixo de 1cqw */
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -49,7 +69,7 @@ body{
 .slide{
   position:absolute;
   inset:0;
-  padding:6.2cqw 7cqw 5.4cqw;
+  padding:6.25cqw 6.875cqw var(--s6);
   display:none;
   flex-direction:column;
   background:var(--paper);
@@ -62,14 +82,14 @@ body{
 
 /* ---------- type scale ---------- */
 .eyebrow{
-  font-size:1.15cqw;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--magenta);margin-bottom:1.5cqw;
+  font-size:1.15cqw;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--magenta);margin-bottom:var(--s2);
 }
-h1{font-size:5.6cqw;font-weight:700;line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
-h2{font-size:3.5cqw;font-weight:700;line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
-h3{font-size:1.85cqw;font-weight:700;line-height:1.2}
-.lede{font-size:1.75cqw;font-weight:300;line-height:1.45;color:var(--ink-soft);max-width:62ch}
-p,li{font-size:1.35cqw;font-weight:400;line-height:1.5;color:var(--ink-soft)}
+h1{font-size:5.6cqw;font-weight:700;line-height:1;letter-spacing:var(--tr-display);text-wrap:balance}
+h2{font-size:3.5cqw;font-weight:700;line-height:1.06;letter-spacing:var(--tr-title);text-wrap:balance}
+h3{font-size:1.85cqw;font-weight:700;line-height:1.18;letter-spacing:var(--tr-head)}
+.lede{font-size:1.75cqw;font-weight:300;line-height:1.42;letter-spacing:var(--tr-head);color:var(--ink-soft);max-width:62ch}
+p,li{font-size:1.35cqw;font-weight:400;line-height:1.52;letter-spacing:var(--tr-body);color:var(--ink-soft)}
 .mono{font-family:'Roboto Mono',ui-monospace,monospace}
 em.hl{font-style:normal;color:var(--magenta)}
 em.hlp{font-style:normal;color:var(--purple)}
@@ -85,17 +105,17 @@ strong{font-weight:700;color:var(--ink)}
   border-radius:1.4cqw;
   border:1px solid var(--line);
   box-shadow:0 .55cqw 1.6cqw rgba(22,34,78,.07);
-  padding:2.1cqw;
-  display:flex;flex-direction:column;gap:1.1cqw;
+  padding:var(--s3);
+  display:flex;flex-direction:column;gap:var(--s1h);
 }
 .card h3{font-size:1.6cqw}
-.card p{font-size:1.2cqw;line-height:1.45}
+.card p{font-size:1.2cqw;line-height:1.5;letter-spacing:var(--tr-small)}
 .tint{background:var(--lavender);border:0}
 
 /* ---------- cover ---------- */
 .cover{padding:0;flex-direction:row}
 .cover .left{
-  flex:1.15;padding:6.5cqw 5cqw 5cqw 7cqw;display:flex;flex-direction:column;justify-content:center;
+  flex:1.15;padding:6.25cqw var(--s5) var(--s6) 6.875cqw;display:flex;flex-direction:column;justify-content:center;
 }
 .cover .right{
   flex:1;background:linear-gradient(158deg,var(--deep) 0%,var(--purple) 46%,var(--navy) 100%);
@@ -103,8 +123,8 @@ strong{font-weight:700;color:var(--ink)}
 }
 .cover .right .sq{position:absolute;border-radius:22%}
 .cover h1{font-size:5.1cqw;color:var(--ink)}
-.cover .sub{font-size:1.7cqw;font-weight:300;color:var(--ink-soft);margin-top:1.8cqw;max-width:30ch;line-height:1.4}
-.cover .by{margin-top:auto;display:flex;flex-direction:column;gap:.5cqw}
+.cover .sub{font-size:1.7cqw;font-weight:300;letter-spacing:var(--tr-head);color:var(--ink-soft);margin-top:var(--s3);max-width:30ch;line-height:1.4}
+.cover .by{margin-top:auto;display:flex;flex-direction:column;gap:var(--s0)}
 .cover .by .n{font-size:1.35cqw;font-weight:700;color:var(--ink)}
 .cover .by .r{font-size:1.15cqw;color:var(--ink-soft)}
 .topbar{
@@ -114,24 +134,24 @@ strong{font-weight:700;color:var(--ink)}
 .cover .topbar{background:linear-gradient(90deg,var(--navy) 0 55%,var(--magenta) 55% 100%)}
 
 /* ---------- bio ---------- */
-.bio-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:3.4cqw;flex:1;min-height:0;align-items:center}
-.bio-name{font-size:4.2cqw;font-weight:700;line-height:1.05;letter-spacing:-.025em;color:var(--ink)}
-.bio-role{font-size:1.75cqw;font-weight:300;color:var(--ink-soft);margin-top:.9cqw}
-.chips{display:flex;flex-wrap:wrap;gap:.65cqw;margin-top:2.2cqw}
+.bio-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--s5);flex:1;min-height:0;align-items:center}
+.bio-name{font-size:4.2cqw;font-weight:700;line-height:1.02;letter-spacing:var(--tr-display);color:var(--ink)}
+.bio-role{font-size:1.75cqw;font-weight:300;letter-spacing:var(--tr-head);color:var(--ink-soft);margin-top:var(--s1h)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s1);margin-top:var(--s4)}
 .chip{
   font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:500;
   padding:.42cqw 1cqw;border-radius:.7cqw;background:var(--lavender);color:var(--purple);
 }
-.bio-meta{font-size:1.15cqw;color:#8B84A0;margin-top:1.2cqw}
+.bio-meta{font-size:1.15cqw;letter-spacing:var(--tr-small);color:#8B84A0;margin-top:var(--s2)}
 .bio-panel{
   background:linear-gradient(150deg,var(--deep) 0%,#4E0E62 60%,var(--navy) 100%);
-  border-radius:1.6cqw;padding:2.6cqw;position:relative;overflow:hidden;
+  border-radius:1.6cqw;padding:var(--s4);position:relative;overflow:hidden;
 }
 .bio-panel .lab{
   font-family:'Roboto Mono',monospace;font-size:.9cqw;font-weight:500;letter-spacing:.1em;
-  text-transform:uppercase;color:#FF8FC0;margin-bottom:1cqw;
+  text-transform:uppercase;color:#FF8FC0;margin-bottom:var(--s1h);
 }
-.bio-panel p{font-size:1.42cqw;line-height:1.5;color:#EDE4F3}
+.bio-panel p{font-size:1.42cqw;line-height:1.5;letter-spacing:var(--tr-body);color:#EDE4F3}
 .bio-panel p b{color:#fff;font-weight:700}
 .bio-panel .sq{position:absolute;border-radius:24%;pointer-events:none}
 
@@ -142,69 +162,69 @@ strong{font-weight:700;color:var(--ink)}
 }
 .statement .eyebrow{color:#FF8FC0}
 .statement h2{color:#fff;max-width:34ch}
-.statement .lede{color:#E7DCEF;margin-top:2cqw}
+.statement .lede{color:#E7DCEF;margin-top:var(--s3)}
 .statement em.hl{color:#FF8FC0}
 
 /* ---------- diálogo (slide da pergunta errada) ---------- */
-.dialog{display:flex;flex-direction:column;gap:1.7cqw;margin-top:2.8cqw;max-width:80cqw}
-.dl{display:grid;grid-template-columns:14cqw 1fr;gap:1.6cqw;align-items:baseline}
+.dialog{display:flex;flex-direction:column;gap:var(--s3);margin-top:var(--s4);max-width:80cqw}
+.dl{display:grid;grid-template-columns:14cqw 1fr;gap:var(--s3);align-items:baseline}
 .dl .who{
   font-family:'Roboto Mono',monospace;font-size:.95cqw;font-weight:500;letter-spacing:.1em;
   text-transform:uppercase;color:#C9B6D4;
 }
-.dl .what{font-size:1.85cqw;font-weight:300;line-height:1.3;color:#fff}
+.dl .what{font-size:1.85cqw;font-weight:300;line-height:1.32;letter-spacing:var(--tr-head);color:#fff}
 .dl.key .who{color:#FF8FC0;font-weight:700}
 .dl.key .what{font-weight:700;color:#fff}
 .dnote{
-  font-size:1.32cqw;line-height:1.5;color:#E7DCEF;max-width:58cqw;
+  font-size:1.32cqw;line-height:1.52;letter-spacing:var(--tr-body);color:#E7DCEF;max-width:58cqw;
   padding-left:15.6cqw;
 }
 
 /* ---------- headers on content slides ---------- */
-.head{margin-bottom:2.6cqw}
+.head{margin-bottom:var(--s3)}
 .head h2{max-width:40ch}
-.head .lede{margin-top:1.1cqw;font-size:1.5cqw}
+.head .lede{margin-top:var(--s1h);font-size:1.5cqw}
 
 /* ---------- grids ---------- */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.8cqw}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3)}
 .fill{flex:1;min-height:0}
 
 /* ---------- as 7 perguntas ---------- */
 .qs{display:flex;flex-direction:column;flex:1;min-height:0;justify-content:center}
 .qrow{
-  display:grid;grid-template-columns:2.3cqw 31cqw 1fr;gap:1.8cqw;align-items:baseline;
-  padding:1.05cqw .95cqw;border-radius:.7cqw;
+  display:grid;grid-template-columns:2.3cqw 31cqw 1fr;gap:var(--s3);align-items:baseline;
+  padding:var(--s2) var(--s1h);border-radius:.7cqw;
 }
 .qrow + .qrow{border-top:1px solid var(--line)}
 .qrow .qn{
-  font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:700;color:#B9AFC9;
+  font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:700;letter-spacing:.05em;color:#B9AFC9;
 }
-.qrow .qq{font-size:1.28cqw;font-weight:500;line-height:1.34;color:var(--ink)}
-.qrow .qr{font-size:1.15cqw;line-height:1.34;color:var(--ink-soft)}
+.qrow .qq{font-size:1.28cqw;font-weight:500;line-height:1.38;letter-spacing:var(--tr-body);color:var(--ink)}
+.qrow .qr{font-size:1.15cqw;line-height:1.45;letter-spacing:var(--tr-small);color:var(--ink-soft)}
 .qrow .qr b{color:var(--ink);font-weight:700}
 .qrow.key{background:#FEF6FA;border-top-color:transparent}
 .qrow.key .qn{color:var(--magenta)}
 .qrow.key .qr b{color:var(--magenta)}
 
 /* ---------- três caixas (python / ia / humano) ---------- */
-.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:1.7cqw;flex:1;min-height:0}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);flex:1;min-height:0}
 .box3{
-  border-radius:1.3cqw;padding:1.85cqw 1.7cqw;display:flex;flex-direction:column;gap:1.02cqw;
+  border-radius:1.3cqw;padding:var(--s3);display:flex;flex-direction:column;gap:var(--s1h);
   border:1.5px solid;
 }
-.box3 .bt{font-size:1.62cqw;font-weight:700;line-height:1.15}
-.box3 .stack{display:flex;flex-wrap:wrap;gap:.45cqw;margin-bottom:.25cqw}
+.box3 .bt{font-size:1.62cqw;font-weight:700;line-height:1.18;letter-spacing:var(--tr-head)}
+.box3 .stack{display:flex;flex-wrap:wrap;gap:var(--s0)}
 .box3 .stack span{
   font-family:'Roboto Mono',monospace;font-size:.95cqw;font-weight:500;
   padding:.24cqw .68cqw;border-radius:.5cqw;
 }
 .box3 .lab{
   font-family:'Roboto Mono',monospace;font-size:.85cqw;font-weight:500;letter-spacing:.09em;
-  text-transform:uppercase;margin-top:.3cqw;
+  text-transform:uppercase;margin-top:var(--s0);
 }
-.box3 p{font-size:1.1cqw;line-height:1.4}
-.box3 .say{font-size:1.08cqw;line-height:1.4;color:var(--ink);font-style:italic}
+.box3 p{font-size:1.1cqw;line-height:1.48;letter-spacing:var(--tr-small)}
+.box3 .say{font-size:1.08cqw;line-height:1.48;letter-spacing:var(--tr-small);color:var(--ink);font-style:italic}
 .box3.py{background:#F2F7FC;border-color:var(--navy)}
 .box3.py .bt,.box3.py .lab{color:var(--navy)}
 .box3.py .stack span{background:#DCE8F6;color:var(--navy)}
@@ -216,15 +236,15 @@ strong{font-weight:700;color:var(--ink)}
 .box3.hu .stack span{background:#E6D8EE;color:var(--purple)}
 
 /* ---------- falas da entrevista ---------- */
-.says{display:flex;flex-direction:column;gap:.9cqw}
+.says{display:flex;flex-direction:column;gap:var(--s1h)}
 .say-row{
-  background:var(--lavender);border-radius:.9cqw;padding:.92cqw 1.25cqw;
+  background:var(--lavender);border-radius:.9cqw;padding:var(--s1h) var(--s2);
   border-left:.28cqw solid var(--lavender-2);
 }
-.say-row .q{font-size:1.12cqw;line-height:1.36;color:var(--ink);font-style:italic}
+.say-row .q{font-size:1.12cqw;line-height:1.45;letter-spacing:var(--tr-small);color:var(--ink);font-style:italic}
 .say-row .to{
   font-family:'Roboto Mono',monospace;font-size:.92cqw;font-weight:500;color:var(--purple);
-  margin-top:.55cqw;letter-spacing:.02em;
+  margin-top:var(--s1);letter-spacing:.02em;
 }
 .say-row.key{background:#FEF6FA;border-left-color:var(--magenta)}
 .say-row.key .to{color:var(--magenta);font-weight:700}
@@ -246,29 +266,29 @@ td.k{color:var(--ink);font-weight:500}
 
 /* ---------- callout ---------- */
 .callout{
-  margin-top:1.8cqw;background:var(--lavender);border-radius:1.2cqw;padding:1.5cqw 1.8cqw;
+  margin-top:var(--s3);background:var(--lavender);border-radius:1.2cqw;padding:var(--s2) var(--s3);
   border-left:.35cqw solid var(--magenta);
 }
-.callout p{font-size:1.2cqw;color:var(--ink)}
+.callout p{font-size:1.2cqw;line-height:1.5;letter-spacing:var(--tr-small);color:var(--ink)}
 .callout .lab{
   font-family:'Roboto Mono',monospace;font-size:.9cqw;font-weight:500;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--magenta);margin-bottom:.6cqw;
+  text-transform:uppercase;color:var(--magenta);margin-bottom:var(--s1);
 }
 
 /* ---------- layers (ferramentas) ---------- */
-.layers{display:flex;flex-direction:column;gap:.75cqw;flex:1;justify-content:center}
+.layers{display:flex;flex-direction:column;gap:var(--s1);flex:1;justify-content:center}
 .layer{
-  display:grid;grid-template-columns:13cqw 1fr;gap:1.4cqw;align-items:center;
-  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:.88cqw 1.4cqw;
+  display:grid;grid-template-columns:13cqw 1fr;gap:var(--s3);align-items:center;
+  background:var(--paper);border:1px solid var(--line);border-radius:1cqw;padding:var(--s1h) var(--s2);
 }
-.layer .ln{display:flex;align-items:center;gap:.85cqw}
-.layer .ln .t{font-size:1.18cqw;font-weight:700;color:var(--ink);line-height:1.15}
-.layer .tools{display:flex;flex-wrap:wrap;gap:.45cqw;align-items:center}
+.layer .ln{display:flex;align-items:center;gap:var(--s1)}
+.layer .ln .t{font-size:1.18cqw;font-weight:700;letter-spacing:var(--tr-body);color:var(--ink);line-height:1.2}
+.layer .tools{display:flex;flex-wrap:wrap;gap:var(--s0);align-items:center}
 .tool{
   font-family:'Roboto Mono',monospace;font-size:.95cqw;padding:.26cqw .75cqw;border-radius:.55cqw;
   background:var(--lavender);color:var(--purple);font-weight:500;
 }
-.tool.q{background:transparent;color:#8B84A0;font-family:'Roboto',sans-serif;font-style:italic;padding-left:.3cqw}
+.tool.q{background:transparent;color:#8B84A0;font-family:'Roboto',sans-serif;font-style:italic;letter-spacing:var(--tr-small);padding-left:var(--s0)}
 .layer.key{border-color:var(--magenta);background:#FEF6FA}
 .layer.key .tool{background:#FBE0EE;color:var(--magenta)}
 .layer.key .tool.q{background:transparent;color:#B07093}
@@ -278,33 +298,33 @@ td.k{color:var(--ink);font-weight:500}
 /* ---------- placeholders ---------- */
 .ph{
   border:1.5px dashed var(--magenta);background:#FEF6FA;border-radius:1.2cqw;
-  padding:1.4cqw 1.6cqw;display:flex;flex-direction:column;gap:.55cqw;
+  padding:var(--s2) var(--s3);display:flex;flex-direction:column;gap:var(--s1);
 }
 .ph .lab{
   font-family:'Roboto Mono',monospace;font-size:.88cqw;font-weight:500;letter-spacing:.09em;
   text-transform:uppercase;color:var(--magenta);
 }
-.ph p{font-size:1.12cqw;line-height:1.42}
-.ph .hint{font-size:1cqw;color:#A08BAA;font-style:italic}
+.ph p{font-size:1.12cqw;line-height:1.48;letter-spacing:var(--tr-small)}
+.ph .hint{font-size:1cqw;line-height:1.5;letter-spacing:var(--tr-small);color:#A08BAA;font-style:italic}
 
 /* ---------- kit ---------- */
-.kit{display:flex;flex-direction:column;gap:.85cqw;flex:1;justify-content:center}
+.kit{display:flex;flex-direction:column;gap:var(--s1);flex:1;justify-content:center}
 .kit-row{
-  display:grid;grid-template-columns:17cqw 1fr;gap:1.4cqw;align-items:baseline;
-  border:1px solid var(--line);border-radius:.9cqw;padding:1cqw 1.4cqw;background:var(--paper);
+  display:grid;grid-template-columns:17cqw 1fr;gap:var(--s3);align-items:baseline;
+  border:1px solid var(--line);border-radius:.9cqw;padding:var(--s1h) var(--s2);background:var(--paper);
 }
 .kit-row .f{font-family:'Roboto Mono',monospace;font-size:1.02cqw;font-weight:500;color:var(--magenta)}
-.kit-row .d{font-size:1.12cqw;line-height:1.38;color:var(--ink-soft)}
+.kit-row .d{font-size:1.12cqw;line-height:1.45;letter-spacing:var(--tr-small);color:var(--ink-soft)}
 .kit-row .d b{color:var(--ink);font-weight:700}
 
 /* ---------- close ---------- */
-.close .three{display:flex;flex-direction:column;gap:1.6cqw;margin-top:1cqw}
-.close .three .t{display:flex;gap:1.4cqw;align-items:flex-start}
+.close .three{display:flex;flex-direction:column;gap:var(--s3);margin-top:var(--s2)}
+.close .three .t{display:flex;gap:var(--s2);align-items:flex-start}
 .close .three .t .n{
   font-family:'Roboto Mono',monospace;font-size:1.2cqw;color:#FF8FC0;font-weight:700;
   width:2.4cqw;flex:none;padding-top:.4cqw;
 }
-.close .three .t .x{font-size:2cqw;font-weight:400;color:#fff;line-height:1.3;max-width:38ch}
+.close .three .t .x{font-size:2cqw;font-weight:400;letter-spacing:var(--tr-head);color:#fff;line-height:1.32;max-width:38ch}
 .close .three .t .x b{font-weight:700}
 
 /* ---------- fluxograma SVG ---------- */
@@ -327,11 +347,11 @@ td.k{color:var(--ink);font-weight:500}
 .fc .todo .box{fill:#FEF6FA;stroke:var(--magenta);stroke-dasharray:7 5}
 .fc .todo .lbl{fill:#A08BAA;font-style:italic}
 
-.nota{height:29cqw;width:100%}
+.nota{height:33cqw;width:100%}
 .flowbox{width:100%;height:100%;min-height:0}
 
-.legend{display:flex;gap:1.5cqw;align-items:center;flex-wrap:wrap}
-.legend .li{display:flex;gap:.5cqw;align-items:center;font-size:1.05cqw;color:var(--ink-soft)}
+.legend{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
+.legend .li{display:flex;gap:var(--s1);align-items:center;font-size:1.05cqw;letter-spacing:var(--tr-small);color:var(--ink-soft)}
 .legend .sw{width:1.05cqw;height:1.05cqw;border-radius:.25cqw;flex:none;border:1.5px solid}
 .legend .sw.code{background:#E4EDF8;border-color:var(--navy)}
 .legend .sw.ia{background:#FBE0EE;border-color:var(--magenta)}
@@ -339,7 +359,7 @@ td.k{color:var(--ink);font-weight:500}
 
 /* ---------- bloco de código ---------- */
 .code-blk{
-  background:#141A31;border-radius:.9cqw;padding:1.35cqw 1.55cqw;
+  background:#141A31;border-radius:.9cqw;padding:var(--s2) var(--s2);
   font-family:'Roboto Mono',ui-monospace,monospace;
   font-size:.92cqw;line-height:1.5;color:#D6D0E6;
   white-space:pre;overflow:hidden;
@@ -351,25 +371,25 @@ td.k{color:var(--ink);font-weight:500}
 .code-blk .w{color:#FFFFFF;font-weight:500}
 .code-cap{
   font-family:'Roboto Mono',monospace;font-size:.92cqw;font-weight:500;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--magenta);margin-bottom:.55cqw;
+  letter-spacing:var(--tr-micro);text-transform:uppercase;color:var(--magenta);margin-bottom:var(--s1);
 }
 
 /* ---------- regras numeradas ---------- */
-.steps{display:flex;flex-direction:column;gap:1.15cqw}
-.stp{display:flex;gap:1.15cqw;align-items:flex-start}
+.steps{display:flex;flex-direction:column;gap:var(--s2)}
+.stp{display:flex;gap:var(--s2);align-items:flex-start}
 .stp .sk{
   width:2.1cqw;height:2.1cqw;border-radius:50%;background:var(--magenta);flex:none;
   color:#fff;font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:700;
   display:grid;place-items:center;margin-top:.1cqw;
 }
-.stp .sx{font-size:1.22cqw;line-height:1.42;color:var(--ink-soft)}
+.stp .sx{font-size:1.22cqw;line-height:1.5;letter-spacing:var(--tr-body);color:var(--ink-soft)}
 .stp .sx b{color:var(--ink);font-weight:700}
 
 /* ---------- chrome ---------- */
 .foot{
   position:absolute;bottom:0;left:0;right:0;height:2.9cqw;
-  display:flex;align-items:center;gap:1.6cqw;padding:0 7cqw;
-  font-size:.95cqw;color:#9A93AC;
+  display:flex;align-items:center;gap:var(--s3);padding:0 6.875cqw;
+  font-size:.95cqw;letter-spacing:var(--tr-small);color:#9A93AC;
 }
 .slide.statement .foot,.slide.cover .foot,.slide.close .foot{color:rgba(255,255,255,.55)}
 .foot .brand{font-weight:700;letter-spacing:.02em}
@@ -384,6 +404,18 @@ td.k{color:var(--ink);font-weight:500}
   padding:3px 10px;border-radius:20px;
   font-family:'Roboto Mono',monospace;letter-spacing:.04em;
   transition:opacity .8s ease;pointer-events:none;
+}
+
+/* Acessibilidade: contraste alto e transparência reduzida.
+   Movimento reduzido já é tratado no bloco .slide.on lá em cima. */
+@media (prefers-contrast:more){
+  .card,.layer,.kit-row,.tw{border-color:#8B84A0}
+  .qrow + .qrow{border-top-color:#B9AFC9}
+  .lede,p,li,.qrow .qr,.box3 p,.kit-row .d,.stp .sx,.ph p{color:var(--ink)}
+  .foot,.bio-meta,.tool.q{color:#5B5470}
+}
+@media (prefers-reduced-transparency:reduce){
+  .hint-nav{background:#fff}
 }
 
 @media print{
@@ -421,7 +453,7 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 02 BIO -->
 <section class="slide" data-sec="Abertura">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.6cqw">
+  <div class="head">
     <div class="eyebrow">Quem está falando</div>
   </div>
   <div class="bio-grid">
@@ -443,7 +475,7 @@ td.k{color:var(--ink);font-weight:500}
       <p>Os últimos anos foram automatizando processo de decisão: entender como ele acontece hoje e devolver a parte repetitiva pra máquina &mdash; <b>script quando dá, IA quando é linguagem, pessoa quando o erro custa caro</b>.</p>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.6cqw">
+  <div class="callout" style="margin-top:var(--s3)">
     <div class="lab">O combinado desta palestra</div>
     <p>Não é demo de ferramenta. Em 25 minutos você sai com <strong>um roteiro de entrevista, uma notação de fluxograma e uma regra de decisão</strong> que dá pra aplicar no seu processo amanhã de manhã &mdash; mais um kit de arquivos pra baixar no fim.</p>
   </div>
@@ -469,7 +501,7 @@ td.k{color:var(--ink);font-weight:500}
       <span class="what">&ldquo;Me conta o que você fez ontem, na ordem.&rdquo;</span>
     </div>
   </div>
-  <div style="margin-top:auto;display:flex;align-items:center;gap:.9cqw;font-size:1.12cqw;color:#C9B6D4;font-weight:500;flex-wrap:wrap">
+  <div style="margin-top:auto;display:flex;align-items:center;gap:var(--s1h);font-size:1.12cqw;color:#C9B6D4;font-weight:500;flex-wrap:wrap">
     <span style="color:#FF8FC0;font-weight:700;letter-spacing:.04em">O CAMINHO DE HOJE</span>
     <span>conversar</span><span style="color:#FF8FC0">→</span>
     <span>desenhar</span><span style="color:#FF8FC0">→</span>
@@ -483,7 +515,7 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 04 AS 7 PERGUNTAS -->
 <section class="slide" data-sec="01 Conversar">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.4cqw">
+  <div class="head">
     <div class="eyebrow">Passo 1 · a conversa</div>
     <h2 style="font-size:3.1cqw">Sete perguntas que arrancam o processo <em class="hl">inteiro</em> em meia hora</h2>
   </div>
@@ -524,7 +556,7 @@ td.k{color:var(--ink);font-weight:500}
       <span class="qr">Custo do erro. Decide se a etapa <b>pode</b> rodar sozinha.</span>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.2cqw;padding:1.1cqw 1.6cqw">
+  <div class="callout" style="margin-top:var(--s3);padding:var(--s1h) var(--s3)">
     <div class="lab">Duas delas fazem 70% do trabalho</div>
     <p>A <strong>2</strong> te entrega os losangos; a <strong>3</strong>, as caixas que viram script. Grave a conversa e desenhe em cima da transcrição &mdash; não da memória.</p>
   </div>
@@ -534,16 +566,16 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 05 A NOTAÇÃO -->
 <section class="slide" data-sec="02 Desenhar">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.8cqw">
+  <div class="head">
     <div class="eyebrow">Passo 2 · o desenho</div>
     <h2>Quatro formas e três regras. <em class="hl">Não precisa de BPMN.</em></h2>
   </div>
-  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:3.6cqw;flex:1;min-height:0">
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:var(--s5);flex:1;min-height:0">
     <div class="steps" style="justify-content:center">
       <div class="stp"><span class="sk">1</span><span class="sx"><b>Uma caixa = uma ação.</b> Se o nome da caixa tem &ldquo;e&rdquo;, são duas caixas. &ldquo;Registrar <i>e</i> classificar&rdquo; esconde exatamente a etapa que você ia automatizar.</span></div>
       <div class="stp"><span class="sk">2</span><span class="sx"><b>Todo losango tem a regra escrita embaixo.</b> Losango sem regra é decisão que ninguém revisou — e é onde a automação quebra três meses depois.</span></div>
       <div class="stp"><span class="sk">3</span><span class="sx"><b>Rotule as duas saídas.</b> Seta sem rótulo esconde o caminho que ninguém tratou. Na dúvida entre ação e decisão, <b>é decisão</b>.</span></div>
-      <div class="callout" style="margin-top:.6cqw;padding:1.1cqw 1.5cqw">
+      <div class="callout" style="margin-top:var(--s1h);padding:var(--s1h) var(--s3)">
         <div class="lab">Com o que desenhar</div>
         <p style="font-size:1.1cqw">Papel, na frente da pessoa, na hora. Depois passe pra <span class="mono">Mermaid</span> ou <span class="mono">draw.io</span> — Mermaid é texto, então versiona no repo e o diff mostra quando o processo mudou.</p>
       </div>
@@ -587,11 +619,11 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 06 DA FALA AO DESENHO -->
 <section class="slide" data-sec="02 Desenhar">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.6cqw">
+  <div class="head">
     <div class="eyebrow">Passo 2 · na prática</div>
     <h2 style="font-size:3.05cqw">Da fala ao desenho: <em class="hl">cinco frases viram um fluxo</em></h2>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:2.6cqw;flex:1;min-height:0">
+  <div style="display:grid;grid-template-columns:1fr 1.15fr;gap:var(--s5);flex:1;min-height:0">
     <div class="says" style="justify-content:center">
       <div class="say-row">
         <div class="q">&ldquo;Chega um e-mail, ou o cliente abre pelo formulário.&rdquo;</div>
@@ -655,7 +687,7 @@ td.k{color:var(--ink);font-weight:500}
       </svg>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.5cqw;padding:.95cqw 1.6cqw">
+  <div class="callout" style="margin-top:var(--s3);padding:var(--s1h) var(--s3)">
     <p>A quinta frase entregou <strong>o losango e a regra na mesma respiração</strong>. E repare: até aqui <strong>nada foi dito sobre IA</strong>.</p>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">02 · Desenhar</span></div>
@@ -692,7 +724,7 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 08 EM QUAL CAIXA CABE O QUÊ -->
 <section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.8cqw">
+  <div class="head">
     <div class="eyebrow">Passo 3 · a classificação</div>
     <h2 style="font-size:3.05cqw">Cada caixa do fluxo vira uma de <em class="hl">três coisas</em></h2>
   </div>
@@ -728,7 +760,7 @@ td.k{color:var(--ink);font-weight:500}
       <p>Costuma ser pouco volume. <strong>Manter gente ali é barato</strong> — e é o que te deixa automatizar o resto sem medo.</p>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.4cqw;padding:1.1cqw 1.6cqw">
+  <div class="callout" style="margin-top:var(--s3);padding:var(--s1h) var(--s3)">
     <div class="lab">A ordem de perguntar &mdash; uma vez por caixa</div>
     <p><strong>1.</strong> Dá pra fazer com um <span class="mono">if</span>? Se dá, faça com <span class="mono">if</span>. &nbsp;<strong>2.</strong> Se não dá, o erro é caro e irreversível? Se é, humano decide (ou a IA propõe e o humano aprova). &nbsp;<strong>3.</strong> Se não é, IA com revisão por amostragem. &nbsp;<em class="hl">A IA é a terceira pergunta, nunca a primeira.</em></p>
   </div>
@@ -738,11 +770,11 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 09 O MESMO FLUXO, PINTADO -->
 <section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.4cqw">
+  <div class="head">
     <div class="eyebrow">Passo 3 · o entregável</div>
     <h2 style="font-size:3.05cqw">O mesmo fluxo, pintado &mdash; e pronto: <em class="hl">essa é a arquitetura</em></h2>
   </div>
-  <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:2.8cqw;flex:1;min-height:0">
+  <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:var(--s5);flex:1;min-height:0">
     <div style="display:flex;flex-direction:column;min-height:0">
       <svg class="fc flowbox" viewBox="0 0 690 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="O mesmo fluxograma com cada etapa classificada como Python, IA ou humano">
         <defs>
@@ -785,13 +817,13 @@ td.k{color:var(--ink);font-weight:500}
         <path class="edge" d="M250 500 H424" marker-end="url(#a3)"/>
       </svg>
     </div>
-    <div style="display:flex;flex-direction:column;gap:1cqw;justify-content:center">
-      <div class="card" style="padding:1.5cqw 1.6cqw;gap:.6cqw">
+    <div style="display:flex;flex-direction:column;gap:var(--s1h);justify-content:center">
+      <div class="card" style="padding:var(--s2) var(--s3);gap:var(--s1)">
         <h3 style="font-size:1.5cqw;color:var(--magenta)">O placar</h3>
         <p style="font-size:1.28cqw"><strong>5 ações + 1 decisão</strong> &rarr; 3 viram <strong style="color:var(--navy)">Python</strong>, 2 viram <strong style="color:var(--magenta)">IA</strong>, 1 continua <strong style="color:var(--purple)">humana</strong>.</p>
         <p style="font-size:1.12cqw">Metade do processo foi resolvida sem IA nenhuma. Isso é bom sinal, não fracasso.</p>
       </div>
-      <div class="card tint" style="padding:1.5cqw 1.6cqw;gap:.6cqw">
+      <div class="card tint" style="padding:var(--s2) var(--s3);gap:var(--s1)">
         <h3 style="font-size:1.4cqw;color:var(--purple)">Como ler o desenho</h3>
         <p style="font-size:1.12cqw">As duas rosas são <strong>decisão ambígua em alto volume, com erro tolerável</strong> — é ali que a IA se paga.</p>
         <p style="font-size:1.12cqw">A lavanda são <strong>poucos julgamentos, todos irreversíveis</strong>: continua humana, e é barato que continue.</p>
@@ -810,11 +842,11 @@ td.k{color:var(--ink);font-weight:500}
 <!-- 10 HUMANO NA ALÇA -->
 <section class="slide" data-sec="03 Decidir">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.8cqw">
+  <div class="head">
     <div class="eyebrow">O ponto onde a IA vira solução de verdade</div>
     <h2 style="font-size:3.05cqw">O humano na alça são <em class="hl">doze linhas</em> &mdash; e um teste pra ver se ele é real</h2>
   </div>
-  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:2.2cqw;height:24.6cqw">
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:var(--s4);height:24.6cqw">
     <div>
       <div class="code-cap">triagem.py</div>
       <div class="code-blk"><span class="c"># o schema é o contrato: sem ele não há limiar nem log</span>
@@ -831,19 +863,19 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
     <span class="w">rotear</span>(chamado, r.categoria)
 <span class="w">registrar</span>(chamado.id, r, modelo=MODELO, prompt_v=PROMPT_V)</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:.8cqw">
-      <div class="card" style="padding:1cqw 1.2cqw;gap:.45cqw">
+    <div style="display:flex;flex-direction:column;gap:var(--s1h)">
+      <div class="card" style="padding:var(--s1h) var(--s2);gap:var(--s1)">
         <h3 style="font-size:1.2cqw;color:var(--magenta)">O checkpoint é real? Três perguntas</h3>
         <p style="font-size:1.05cqw;line-height:1.38"><strong>1.</strong> O revisor tem tempo e informação pra discordar?</p>
         <p style="font-size:1.05cqw;line-height:1.38"><strong>2.</strong> Existe registro de quando ele discordou? Rejeição de 0% é alarme, não é qualidade.</p>
         <p style="font-size:1.05cqw;line-height:1.38"><strong>3.</strong> Se revisar por amostragem daria o mesmo, revisar item a item é teatro &mdash; e custa uma pessoa.</p>
       </div>
-      <div class="tint" style="border-radius:.9cqw;padding:1cqw 1.2cqw">
+      <div class="tint" style="border-radius:.9cqw;padding:var(--s1h) var(--s2)">
         <p style="font-size:1.02cqw;line-height:1.38"><strong style="color:var(--purple)">LGPD, art. 20.</strong> O titular pode pedir revisão de decisão tomada <em>unicamente</em> de forma automatizada. Em serviço financeiro isso define quais caixas <strong>podem</strong> ser 100% automáticas &mdash; e obriga saber qual versão do modelo decidiu o quê.</p>
       </div>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.4cqw;padding:1cqw 1.6cqw">
+  <div class="callout" style="margin-top:var(--s3);padding:var(--s1h) var(--s3)">
     <div class="lab">O detalhe que quase todo mundo esquece</div>
     <p><strong>Sem <span class="mono">faltou_contexto</span>, o modelo nunca diz &ldquo;não sei&rdquo; &mdash; ele chuta com confiança alta.</strong> &ldquo;Não sei&rdquo; precisa ser saída válida e explicitamente permitida no prompt. E escalone <strong>com a sugestão junto</strong>: fila que chega em branco custa o mesmo que não ter automação.</p>
   </div>
@@ -853,9 +885,9 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
 <!-- 11 PANORAMA DE FERRAMENTAS -->
 <section class="slide" data-sec="04 Ferramentas">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.4cqw">
+  <div class="head">
     <div class="eyebrow">Passo 4 · o panorama</div>
-    <h2 style="font-size:3.05cqw">Sete camadas &mdash; e as <em class="hl">duas</em> que decidem se vai pra produção</h2>
+    <h2 style="font-size:3.05cqw;max-width:60ch">Sete camadas &mdash; e as <em class="hl">duas</em> que decidem produção</h2>
   </div>
   <div class="layers">
     <div class="layer">
@@ -887,7 +919,7 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
       <div class="tools"><span class="tool">casos versionados no repo</span><span class="tool">Langfuse</span><span class="tool">Braintrust</span><span class="tool q">sem isso, o terceiro mês te pega</span></div>
     </div>
   </div>
-  <div class="callout" style="margin-top:1.2cqw;padding:.95cqw 1.6cqw">
+  <div class="callout" style="margin-top:var(--s3);padding:var(--s1h) var(--s3)">
     <p><strong>Claude Code não é modelo</strong> — é agente. <strong>Cursor não é orquestrador</strong> — é editor com agente. <strong>GitHub Actions é gatilho</strong>, não orquestrador.</p>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
@@ -896,7 +928,7 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
 <!-- 12 O CASO -->
 <section class="slide" data-sec="05 O caso">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.6cqw">
+  <div class="head">
     <div class="eyebrow">Passo 5 · o caso</div>
     <h2 style="font-size:3.05cqw">Um processo real, <em class="hl">na mesma notação</em></h2>
   </div>
@@ -927,7 +959,7 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
 <!-- 13 O KIT -->
 <section class="slide" data-sec="06 O kit">
   <div class="topbar"></div>
-  <div class="head" style="margin-bottom:1.6cqw">
+  <div class="head">
     <div class="eyebrow">Passo 6 · pra levar embora</div>
     <h2 style="font-size:3.05cqw">O kit &mdash; os arquivos que eu usei <em class="hl">pra montar tudo isso</em></h2>
   </div>
@@ -961,7 +993,7 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
       <span class="d"><b>Doze itens antes de ligar o fluxo.</b> Item desmarcado é risco aceito, com nome e data ao lado.</span>
     </div>
   </div>
-  <div class="ph" style="margin-top:1.2cqw;flex-direction:row;align-items:center;gap:1.4cqw">
+  <div class="ph" style="margin-top:var(--s3);flex-direction:row;align-items:center;gap:var(--s3)">
     <div class="lab" style="flex:none">Link / QR a definir</div>
     <p class="hint" style="margin:0">Repositório público ou pasta compartilhada. Definir também se vai junto a versão instalável como skills, ou só os arquivos em Markdown — que funcionam com qualquer ferramenta.</p>
   </div>
@@ -977,7 +1009,7 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
     <div class="t"><span class="n">02</span><span class="x">Se dá pra fazer com um <b>if</b>, faça com um if. IA é a terceira pergunta.</span></div>
     <div class="t"><span class="n">03</span><span class="x">Mantenha a pessoa onde <b>errar é caro</b> — e prove que ela consegue discordar.</span></div>
   </div>
-  <div class="callout" style="background:rgba(255,255,255,.1);border-left-color:#FF8FC0;margin-top:2.4cqw">
+  <div class="callout" style="background:rgba(255,255,255,.1);border-left-color:#FF8FC0;margin-top:var(--s4)">
     <div class="lab" style="color:#FF8FC0">Desafio de uma hora</div>
     <p style="color:#fff">Pegue alguém do seu time que executa um processo toda semana. Faça as <strong style="color:#fff">sete perguntas</strong>. Desenhe o fluxo na frente da pessoa. Marque a única caixa que é pura digitação &mdash; e automatize <strong style="color:#fff">só ela</strong>. Depois volte pra segunda.</p>
   </div>

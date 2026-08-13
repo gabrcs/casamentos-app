@@ -73,7 +73,10 @@ function header(slide, eyebrow, titleRuns, opts) {
   slide.addText(titleRuns, {
     x: M, y: 0.85, w: o.titleW || W - 2 * M, h: o.titleH || 0.95,
     margin: 0, valign: "top", fontFace: FONT,
-    fontSize: o.size || 30, bold: true, color: C.ink, lineSpacing: o.lnspc || 34,
+    fontSize: o.size || 30, bold: true, color: C.ink,
+    // tracking e entrelinha saem do tamanho — título grande lê espaçado demais
+    charSpacing: (o.size || 30) * -0.022,
+    lineSpacing: o.lnspc || Math.round((o.size || 30) * 1.06),
   });
 }
 
@@ -108,7 +111,7 @@ function callout(slide, label, runs, y, h, opts) {
   slide.addText(runs, {
     x: M + 0.28, y: y + (label ? 0.34 : 0.14), w: W - 2 * M - 0.56, h: hh - (label ? 0.42 : 0.28),
     margin: 0, valign: label ? "top" : "middle", fontFace: FONT, fontSize: 12,
-    color: o.color || C.ink, lineSpacing: 16,
+    color: o.color || C.ink, lineSpacing: 18,
   });
 }
 
@@ -342,10 +345,10 @@ function triagem(slide, F, painted) {
       { text: "Automação de\nprocessos com ", options: { color: "FFFFFF" } },
       { text: "IA", options: { color: C.pink } },
     ],
-    { x: M, y: 1.98, w: 9.9, h: 2.15, margin: 0, valign: "top", fontFace: FONT, fontSize: 42, bold: true, lineSpacing: 48 }
+    { x: M, y: 1.98, w: 9.9, h: 2.15, margin: 0, valign: "top", fontFace: FONT, fontSize: 42, bold: true, charSpacing: -1.26, lineSpacing: 43 }
   );
   s.addText("Onde a IA ajuda — e onde um script resolve melhor.", {
-    x: M, y: 4.2, w: 7.2, h: 0.5, margin: 0, fontFace: FONT, fontSize: 16, color: "E7DCEF", lineSpacing: 22,
+    x: M, y: 4.2, w: 7.2, h: 0.5, margin: 0, fontFace: FONT, fontSize: 16, color: "E7DCEF", lineSpacing: 21,
   });
   s.addText("Bruno Prata", {
     x: M, y: 6.15, w: 6, h: 0.3, margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: "FFFFFF",
@@ -369,14 +372,14 @@ function triagem(slide, F, painted) {
   });
   s.addText("Bruno Prata", {
     x: M, y: 1.5, w: 6.5, h: 0.85, margin: 0, valign: "top",
-    fontFace: FONT, fontSize: 40, bold: true, color: C.ink,
+    fontFace: FONT, fontSize: 40, bold: true, charSpacing: -1.2, color: C.ink,
   });
   s.addText(
     [
       { text: "Especialista em Dados no ", options: { color: C.inkSoft } },
       { text: "Nubank", options: { color: C.ink, bold: true } },
     ],
-    { x: M, y: 2.4, w: 6.5, h: 0.4, margin: 0, fontFace: FONT, fontSize: 17 }
+    { x: M, y: 2.4, w: 6.5, h: 0.4, margin: 0, fontFace: FONT, fontSize: 17, charSpacing: -0.17 }
   );
   const chips = ["Grupo Boticário", "iFood", "EBANX", "Nubank"];
   const chipW = [1.85, 0.95, 1.1, 1.15];
@@ -409,7 +412,7 @@ function triagem(slide, F, painted) {
       { text: "script quando dá, IA quando é linguagem, pessoa quando o erro custa caro", options: { color: "FFFFFF", bold: true } },
       { text: ".", options: { color: "EDE4F3" } },
     ],
-    { x: 7.98, y: 1.98, w: 4.34, h: 1.9, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 19 }
+    { x: 7.98, y: 1.98, w: 4.34, h: 1.9, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 18.5 }
   );
 
   callout(
@@ -441,7 +444,7 @@ function triagem(slide, F, painted) {
       { text: "A primeira pergunta é sempre ", options: { color: "FFFFFF" } },
       { text: "a errada", options: { color: C.pink } },
     ],
-    { x: M, y: 1.35, w: 11, h: 0.7, margin: 0, valign: "top", fontFace: FONT, fontSize: 32, bold: true }
+    { x: M, y: 1.35, w: 11, h: 0.7, margin: 0, valign: "top", fontFace: FONT, fontSize: 32, bold: true, charSpacing: -0.96 }
   );
 
   const DL = [
@@ -456,7 +459,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(what, {
       x: M + 2.35, y: dy, w: 9, h: 0.42,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 19, color: "FFFFFF",
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 19, charSpacing: -0.19, color: "FFFFFF",
     });
     dy += 0.72;
   });
@@ -471,7 +474,7 @@ function triagem(slide, F, painted) {
   });
   s.addText("“Me conta o que você fez ontem, na ordem.”", {
     x: M + 2.35, y: dy, w: 9, h: 0.45,
-    margin: 0, valign: "top", fontFace: FONT, fontSize: 19, bold: true, color: "FFFFFF",
+    margin: 0, valign: "top", fontFace: FONT, fontSize: 19, bold: true, charSpacing: -0.19, color: "FFFFFF",
   });
 
   s.addText(
@@ -480,7 +483,7 @@ function triagem(slide, F, painted) {
       { text: "conversar → desenhar → decidir quem faz cada caixa → ferramentas → um caso → ", options: { color: "C9B6D4" } },
       { text: "o kit pra baixar", options: { color: "FFFFFF", bold: true } },
     ],
-    { x: M, y: 6.25, w: 11.9, h: 0.45, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 17 }
+    { x: M, y: 6.25, w: 11.9, h: 0.45, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 18 }
   );
   s.addNotes(
     "Slide de pontuação. Encene o diálogo: faça a pergunta errada em voz alta e dê a resposta que sempre vem. " +
@@ -540,11 +543,11 @@ function triagem(slide, F, painted) {
     });
     s.addText(q, {
       x: M + 0.62, y: y + 0.08, w: 4.2, h: 0.38,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, color: C.ink, lineSpacing: 16,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, color: C.ink, lineSpacing: 19,
     });
     s.addText(reveal, {
       x: M + 4.95, y: y + 0.08, w: 6.85, h: 0.38,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 15,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 17,
     });
     y += rowH;
   });
@@ -591,18 +594,18 @@ function triagem(slide, F, painted) {
     });
     s.addText(
       [{ text: lead, options: { bold: true, color: C.ink } }, { text: rest, options: { color: C.inkSoft } }],
-      { x: M + 0.48, y: ry - 0.03, w: 5.5, h: 0.75, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 17 }
+      { x: M + 0.48, y: ry - 0.03, w: 5.5, h: 0.84, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 19 }
     );
-    ry += 0.88;
+    ry += 0.96;
   });
 
   s.addShape(pres.ShapeType.roundRect, {
-    x: M, y: 4.78, w: 6.0, h: 1.0, rectRadius: 0.09,
+    x: M, y: 5.05, w: 6.0, h: 1.12, rectRadius: 0.09,
     fill: { color: C.lavender }, line: { width: 0 },
   });
-  s.addShape(pres.ShapeType.rect, { x: M, y: 4.78, w: 0.05, h: 1.0, fill: { color: C.magenta }, line: { width: 0 } });
+  s.addShape(pres.ShapeType.rect, { x: M, y: 5.05, w: 0.05, h: 1.12, fill: { color: C.magenta }, line: { width: 0 } });
   s.addText("COM O QUE DESENHAR", {
-    x: M + 0.24, y: 4.88, w: 5, h: 0.22,
+    x: M + 0.24, y: 5.15, w: 5, h: 0.22,
     margin: 0, fontFace: FONT, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1.8,
   });
   s.addText(
@@ -613,7 +616,7 @@ function triagem(slide, F, painted) {
       { text: "draw.io", options: { fontFace: MONO } },
       { text: " — Mermaid é texto, então versiona no repo e o diff mostra quando o processo mudou." },
     ],
-    { x: M + 0.24, y: 5.1, w: 5.5, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.ink, lineSpacing: 15 }
+    { x: M + 0.24, y: 5.4, w: 5.5, h: 0.72, margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.ink, lineSpacing: 17 }
   );
 
   // a notação, no mesmo viewBox 440x350 do SVG
@@ -667,7 +670,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(q, {
       x: M + 0.22, y: sy + 0.06, w: 5.4, h: 0.42,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, italic: true, color: C.ink, lineSpacing: 14,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, italic: true, color: C.ink, lineSpacing: 16,
     });
     s.addText(to, {
       x: M + 0.22, y: sy + 0.48, w: 5.4, h: 0.22,
@@ -713,42 +716,42 @@ function triagem(slide, F, painted) {
   card(s, M, 2.1, cw, 3.5, C.paper);
   s.addText("IA como ferramenta — um copiloto seu", {
     x: M + 0.32, y: 2.34, w: cw - 0.64, h: 0.34,
-    margin: 0, fontFace: FONT, fontSize: 15, bold: true, color: C.magenta,
+    margin: 0, fontFace: FONT, fontSize: 15, bold: true, charSpacing: -0.15, color: C.magenta,
   });
   s.addText(
     [{ text: "Você está no meio.", options: { bold: true, color: C.ink } },
      { text: " Cada uso é uma decisão sua, e você vê a saída antes de qualquer coisa acontecer.", options: { color: C.inkSoft } }],
-    { x: M + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+    { x: M + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 18 }
   );
   s.addText("Escrever o script · entender uma base nova · gerar o SQL · revisar um texto · virar 40 páginas de PDF em resumo", {
     x: M + 0.32, y: 3.44, w: cw - 0.64, h: 0.9,
-    margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15,
+    margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15.5,
   });
   s.addText(
     [{ text: "Não precisa de eval, log nem dono.", options: { bold: true, color: C.ink } },
      { text: " Precisa de você prestando atenção. Começa hoje, sem projeto e sem aprovação.", options: { color: C.inkSoft } }],
-    { x: M + 0.32, y: 4.5, w: cw - 0.64, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+    { x: M + 0.32, y: 4.5, w: cw - 0.64, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 18 }
   );
 
   const x2 = M + cw + 0.4;
   card(s, x2, 2.1, cw, 3.5, C.lavender);
   s.addText("IA como solução — dentro do processo", {
     x: x2 + 0.32, y: 2.34, w: cw - 0.64, h: 0.34,
-    margin: 0, fontFace: FONT, fontSize: 15, bold: true, color: C.purple,
+    margin: 0, fontFace: FONT, fontSize: 15, bold: true, charSpacing: -0.15, color: C.purple,
   });
   s.addText(
     [{ text: "Roda sem você", options: { bold: true, color: C.ink } },
      { text: ", N vezes por dia, e o resultado vai direto pro cliente ou pro sistema seguinte.", options: { color: C.inkSoft } }],
-    { x: x2 + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+    { x: x2 + 0.32, y: 2.76, w: cw - 0.64, h: 0.62, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 18 }
   );
   s.addText("Classificar todo chamado que entra · extrair campo de documento · redigir a primeira versão da resposta", {
     x: x2 + 0.32, y: 3.44, w: cw - 0.64, h: 0.9,
-    margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15,
+    margin: 0, valign: "top", fontFace: MONO, fontSize: 10.5, color: C.ink, lineSpacing: 15.5,
   });
   s.addText(
     [{ text: "Precisa de tudo que um sistema precisa:", options: { bold: true, color: C.ink } },
      { text: " saída com schema, limiar de confiança, log por execução, dono com nome e um conjunto de casos de teste.", options: { color: C.inkSoft } }],
-    { x: x2 + 0.32, y: 4.5, w: cw - 0.64, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 16 }
+    { x: x2 + 0.32, y: 4.5, w: cw - 0.64, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 12, lineSpacing: 18 }
   );
 
   callout(
@@ -759,7 +762,7 @@ function triagem(slide, F, painted) {
       { text: ": funcionou lindo no chat de quem construiu, e ninguém desenhou o que acontece quando erra às 3 da manhã sem ninguém olhando. " },
       { text: "A demo é ferramenta. Produção é solução.", options: { bold: true } },
     ],
-    5.78, 0.88
+    5.78, 0.94
   );
   footer(s, "03 · Decidir");
   s.addNotes(
@@ -813,7 +816,7 @@ function triagem(slide, F, painted) {
     card(s, x, 2.0, bw, 3.55, b.fill, b.accent);
     s.addText(b.title, {
       x: x + 0.28, y: 2.22, w: bw - 0.56, h: 0.32,
-      margin: 0, fontFace: FONT, fontSize: 14.5, bold: true, color: b.accent,
+      margin: 0, fontFace: FONT, fontSize: 14.5, bold: true, charSpacing: -0.14, color: b.accent,
     });
     let sx = x + 0.28;
     let sy2 = 2.64;
@@ -836,7 +839,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(b.when, {
       x: x + 0.28, y: base + 0.2, w: bw - 0.56, h: 0.52,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16,
     });
     s.addText("COMO APARECE NA ENTREVISTA", {
       x: x + 0.28, y: base + 0.78, w: bw - 0.56, h: 0.2,
@@ -844,7 +847,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(b.say, {
       x: x + 0.28, y: base + 0.98, w: bw - 0.56, h: 0.52,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, italic: true, color: C.ink, lineSpacing: 14,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, italic: true, color: C.ink, lineSpacing: 15.5,
     });
     s.addText(b.lastLab, {
       x: x + 0.28, y: base + 1.56, w: bw - 0.56, h: 0.2,
@@ -852,7 +855,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(b.last, {
       x: x + 0.28, y: base + 1.76, w: bw - 0.56, h: 0.72,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16,
     });
   });
 
@@ -889,10 +892,10 @@ function triagem(slide, F, painted) {
   const F = frame(690, 570, 0.72, 2.05, 6.2, 4.5);
   triagem(s, F, true);
 
-  card(s, 7.3, 2.15, 5.3, 1.42, C.paper);
+  card(s, 7.3, 2.15, 5.3, 1.6, C.paper);
   s.addText("O placar", {
     x: 7.58, y: 2.34, w: 4.8, h: 0.3,
-    margin: 0, fontFace: FONT, fontSize: 14, bold: true, color: C.magenta,
+    margin: 0, fontFace: FONT, fontSize: 14, bold: true, charSpacing: -0.14, color: C.magenta,
   });
   s.addText(
     [
@@ -905,32 +908,32 @@ function triagem(slide, F, painted) {
       { text: "humana", options: { bold: true, color: C.purple } },
       { text: ".", options: { color: C.inkSoft } },
     ],
-    { x: 7.58, y: 2.66, w: 4.8, h: 0.42, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 16 }
+    { x: 7.58, y: 2.68, w: 4.8, h: 0.56, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 19 }
   );
   s.addText("Metade do processo foi resolvida sem IA nenhuma. Isso é bom sinal, não fracasso.", {
-    x: 7.58, y: 3.08, w: 4.8, h: 0.4,
-    margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14,
+    x: 7.58, y: 3.24, w: 4.8, h: 0.46,
+    margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16,
   });
 
-  card(s, 7.3, 3.75, 5.3, 2.05, C.lavender);
+  card(s, 7.3, 3.88, 5.3, 2.05, C.lavender);
   s.addText("Como ler o desenho", {
-    x: 7.58, y: 3.94, w: 4.8, h: 0.3,
-    margin: 0, fontFace: FONT, fontSize: 13, bold: true, color: C.purple,
+    x: 7.58, y: 4.05, w: 4.8, h: 0.3,
+    margin: 0, fontFace: FONT, fontSize: 13, bold: true, charSpacing: -0.13, color: C.purple,
   });
   s.addText(
     [{ text: "As duas rosas são " }, { text: "decisão ambígua em alto volume, com erro tolerável", options: { bold: true, color: C.ink } },
      { text: " — é ali que a IA se paga." }],
-    { x: 7.58, y: 4.26, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
+    { x: 7.58, y: 4.40, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16 }
   );
   s.addText(
     [{ text: "A lavanda são " }, { text: "poucos julgamentos, todos irreversíveis", options: { bold: true, color: C.ink } },
      { text: ": continua humana, e é barato que continue." }],
-    { x: 7.58, y: 4.76, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
+    { x: 7.58, y: 4.92, w: 4.8, h: 0.48, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16 }
   );
   s.addText(
     [{ text: "O losango " }, { text: "parece", options: { italic: true } },
      { text: " decisão de IA e não é — é " }, { text: "if desconto > 0.10", options: { fontFace: MONO } }, { text: "." }],
-    { x: 7.58, y: 5.26, w: 4.8, h: 0.44, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 14 }
+    { x: 7.58, y: 5.44, w: 4.8, h: 0.44, margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16 }
   );
 
   // legenda
@@ -984,7 +987,7 @@ function triagem(slide, F, painted) {
   card(s, 8.35, 2.32, 4.25, 1.85, C.paper);
   s.addText("O checkpoint é real? Três perguntas", {
     x: 8.6, y: 2.5, w: 3.8, h: 0.3,
-    margin: 0, fontFace: FONT, fontSize: 12, bold: true, color: C.magenta,
+    margin: 0, fontFace: FONT, fontSize: 12, bold: true, charSpacing: -0.12, color: C.magenta,
   });
   [
     [{ text: "1.", options: { bold: true, color: C.ink } }, { text: " O revisor tem tempo e informação pra discordar?" }],
@@ -993,11 +996,11 @@ function triagem(slide, F, painted) {
   ].forEach((runs, i) => {
     s.addText(runs, {
       x: 8.6, y: 2.84 + i * 0.44, w: 3.8, h: 0.42,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 13.5,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 15.5,
     });
   });
 
-  card(s, 8.35, 4.32, 4.25, 1.35, C.lavender);
+  card(s, 8.35, 4.30, 4.25, 1.48, C.lavender);
   s.addText(
     [
       { text: "LGPD, art. 20.", options: { bold: true, color: C.purple } },
@@ -1007,7 +1010,7 @@ function triagem(slide, F, painted) {
       { text: "podem", options: { bold: true, color: C.ink } },
       { text: " ser 100% automáticas — e obriga saber qual versão do modelo decidiu o quê." },
     ],
-    { x: 8.6, y: 4.5, w: 3.8, h: 1.0, margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 13.5 }
+    { x: 8.6, y: 4.45, w: 3.8, h: 1.18, margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 15.5 }
   );
 
   callout(
@@ -1018,7 +1021,7 @@ function triagem(slide, F, painted) {
       { text: "com a sugestão junto", options: { bold: true } },
       { text: ": fila que chega em branco custa o mesmo que não ter automação." },
     ],
-    5.85, 0.85
+    5.87, 0.92
   );
   footer(s, "03 · Decidir");
   s.addNotes(
@@ -1129,11 +1132,11 @@ function triagem(slide, F, painted) {
     });
     s.addText(line, {
       x: x + 0.28, y: 2.66, w: pw - 0.56, h: 0.6,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 15,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 17,
     });
     s.addText(hint, {
       x: x + 0.28, y: 3.3, w: pw - 0.56, h: 1.2,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 13.5,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 14.5,
     });
   });
 
@@ -1143,7 +1146,7 @@ function triagem(slide, F, painted) {
       { text: "Este slide vira " }, { text: "dois ou três", options: { bold: true } },
       { text: " quando o caso estiver definido: um do processo e da conversa, um do fluxo pintado, um do resultado e das cicatrizes. A estrutura já está de pé — falta o conteúdo." },
     ],
-    5.3, 0.88
+    5.3, 0.94
   );
   footer(s, "05 · O caso");
   s.addNotes(
@@ -1183,7 +1186,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(
       [{ text: lead, options: { bold: true, color: C.ink } }, { text: rest, options: { color: C.inkSoft } }],
-      { x: M + 3.05, y: ky + 0.05, w: W - 2 * M - 3.35, h: 0.40, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10.5, lineSpacing: 13.5 }
+      { x: M + 3.05, y: ky + 0.05, w: W - 2 * M - 3.35, h: 0.46, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10.5, lineSpacing: 15.5 }
     );
     ky += kh + 0.08;
   });
@@ -1195,7 +1198,7 @@ function triagem(slide, F, painted) {
   });
   s.addText(
     "Repositório público ou pasta compartilhada. Definir também se vai junto a versão instalável como skills, ou só os arquivos em Markdown — que funcionam com qualquer ferramenta.",
-    { x: M + 2.75, y: 6.14, w: W - 2 * M - 3.05, h: 0.5, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 13 }
+    { x: M + 2.75, y: 6.14, w: W - 2 * M - 3.05, h: 0.5, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 14.5 }
   );
   footer(s, "06 · O kit");
   s.addNotes(
@@ -1215,7 +1218,7 @@ function triagem(slide, F, painted) {
   s.addText(
     [{ text: "Três frases e ", options: { color: "FFFFFF" } },
      { text: "um desafio de uma hora", options: { color: C.pink } }],
-    { x: M, y: 1.35, w: 11, h: 0.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 26, bold: true }
+    { x: M, y: 1.35, w: 11, h: 0.6, margin: 0, valign: "top", fontFace: FONT, fontSize: 26, bold: true, charSpacing: -0.57 }
   );
   const THREE = [
     ["01", [{ text: "A conversa vem antes do desenho. O desenho vem antes da " }, { text: "ferramenta", options: { bold: true } }, { text: "." }]],
@@ -1230,7 +1233,7 @@ function triagem(slide, F, painted) {
     });
     s.addText(runs, {
       x: M + 0.62, y: ty, w: 10.5, h: 0.6,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 18, color: "FFFFFF", lineSpacing: 24,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 18, charSpacing: -0.18, color: "FFFFFF", lineSpacing: 24,
     });
     ty += 0.78;
   });
@@ -1252,7 +1255,7 @@ function triagem(slide, F, painted) {
       { text: "só ela", options: { bold: true } },
       { text: ". Depois volte pra segunda." },
     ],
-    { x: M + 0.28, y: 5.45, w: W - 2 * M - 0.56, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, color: "FFFFFF", lineSpacing: 18 }
+    { x: M + 0.28, y: 5.45, w: W - 2 * M - 0.56, h: 0.85, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, color: "FFFFFF", lineSpacing: 18.5 }
   );
   s.addNotes(
     "Fecho. As três frases são o resumo da palestra inteira — leia devagar. O desafio de uma hora é o " +

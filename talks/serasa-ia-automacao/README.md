@@ -22,12 +22,14 @@ faça com um `if`; se o erro é caro e irreversível, é humano; o que sobra é 
 | `fonts/` | Roboto e Roboto Mono (subsets latin/latin-ext) para embutir no HTML. |
 | `qa/check_html.mjs` | Renderiza os 14 slides no Chromium e checa overflow, sangramento e texto recortado. |
 | `qa/check_pptx.py` | Checagem geométrica do `.pptx` com métricas de fonte reais. |
+| `qa/measure_rhythm.mjs` | Mede o vão entre blocos e a folga antes do rodapé, slide a slide. |
 
 ```bash
 python3 build.py            # reconstrói deck.html
 node make_pptx.js           # reconstrói deck.pptx
 node qa/check_html.mjs      # QA do HTML (gera qa/shots/*.png)
 python3 qa/check_pptx.py deck.pptx
+node qa/measure_rhythm.mjs   # ritmo vertical
 ```
 
 ## Apresentar o deck HTML
@@ -122,8 +124,39 @@ Baseada no site e no manual de marca da Experian.
 | Lavanda | `#F4F0F9` | Painéis de conclusão e tinta de fundo |
 
 Tipografia: **Roboto** (marca) e **Roboto Mono** para rótulos técnicos e código.
-Grid de 8px. Elemento gráfico recorrente: **squircle** — cartão de cantos muito
-arredondados e badge circular magenta, como no site.
+Elemento gráfico recorrente: **squircle** — cartão de cantos muito arredondados e badge
+circular magenta, como no site.
+
+### Espaçamento — a grade de 8px
+
+Nenhuma distância no deck é chutada: todas saem de sete tokens no `:root`, sobre uma
+grade de 8px num palco de 1280px (`1cqw = 12,8px`).
+
+| Token | Valor | Para que serve |
+|---|---|---|
+| `--s0` | 4px | dentro de um par (rótulo ↔ valor) |
+| `--s1` | 8px | rótulo ↔ conteúdo |
+| `--s1h` | 12px | item ↔ item dentro de um bloco |
+| `--s2` | 16px | respiro interno de card |
+| `--s3` | 24px | bloco ↔ bloco (é o vão padrão entre título, conteúdo e callout) |
+| `--s4` | 32px | grupo ↔ grupo |
+| `--s5` | 48px | coluna ↔ coluna |
+| `--s6` | 64px | margem inferior do slide |
+
+A escala serve à **proximidade como sinal de agrupamento**: o que pertence junto fica a
+`--s1`, o que é irmão fica a `--s1h`, o que é outro assunto fica a `--s3`. Em todo slide
+de conteúdo o vão entre blocos é `--s3` — `qa/measure_rhythm.mjs` confere isso.
+
+### Tracking e entrelinha
+
+Um único `letter-spacing` está errado em algum tamanho: texto grande lê espaçado demais,
+texto pequeno lê apertado demais. O deck usa uma escada de tracking por faixa de tamanho
+(`--tr-display` a `--tr-micro`, de `-0.03em` a `+0.1em`), e a entrelinha anda ao contrário
+do tamanho — apertada nos títulos (`1.0`–`1.06`), folgada no corpo (`1.5`), levemente
+mais fechada no texto pequeno e denso de card (`1.45`–`1.48`).
+
+O `.pptx` segue a mesma escada: `charSpacing` em pontos (`tamanho × em`) e `lineSpacing`
+derivado do tamanho pela mesma tabela de razões.
 
 Dispositivos de marca reproduzidos do site: eyebrow rosa em caixa alta acima do título,
 título em navy com **uma palavra em magenta**, cartões brancos com badge circular,
@@ -149,7 +182,8 @@ dois arquivos**: se você mover um nó, mova pelo mesmo número nos dois.
 
 O deck HTML é verificado slide por slide no Chromium: 14 telas renderizadas em
 `qa/shots/`, fontes confirmadas carregadas, e checagem automática de overflow,
-sangramento e de texto recortado por ancestral com `overflow:hidden` — o recorte é
+sangramento, invasão da faixa do rodapé e texto recortado por ancestral com
+`overflow:hidden` — o recorte é
 calculado contra o retângulo de clip real, então decoração que sangra de propósito
 dentro de um painel recortado não gera falso positivo.
 
