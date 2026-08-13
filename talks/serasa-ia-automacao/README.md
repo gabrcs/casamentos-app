@@ -20,6 +20,7 @@ faça com um `if`; se o erro é caro e irreversível, é humano; o que sobra é 
 | `deck.pptx` | Versão PowerPoint editável, com notas do apresentador em todos os slides. **Gerado.** |
 | `make_pptx.js` | Gerador do `.pptx`. |
 | `fonts/` | Roboto e Roboto Mono (subsets latin/latin-ext) para embutir no HTML. |
+| `assets/` | A foto do apresentador. Veja `assets/README.md` — **não versionada**. |
 | `qa/check_html.mjs` | Renderiza os 14 slides no Chromium e checa overflow, sangramento e texto recortado. |
 | `qa/check_pptx.py` | Checagem geométrica do `.pptx` com métricas de fonte reais. |
 | `qa/measure_rhythm.mjs` | Mede o vão entre blocos e a folga antes do rodapé, slide a slide. |
@@ -53,7 +54,7 @@ Para PDF: imprimir pelo navegador em paisagem, sem margens.
 | # | Slide | Artefato que entrega | Tempo |
 |---|---|---|---|
 | 1 | Capa | — | 1 min |
-| 2 | **Bio** — Bruno Prata, e a tese em uma frase | — | 1 min |
+| 2 | **Bio** — foto, credenciais e a tese em uma frase | — | 1 min |
 | 3 | **Duas perguntas, duas respostas** — por que "me conta o que você fez ontem" funciona | — | 1,5 min |
 | 4 | **As sete perguntas** da entrevista | o roteiro | 3 min |
 | 5 | **A notação** — 4 formas + 3 regras | a notação | 2,5 min |
@@ -91,6 +92,11 @@ quando estiver definido:
 3. *O resultado e o que quebrou* — um número de antes → depois que você defenda no Q&A,
    e a falha: de preferência uma em que o modelo errou com confiança e você só descobriu
    depois. É o bloco que a plateia lembra; plateia técnica confia em quem mostra a cicatriz.
+
+**A foto do slide 2.** Salve em `assets/bruno.jpg` e rode `python3 build.py` e
+`node make_pptx.js`. Os dois formatos recortam em quadrado sozinhos; enquanto o arquivo
+não existir, aparece um espaço tracejado com a instrução e o build avisa no terminal.
+Detalhes em `assets/README.md`.
 
 **Slide 13 — o kit.** Os sete arquivos estão listados, mas falta publicar e trocar a
 caixa tracejada por link + QR. Falta decidir também se vai junto uma versão instalável

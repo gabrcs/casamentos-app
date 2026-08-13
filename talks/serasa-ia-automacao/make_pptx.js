@@ -15,6 +15,18 @@
  * Uso: node make_pptx.js
  */
 const pptxgen = require("pptxgenjs");
+const fs = require("fs");
+const path = require("path");
+
+/** Primeiro assets/bruno.* que existir, ou null. */
+function findPhoto() {
+  for (const ext of [".jpg", ".jpeg", ".png", ".webp"]) {
+    const f = path.join(__dirname, "assets", "bruno" + ext);
+    if (fs.existsSync(f)) return f;
+  }
+  return null;
+}
+const PHOTO = findPhoto();
 
 const C = {
   ink: "16224E",
@@ -370,8 +382,27 @@ function triagem(slide, F, painted) {
     x: M, y: 0.5, w: 8, h: 0.3,
     margin: 0, fontFace: FONT, fontSize: 11, bold: true, color: C.magenta, charSpacing: 2.2,
   });
+  // foto quadrada; sizing 'cover' recorta em vez de deformar
+  const ph = { x: M, y: 1.75, w: 2.9, h: 2.9 };
+  if (PHOTO) {
+    s.addImage({
+      path: PHOTO, x: ph.x, y: ph.y, w: ph.w, h: ph.h,
+      sizing: { type: "cover", w: ph.w, h: ph.h },
+    });
+  } else {
+    s.addText("foto: salve em\nassets/bruno.jpg", {
+      shape: pres.ShapeType.roundRect, rectRadius: 0.12,
+      x: ph.x, y: ph.y, w: ph.w, h: ph.h,
+      fill: { color: C.pinkTint },
+      line: { color: C.magenta, width: 1.25, dashType: "dash" },
+      align: "center", valign: "middle", margin: 0,
+      fontFace: MONO, fontSize: 9.5, italic: true, color: C.hint, lineSpacing: 14,
+    });
+  }
+  const IDX = ph.x + ph.w + 0.55;
+
   s.addText("Bruno Prata", {
-    x: M, y: 1.5, w: 6.5, h: 0.85, margin: 0, valign: "top",
+    x: IDX, y: 1.68, w: 5.5, h: 0.85, margin: 0, valign: "top",
     fontFace: FONT, fontSize: 40, bold: true, charSpacing: -1.2, color: C.ink,
   });
   s.addText(
@@ -379,15 +410,15 @@ function triagem(slide, F, painted) {
       { text: "Especialista em Dados no ", options: { color: C.inkSoft } },
       { text: "Nubank", options: { color: C.ink, bold: true } },
     ],
-    { x: M, y: 2.4, w: 6.5, h: 0.4, margin: 0, fontFace: FONT, fontSize: 17, charSpacing: -0.17 }
+    { x: IDX, y: 2.5, w: 6, h: 0.4, margin: 0, fontFace: FONT, fontSize: 17, charSpacing: -0.17 }
   );
   const chips = ["Grupo Boticário", "iFood", "EBANX", "Nubank"];
   const chipW = [1.85, 0.95, 1.1, 1.15];
-  let cx = M;
+  let cx = IDX;
   chips.forEach((t, i) => {
     s.addText(t, {
       shape: pres.ShapeType.roundRect, rectRadius: 0.06,
-      x: cx, y: 3.1, w: chipW[i], h: 0.36,
+      x: cx, y: 3.14, w: chipW[i], h: 0.36,
       fill: { color: C.lavender }, line: { width: 0 },
       align: "center", valign: "middle", margin: 0,
       fontFace: MONO, fontSize: 10.5, color: C.purple,
@@ -395,15 +426,15 @@ function triagem(slide, F, painted) {
     cx += chipW[i] + 0.14;
   });
   s.addText("Administração — UFPR  ·  6+ anos entre análise de dados, BI e decisão", {
-    x: M, y: 3.66, w: 6.5, h: 0.3, margin: 0, fontFace: FONT, fontSize: 11.5, color: "8B84A0",
+    x: IDX, y: 3.72, w: 6, h: 0.3, margin: 0, fontFace: FONT, fontSize: 11.5, color: "8B84A0",
   });
 
   s.addShape(pres.ShapeType.roundRect, {
-    x: 7.7, y: 1.45, w: 4.9, h: 2.6, rectRadius: 0.13,
+    x: IDX, y: 4.32, w: W - M - IDX, h: 1.55, rectRadius: 0.13,
     fill: { color: C.deep }, line: { width: 0 },
   });
   s.addText("O QUE EU FAÇO", {
-    x: 7.98, y: 1.68, w: 4.3, h: 0.24,
+    x: IDX + 0.3, y: 4.5, w: 4.3, h: 0.24,
     margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.pink, charSpacing: 1.2,
   });
   s.addText(
@@ -412,13 +443,14 @@ function triagem(slide, F, painted) {
       { text: "script quando dá, IA quando é linguagem, pessoa quando o erro custa caro", options: { color: "FFFFFF", bold: true } },
       { text: ".", options: { color: "EDE4F3" } },
     ],
-    { x: 7.98, y: 1.98, w: 4.34, h: 1.9, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, lineSpacing: 18.5 }
+    { x: IDX + 0.3, y: 4.78, w: W - M - IDX - 0.6, h: 1.0, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 19 }
   );
 
   footer(s, "Abertura");
   s.addNotes(
     "Credencial em 30 segundos, não currículo. A frase do painel escuro é a tese da palestra inteira: " +
-      "script / IA / pessoa. Ela volta no slide 8. ~1 min."
+      "script / IA / pessoa. Ela volta no slide 8. ~1 min." +
+      (PHOTO ? "" : "\n\nPENDENTE: salvar a foto em assets/bruno.jpg e rodar node make_pptx.js de novo.")
   );
 }
 
@@ -1319,7 +1351,6 @@ function triagem(slide, F, painted) {
 }
 
 /* ---------------- escreve ---------------- */
-const path = require("path");
 pres.writeFile({ fileName: path.join(__dirname, "deck.pptx") }).then((f) => {
   console.log("gerado:", f);
 });

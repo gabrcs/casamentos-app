@@ -5,3 +5,6 @@ qa/node_modules/
 qa/package-lock.json
 qa/package.json
 qa/shots/
+
+# foto do apresentador — não versionada
+assets/bruno.*

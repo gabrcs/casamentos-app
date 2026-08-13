@@ -131,10 +131,18 @@ strong{font-weight:700;color:var(--ink)}
 .cover .topbar{background:linear-gradient(90deg,var(--navy) 0 55%,var(--magenta) 55% 100%)}
 
 /* ---------- bio ---------- */
-.bio-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:var(--s5);flex:1;min-height:0;align-items:center}
+.bio-grid{display:grid;grid-template-columns:25cqw 1fr;gap:var(--s5);flex:1;min-height:0;align-items:center}
+.bio-right{display:flex;flex-direction:column;gap:var(--s4);min-width:0}
+.bio-photo{
+  width:25cqw;height:25cqw;border-radius:3cqw;overflow:hidden;
+  background:var(--lavender);position:relative;
+  box-shadow:0 .8cqw 2.4cqw rgba(22,34,78,.16);
+}
+.bio-photo img{width:100%;height:100%;object-fit:cover;object-position:52% 16%;display:block}
+/*PHOTO*/
 .bio-name{font-size:4.2cqw;font-weight:700;line-height:1.02;letter-spacing:var(--tr-display);color:var(--ink)}
 .bio-role{font-size:1.75cqw;font-weight:300;letter-spacing:var(--tr-head);color:var(--ink-soft);margin-top:var(--s1h)}
-.chips{display:flex;flex-wrap:wrap;gap:var(--s1);margin-top:var(--s4)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s1);margin-top:var(--s3)}
 .chip{
   font-family:'Roboto Mono',monospace;font-size:1.05cqw;font-weight:500;
   padding:.42cqw 1cqw;border-radius:.7cqw;background:var(--lavender);color:var(--purple);
@@ -142,13 +150,13 @@ strong{font-weight:700;color:var(--ink)}
 .bio-meta{font-size:1.15cqw;letter-spacing:var(--tr-small);color:#8B84A0;margin-top:var(--s2)}
 .bio-panel{
   background:linear-gradient(150deg,var(--deep) 0%,#4E0E62 60%,var(--navy) 100%);
-  border-radius:1.6cqw;padding:var(--s4);position:relative;overflow:hidden;
+  border-radius:1.6cqw;padding:var(--s3) var(--s4);position:relative;overflow:hidden;
 }
 .bio-panel .lab{
   font-family:'Roboto Mono',monospace;font-size:.9cqw;font-weight:500;letter-spacing:.1em;
   text-transform:uppercase;color:#FF8FC0;margin-bottom:var(--s1h);
 }
-.bio-panel p{font-size:1.42cqw;line-height:1.5;letter-spacing:var(--tr-body);color:#EDE4F3}
+.bio-panel p{font-size:1.32cqw;line-height:1.5;letter-spacing:var(--tr-body);color:#EDE4F3}
 .bio-panel p b{color:#fff;font-weight:700}
 .bio-panel .sq{position:absolute;border-radius:24%;pointer-events:none}
 
@@ -502,6 +510,8 @@ td.k{color:var(--ink);font-weight:500}
     <div class="eyebrow">Quem está falando</div>
   </div>
   <div class="bio-grid">
+    <div class="bio-photo"><img alt="Bruno Prata" src="__PHOTO__"></div>
+    <div class="bio-right">
     <div>
       <div class="bio-name">Bruno Prata</div>
       <div class="bio-role">Especialista em Dados no <strong style="font-weight:700;color:var(--ink)">Nubank</strong></div>
@@ -515,9 +525,10 @@ td.k{color:var(--ink);font-weight:500}
     </div>
     <div class="bio-panel">
       <div class="sq" style="width:12cqw;height:12cqw;background:rgba(255,255,255,.07);top:-3cqw;right:-3.5cqw"></div>
-      <div class="sq" style="width:5cqw;height:5cqw;background:rgba(232,0,112,.6);bottom:-1.5cqw;left:-1.5cqw"></div>
+      <div class="sq" style="width:4.5cqw;height:4.5cqw;background:rgba(232,0,112,.55);bottom:-2cqw;right:-2cqw"></div>
       <div class="lab">O que eu faço</div>
       <p>Os últimos anos foram automatizando processo de decisão: entender como ele acontece hoje e devolver a parte repetitiva pra máquina &mdash; <b>script quando dá, IA quando é linguagem, pessoa quando o erro custa caro</b>.</p>
+    </div>
     </div>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">Abertura</span></div>
