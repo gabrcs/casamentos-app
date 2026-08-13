@@ -1,0 +1,23 @@
+Descrição do processo (como um analista contaria):
+
+"Todo mês a gente fecha a conciliação dos parceiros. Chega um arquivo de cada
+parceiro por e-mail, uns 40 arquivos, cada um num formato meio diferente — alguns
+mandam CSV, outros mandam Excel com umas linhas de cabeçalho antes da tabela.
+
+Aí eu baixo tudo e jogo numa pasta. Abro um por um, tiro as linhas de lixo e
+padronizo as colunas, porque cada um chama as coisas de um jeito: "valor",
+"vlr_total", "Valor Bruto". Depois eu junto tudo numa planilha só.
+
+Com a planilha pronta eu comparo com o que tem no nosso sistema. A maioria bate.
+Quando não bate, eu olho a diferença: se for centavo é arredondamento, deixo passar.
+Se for mais que isso eu abro o extrato e tento entender.
+
+Aí depende. Tem caso que é claramente erro do parceiro, aí eu escrevo um e-mail
+pra ele explicando a divergência. Tem caso que eu não sei explicar e mando pro
+meu coordenador decidir se a gente aceita ou contesta — isso quando é valor alto,
+porque contestar depois é briga.
+
+No fim eu marco o mês como fechado no sistema e mando o resumo pra contabilidade.
+
+Se eu errar alguma coisa aqui, sinceramente a gente só descobre no fechamento
+trimestral, quando a auditoria pega."

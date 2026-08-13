@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conciliação mensal de parceiros</title>
+<style>
+:root{
+  --bg:#0F1117; --panel:#171A23; --panel-2:#1E222E; --line:#2A2F3D;
+  --ink:#E8E9EF; --ink-soft:#9BA1B4; --ink-dim:#6B7186;
+  --auto:#5B9BE8; --auto-bg:rgba(91,155,232,.14); --auto-dim:rgba(91,155,232,.5);
+  --ia:#FF5CA8; --ia-bg:rgba(255,92,168,.14); --ia-dim:rgba(255,92,168,.5);
+  --hum:#B77BE0; --hum-bg:rgba(183,123,224,.14); --hum-dim:rgba(183,123,224,.5);
+  --wait:#E8A33D; --wait-bg:rgba(232,163,61,.14); --wait-dim:rgba(232,163,61,.5);
+  --und:#7D8397; --und-bg:rgba(125,131,151,.14); --und-dim:rgba(125,131,151,.5);
+  --term:#3A3F52; --term-bg:#232838;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font:15px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+.wrap{max-width:1440px;margin:0 auto;padding:40px 32px 72px}
+header{margin-bottom:32px}
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-dim);margin-bottom:10px;
+}
+h1{font-size:32px;font-weight:700;line-height:1.15;letter-spacing:-.02em}
+.sub{color:var(--ink-soft);margin-top:8px;max-width:70ch}
+
+/* placar */
+.placar{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.pc{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 18px;min-width:132px;
+}
+.pc .n{font-size:26px;font-weight:700;line-height:1}
+.pc .l{font-size:12px;color:var(--ink-soft);margin-top:6px}
+.pc.auto .n{color:var(--auto)} .pc.ia .n{color:var(--ia)}
+.pc.hum .n{color:var(--hum)} .pc.wait .n{color:var(--wait)} .pc.und .n{color:var(--und)}
+
+/* flows */
+.flows{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:28px 0 16px}
+.flows .lab{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-right:6px}
+.fbtn{
+  background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  color:var(--ink-soft);padding:7px 15px;font-size:13px;cursor:pointer;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.fbtn:hover{border-color:#3B4256;color:var(--ink)}
+.fbtn.on{background:#2A3350;border-color:#4A6BC0;color:#fff}
+
+/* layout principal */
+.main{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media (max-width:1080px){.main{grid-template-columns:1fr}}
+.canvas{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:24px;overflow:auto;
+}
+svg{display:block;width:100%;height:auto;margin:0 auto}
+.nd{cursor:pointer}
+.nd .box{stroke-width:1.5;transition:opacity .18s,stroke-width .18s}
+.nd .lbl{font-size:14px;font-weight:500;fill:var(--ink);text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.nd .tag{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-anchor:middle;pointer-events:none}
+.nd:hover .box{stroke-width:2.5}
+.nd.sel .box{stroke-width:3}
+.nd.dim{opacity:.22}
+.edge{fill:none;stroke:#454B60;stroke-width:1.8}
+.edge.dim{opacity:.18}
+.edge.hot{stroke:#7FA9F0;stroke-width:2.6}
+.etxt{font-size:11.5px;font-weight:600;fill:var(--ink-dim)}
+.etxt.dim{opacity:.2}
+
+/* painel lateral */
+.side{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h2{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:14px}
+.det .t{font-size:19px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+.chip{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:4px 10px;border-radius:6px;margin-top:10px;
+}
+.chip.automacao{background:var(--auto-bg);color:var(--auto)}
+.chip.ia{background:var(--ia-bg);color:var(--ia)}
+.chip.humano{background:var(--hum-bg);color:var(--hum)}
+.chip.ainda_nao{background:var(--wait-bg);color:var(--wait)}
+.chip.indefinido{background:var(--und-bg);color:var(--und)}
+.det dl{margin-top:16px;display:flex;flex-direction:column;gap:14px}
+.det dt{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
+.det dd{font-size:14px;line-height:1.5;color:var(--ink-soft)}
+.det dd code{background:var(--panel-2);padding:2px 6px;border-radius:4px;font-size:12.5px;color:var(--ink)}
+.empty{color:var(--ink-dim);font-size:14px;line-height:1.55}
+
+.legend{display:flex;flex-direction:column;gap:9px}
+.lg{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-soft)}
+.lg .sw{width:13px;height:13px;border-radius:4px;border:1.5px solid;flex:none;margin-top:3px}
+.lg .sw.automacao{background:var(--auto-bg);border-color:var(--auto)}
+.lg .sw.ia{background:var(--ia-bg);border-color:var(--ia)}
+.lg .sw.humano{background:var(--hum-bg);border-color:var(--hum)}
+.lg .sw.ainda_nao{background:var(--wait-bg);border-color:var(--wait)}
+.lg .sw.indefinido{background:var(--und-bg);border-color:var(--und)}
+.lg b{color:var(--ink);font-weight:600}
+
+.perg{margin-top:28px}
+.perg ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.perg li{
+  background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--wait);
+  border-radius:10px;padding:13px 16px;font-size:14px;color:var(--ink-soft);
+}
+.foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Mapa do processo</div>
+    <h1 id="titulo"></h1>
+    <div class="sub" id="resumo"></div>
+    <div class="placar" id="placar"></div>
+  </header>
+
+  <div class="flows" id="flows"></div>
+
+  <div class="main">
+    <div class="canvas"><svg id="svg"></svg></div>
+    <aside class="side">
+      <div class="card det" id="det"></div>
+      <div class="card">
+        <h2>Como ler</h2>
+        <div class="legend">
+          <div class="lg"><span class="sw automacao"></span><span><b>Automação tradicional</b> — regra fixa, entrada estruturada. Python, SQL, API, regex.</span></div>
+          <div class="lg"><span class="sw ia"></span><span><b>IA</b> — entrada em linguagem, regra ambígua, verificar custa menos que fazer.</span></div>
+          <div class="lg"><span class="sw humano"></span><span><b>Humano</b> — o erro é caro e irreversível, ou a regra ainda não existe.</span></div>
+          <div class="lg"><span class="sw ainda_nao"></span><span><b>Ainda não automatize</b> — não há como detectar a falha. Torne verificável primeiro.</span></div>
+          <div class="lg"><span class="sw indefinido"></span><span><b>Falta informação</b> — a descrição não diz o suficiente para classificar.</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="perg" id="perg"></div>
+  <div class="foot">Gerado pela skill <code class="mono">mapear-processo</code>. Classificação e regras vêm da descrição fornecida — confira antes de usar como decisão.</div>
+</div>
+
+<script>
+const DATA = {"processo": "Conciliação mensal de parceiros", "resumo": "Fechamento mensal: recebe arquivos de ~40 parceiros por e-mail, padroniza, compara com o sistema, trata as divergências e fecha o mês para a contabilidade.", "nodes": [{"id": "n1", "tipo": "inicio", "label": "Arquivos chegam por e-mail"}, {"id": "n2", "tipo": "acao", "label": "Baixar anexos para a pasta", "classe": "automacao", "porque": "Mover anexo de e-mail para uma pasta é uma regra fixa com entrada e saída sempre iguais. Não há julgamento nenhum aqui.", "precisa": "Acesso à caixa por IMAP ou API, e uma convenção de nome de arquivo", "frequencia": "~40 por mês", "custo_erro": "baixo — arquivo faltando é percebido na etapa seguinte"}, {"id": "n3", "tipo": "acao", "label": "Limpar linhas de cabeçalho", "classe": "automacao", "porque": "Cada parceiro sempre manda no mesmo formato. São 40 regras fixas, uma por parceiro, não uma regra ambígua. Escrever 40 parsers é chato, mas é determinístico e testável.", "precisa": "Um parser por parceiro, versionado, com um teste por formato", "frequencia": "~40 por mês", "custo_erro": "baixo — quebra alto e visível"}, {"id": "n4", "tipo": "acao", "label": "Padronizar nomes de coluna", "classe": "ia", "porque": "Aqui a entrada é linguagem: 'valor', 'vlr_total', 'Valor Bruto' são o mesmo campo escrito de formas que ninguém enumerou. Verificar o mapeamento proposto é muito mais barato que fazê-lo na mão.", "precisa": "Saída com schema fixo (lista de campos permitidos), limiar de confiança, e um de-para versionado que a IA só complementa — o que já foi resolvido uma vez vira regra fixa", "frequencia": "~40 por mês", "custo_erro": "médio — coluna trocada contamina toda a conciliação"}, {"id": "n5", "tipo": "acao", "label": "Consolidar numa planilha", "classe": "automacao", "porque": "Concatenação de tabelas já padronizadas. É a definição de trabalho para script.", "precisa": "Nada além do passo anterior", "frequencia": "1 por mês", "custo_erro": "baixo"}, {"id": "n6", "tipo": "acao", "label": "Comparar com o sistema", "classe": "automacao", "porque": "Comparação de valores entre duas bases pela chave do parceiro. Regra fixa.", "precisa": "Consulta ao sistema por API ou banco", "frequencia": "1 por mês", "custo_erro": "alto se a comparação estiver errada, mas é testável com casos conhecidos"}, {"id": "n7", "tipo": "decisao", "label": "A diferença é maior que arredondamento?", "regra": "|diferença| > R$ 0,05", "classe": "automacao", "porque": "Comparação numérica contra um limite. Parece decisão de análise e é um if.", "pergunta": "O limite de centavos é fixo ou proporcional ao valor da linha?"}, {"id": "n8", "tipo": "acao", "label": "Investigar a divergência no extrato", "classe": "indefinido", "porque": "A descrição diz 'tento entender', sem dizer o que é olhado nem em que ordem. Pode ser uma sequência de checagens fixas (automação) ou leitura de texto livre do extrato (IA) — são caminhos muito diferentes.", "pergunta": "Quando você abre o extrato, o que você olha primeiro? Dá para listar as três causas mais comuns?", "frequencia": "só as linhas que não batem", "custo_erro": "alto"}, {"id": "n9", "tipo": "decisao", "label": "Dá para explicar a causa?", "regra": "sem regra escrita — hoje é julgamento do analista", "classe": "indefinido", "porque": "É o losango central do processo e ninguém escreveu a regra dele. Sem isso não dá para dizer se a etapa seguinte é automatizável.", "pergunta": "O que faz você concluir que é erro do parceiro em vez de mandar para o coordenador?"}, {"id": "n10", "tipo": "acao", "label": "Escrever e-mail ao parceiro", "classe": "ia", "porque": "Texto que varia pouco entre casos e é conferido antes de sair. A pessoa continua lendo antes de enviar, então o erro é barato.", "precisa": "Modelo de e-mail, os dados da divergência estruturados, e o envio só depois da revisão", "frequencia": "algumas por mês", "custo_erro": "médio — vai para fora da empresa, mas é revisado"}, {"id": "n11", "tipo": "acao", "label": "Coordenador decide aceitar ou contestar", "classe": "humano", "porque": "Valor alto e caminho sem volta: contestar depois vira briga com o parceiro. É exatamente o tipo de decisão que se mantém humana de propósito.", "precisa": "A IA pode preparar o dossiê da divergência; a decisão continua sendo do coordenador", "frequencia": "poucas por mês", "custo_erro": "alto e irreversível"}, {"id": "n12", "tipo": "acao", "label": "Marcar mês como fechado", "classe": "ainda_nao", "porque": "Tecnicamente é uma chamada de API trivial. Mas o processo inteiro só descobre um erro no fechamento trimestral, pela auditoria — automatizar o fechamento transforma um erro visível em um erro silencioso por três meses.", "precisa": "Uma conferência antes do fechamento: totais por parceiro comparados com o mês anterior, com alerta quando a variação sai da faixa", "frequencia": "1 por mês", "custo_erro": "alto, e hoje só aparece no trimestre"}, {"id": "n13", "tipo": "acao", "label": "Enviar resumo à contabilidade", "classe": "automacao", "porque": "Relatório com formato fixo a partir de dados já consolidados.", "precisa": "Um template de relatório e o disparo por e-mail", "frequencia": "1 por mês", "custo_erro": "baixo"}, {"id": "n14", "tipo": "fim", "label": "Mês fechado"}], "edges": [{"from": "n1", "to": "n2"}, {"from": "n2", "to": "n3"}, {"from": "n3", "to": "n4"}, {"from": "n4", "to": "n5"}, {"from": "n5", "to": "n6"}, {"from": "n6", "to": "n7"}, {"from": "n7", "to": "n8", "label": "sim"}, {"from": "n7", "to": "n12", "label": "não"}, {"from": "n8", "to": "n9"}, {"from": "n9", "to": "n10", "label": "sim"}, {"from": "n9", "to": "n11", "label": "não"}, {"from": "n10", "to": "n12"}, {"from": "n11", "to": "n12"}, {"from": "n12", "to": "n13"}, {"from": "n13", "to": "n14"}], "flows": [{"nome": "Bateu de primeira", "steps": ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n12", "n13", "n14"]}, {"nome": "Divergência explicada", "steps": ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n12", "n13", "n14"]}, {"nome": "Foi para o coordenador", "steps": ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n11", "n12", "n13", "n14"]}], "placar": {"automacao": 7, "ia": 2, "humano": 1, "ainda_nao": 1, "indefinido": 2}, "perguntas_abertas": ["Quando você abre o extrato para investigar, o que olha primeiro? Dá para listar as três causas mais comuns de divergência?", "O que faz você concluir que é erro do parceiro, em vez de mandar para o coordenador?", "O limite de centavos para ignorar diferença é fixo (R$ 0,05) ou proporcional ao valor?", "Existe alguma conferência entre marcar o mês como fechado e a auditoria trimestral? Se não, essa é a primeira coisa a criar."]};
+
+const CLS = ["automacao","ia","humano","ainda_nao","indefinido"];
+const NOME = {automacao:"Automação",ia:"IA",humano:"Humano",ainda_nao:"Ainda não",indefinido:"Falta info"};
+const COR = {
+  automacao:{s:"#5B9BE8",f:"rgba(91,155,232,.14)"},
+  ia:{s:"#FF5CA8",f:"rgba(255,92,168,.14)"},
+  humano:{s:"#B77BE0",f:"rgba(183,123,224,.14)"},
+  ainda_nao:{s:"#E8A33D",f:"rgba(232,163,61,.14)"},
+  indefinido:{s:"#7D8397",f:"rgba(125,131,151,.14)"},
+  terminal:{s:"#3A3F52",f:"#232838"}
+};
+
+document.getElementById("titulo").textContent = DATA.processo || "Processo";
+document.getElementById("resumo").textContent = DATA.resumo || "";
+
+/* ---------- placar ---------- */
+{
+  const p = DATA.placar || {};
+  const el = document.getElementById("placar");
+  CLS.forEach(c => {
+    const n = p[c] || 0;
+    if (!n) return;
+    const k = c === "ainda_nao" ? "wait" : c === "indefinido" ? "und"
+            : c === "automacao" ? "auto" : c === "humano" ? "hum" : "ia";
+    el.insertAdjacentHTML("beforeend",
+      `<div class="pc ${k}"><div class="n">${n}</div><div class="l">${NOME[c]}</div></div>`);
+  });
+}
+
+/* ---------- layout em camadas ---------- */
+const N = DATA.nodes, E = DATA.edges || [];
+const byId = Object.fromEntries(N.map(n => [n.id, n]));
+const out = {}, inc = {};
+N.forEach(n => { out[n.id] = []; inc[n.id] = []; });
+E.forEach(e => { if (out[e.from] && inc[e.to]) { out[e.from].push(e.to); inc[e.to].push(e.from); } });
+
+// rank = maior caminho a partir de uma raiz, para o fluxo descer sempre
+const rank = {};
+(function rankAll(){
+  const roots = N.filter(n => inc[n.id].length === 0).map(n => n.id);
+  const seeds = roots.length ? roots : [N[0].id];
+  seeds.forEach(id => rank[id] = 0);
+  let changed = true, guard = 0;
+  while (changed && guard++ < 500) {
+    changed = false;
+    E.forEach(e => {
+      if (rank[e.from] === undefined) return;
+      const want = rank[e.from] + 1;
+      if (rank[e.to] === undefined || rank[e.to] < want) { rank[e.to] = want; changed = true; }
+    });
+  }
+  N.forEach(n => { if (rank[n.id] === undefined) rank[n.id] = 0; });
+})();
+
+const rows = {};
+N.forEach(n => (rows[rank[n.id]] = rows[rank[n.id]] || []).push(n));
+
+const W = 236, H = 62, DW = 250, DH = 92, GAPX = 44, GAPY = 74, PAD = 24;
+const pos = {};
+let maxW = 0;
+Object.keys(rows).map(Number).sort((a,b)=>a-b).forEach(r => {
+  const line = rows[r];
+  const widths = line.map(n => n.tipo === "decisao" ? DW : W);
+  const total = widths.reduce((a,b)=>a+b,0) + GAPX * (line.length - 1);
+  maxW = Math.max(maxW, total);
+  let x = 0;
+  line.forEach((n, i) => {
+    const w = widths[i], h = n.tipo === "decisao" ? DH : H;
+    pos[n.id] = { x, y: 0, w, h, r };
+    x += w + GAPX;
+  });
+  rows[r]._total = total;
+});
+// centraliza cada linha e calcula o y acumulado
+let y = PAD;
+Object.keys(rows).map(Number).sort((a,b)=>a-b).forEach(r => {
+  const line = rows[r];
+  const off = (maxW - rows[r]._total) / 2;
+  let hmax = 0;
+  line.forEach(n => { pos[n.id].x += off + PAD; pos[n.id].y = y; hmax = Math.max(hmax, pos[n.id].h); });
+  line.forEach(n => { pos[n.id].y = y + (hmax - pos[n.id].h) / 2; });
+  y += hmax + GAPY;
+});
+const GUT = maxW + PAD * 2 + 16;          // calha para arestas que pulam camadas
+const SVGW = GUT + 16, SVGH = y - GAPY + PAD;
+
+/* ---------- desenho ---------- */
+const svg = document.getElementById("svg");
+svg.setAttribute("viewBox", `0 0 ${SVGW} ${SVGH}`);
+svg.style.maxWidth = SVGW + "px";
+svg.innerHTML = `<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+  markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+  <path d="M0 0 L10 5 L0 10 z" fill="#454B60"/></marker>
+  <marker id="ahh" viewBox="0 0 10 10" refX="9" refY="5"
+  markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+  <path d="M0 0 L10 5 L0 10 z" fill="#7FA9F0"/></marker></defs>`;
+
+const gE = document.createElementNS("http://www.w3.org/2000/svg","g");
+const gN = document.createElementNS("http://www.w3.org/2000/svg","g");
+svg.append(gE, gN);
+
+const edgeEls = [], usados = {};
+E.forEach(e => {
+  const a = pos[e.from], b = pos[e.to];
+  if (!a || !b) return;
+  const ax = a.x + a.w / 2, ay = a.y + a.h, bx = b.x + b.w / 2, by = b.y;
+  let d, lx, ly, anchor = "middle";
+  // o rótulo desce abaixo da etiqueta de classificação, e as duas saídas de um
+  // mesmo losango ficam em lados opostos da linha para não se sobreporem
+  const baseY = ay + (a.tipo === "decisao" ? 50 : 40);
+  if (b.r - a.r > 1) {
+    // pula camadas: desvia pela calha, senão a linha atravessa os nós do meio
+    d = `M${ax} ${ay} V${ay + 58} H${GUT} V${by - 22} H${bx} V${by - 8}`;
+    lx = ax - 12; ly = baseY; anchor = "end";
+  } else if (Math.abs(ax - bx) < 2) {
+    d = `M${ax} ${ay} V${by - 8}`;
+    lx = ax + 12; ly = baseY; anchor = "start";
+  } else {
+    const my = Math.max(ay + 18, by - 26);
+    d = `M${ax} ${ay} V${my} H${bx} V${by - 8}`;
+    lx = (ax + bx) / 2; ly = my - 9;   // em cima do trecho horizontal
+  }
+  const ordem = (usados[e.from] = (usados[e.from] || 0) + 1);
+  if (ordem > 2) ly += 17;
+  const p = document.createElementNS("http://www.w3.org/2000/svg","path");
+  p.setAttribute("class","edge"); p.setAttribute("d", d); p.setAttribute("marker-end","url(#ah)");
+  gE.appendChild(p);
+  let t = null;
+  if (e.label) {
+    t = document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("class","etxt");
+    t.setAttribute("x", lx);
+    t.setAttribute("y", ly);
+    t.setAttribute("text-anchor", anchor);
+    t.textContent = e.label;
+    gE.appendChild(t);
+  }
+  edgeEls.push({ e, p, t });
+});
+
+const nodeEls = {};
+N.forEach(n => {
+  const p = pos[n.id], term = n.tipo === "inicio" || n.tipo === "fim";
+  const c = COR[term ? "terminal" : (n.classe || "indefinido")];
+  const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+  g.setAttribute("class","nd");
+  let shape;
+  if (n.tipo === "decisao") {
+    shape = document.createElementNS("http://www.w3.org/2000/svg","path");
+    shape.setAttribute("d",
+      `M${p.x + p.w/2} ${p.y} L${p.x + p.w} ${p.y + p.h/2} L${p.x + p.w/2} ${p.y + p.h} L${p.x} ${p.y + p.h/2} Z`);
+  } else {
+    shape = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    shape.setAttribute("x", p.x); shape.setAttribute("y", p.y);
+    shape.setAttribute("width", p.w); shape.setAttribute("height", p.h);
+    shape.setAttribute("rx", term ? p.h / 2 : 10);
+  }
+  shape.setAttribute("class","box");
+  shape.setAttribute("fill", c.f); shape.setAttribute("stroke", c.s);
+  g.appendChild(shape);
+
+  const words = String(n.label).split(" ");
+  const lines = [];
+  let cur = "";
+  const max = n.tipo === "decisao" ? 18 : 24;
+  words.forEach(w => {
+    if ((cur + " " + w).trim().length > max) { if (cur) lines.push(cur); cur = w; }
+    else cur = (cur + " " + w).trim();
+  });
+  if (cur) lines.push(cur);
+  const cy = p.y + p.h / 2 - (lines.length - 1) * 9;
+  lines.forEach((ln, i) => {
+    const t = document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("class","lbl");
+    t.setAttribute("x", p.x + p.w / 2);
+    t.setAttribute("y", cy + i * 18);
+    t.textContent = ln;
+    g.appendChild(t);
+  });
+
+  if (!term && n.classe) {
+    const t = document.createElementNS("http://www.w3.org/2000/svg","text");
+    t.setAttribute("class","tag");
+    t.setAttribute("x", p.x + p.w / 2);
+    t.setAttribute("y", p.y + p.h + (n.tipo === "decisao" ? 24 : 15));
+    t.setAttribute("fill", c.s);
+    t.textContent = (NOME[n.classe] || n.classe).toUpperCase();
+    g.appendChild(t);
+  }
+
+  g.addEventListener("click", () => selecionar(n.id));
+  gN.appendChild(g);
+  nodeEls[n.id] = g;
+});
+
+/* ---------- painel de detalhe ---------- */
+const det = document.getElementById("det");
+function vazio() {
+  det.innerHTML = `<h2>Detalhe da etapa</h2>
+    <div class="empty">Clique em qualquer caixa do fluxo para ver por que ela foi classificada assim, e o que ela precisa para sair do papel.</div>`;
+}
+function esc(s){ return String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function selecionar(id) {
+  Object.values(nodeEls).forEach(g => g.classList.remove("sel"));
+  nodeEls[id].classList.add("sel");
+  const n = byId[id];
+  const linhas = [];
+  if (n.regra) linhas.push(["A regra, escrita", `<code>${esc(n.regra)}</code>`]);
+  if (n.porque) linhas.push(["Por que essa classificação", esc(n.porque)]);
+  if (n.precisa) linhas.push(["O que precisa para funcionar", esc(n.precisa)]);
+  if (n.frequencia) linhas.push(["Frequência", esc(n.frequencia)]);
+  if (n.custo_erro) linhas.push(["Custo do erro", esc(n.custo_erro)]);
+  if (n.pergunta) linhas.push(["Falta responder", esc(n.pergunta)]);
+  det.innerHTML = `<h2>Detalhe da etapa</h2>
+    <div class="t">${esc(n.label)}</div>
+    ${n.classe ? `<span class="chip ${n.classe}">${NOME[n.classe] || n.classe}</span>` : ""}
+    ${linhas.length ? `<dl>${linhas.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>` : ""}`;
+}
+vazio();
+
+/* ---------- caminhos ---------- */
+const flows = DATA.flows || [];
+if (flows.length) {
+  const el = document.getElementById("flows");
+  el.insertAdjacentHTML("beforeend", `<span class="lab">Caminhos</span>`);
+  const btns = [];
+  const mk = (nome, steps) => {
+    const b = document.createElement("button");
+    b.className = "fbtn"; b.textContent = nome;
+    b.addEventListener("click", () => {
+      const ja = b.classList.contains("on");
+      btns.forEach(x => x.classList.remove("on"));
+      if (ja) return realce(null);
+      b.classList.add("on"); realce(steps);
+    });
+    btns.push(b); el.appendChild(b);
+  };
+  flows.forEach(f => mk(f.nome, f.steps));
+}
+function realce(steps) {
+  const on = steps ? new Set(steps) : null;
+  Object.entries(nodeEls).forEach(([id, g]) => g.classList.toggle("dim", !!on && !on.has(id)));
+  edgeEls.forEach(({ e, p, t }) => {
+    const dentro = on && on.has(e.from) && on.has(e.to)
+      && Math.abs(steps.indexOf(e.to) - steps.indexOf(e.from)) === 1;
+    p.classList.toggle("dim", !!on && !dentro);
+    p.classList.toggle("hot", !!dentro);
+    p.setAttribute("marker-end", dentro ? "url(#ahh)" : "url(#ah)");
+    if (t) t.classList.toggle("dim", !!on && !dentro);
+  });
+}
+
+/* ---------- perguntas abertas ---------- */
+{
+  const qs = DATA.perguntas_abertas || [];
+  if (qs.length) {
+    document.getElementById("perg").innerHTML =
+      `<div class="eyebrow">Falta responder antes de automatizar</div>
+       <ul>${qs.map(q => `<li>${esc(q)}</li>`).join("")}</ul>`;
+  }
+}
+</script>
+</body>
+</html>

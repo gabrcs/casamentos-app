@@ -1,0 +1,120 @@
+{
+  "processo": "Conciliação mensal de parceiros",
+  "resumo": "Fechamento mensal: recebe arquivos de ~40 parceiros por e-mail, padroniza, compara com o sistema, trata as divergências e fecha o mês para a contabilidade.",
+  "nodes": [
+    { "id": "n1", "tipo": "inicio", "label": "Arquivos chegam por e-mail" },
+
+    { "id": "n2", "tipo": "acao", "label": "Baixar anexos para a pasta",
+      "classe": "automacao",
+      "porque": "Mover anexo de e-mail para uma pasta é uma regra fixa com entrada e saída sempre iguais. Não há julgamento nenhum aqui.",
+      "precisa": "Acesso à caixa por IMAP ou API, e uma convenção de nome de arquivo",
+      "frequencia": "~40 por mês",
+      "custo_erro": "baixo — arquivo faltando é percebido na etapa seguinte" },
+
+    { "id": "n3", "tipo": "acao", "label": "Limpar linhas de cabeçalho",
+      "classe": "automacao",
+      "porque": "Cada parceiro sempre manda no mesmo formato. São 40 regras fixas, uma por parceiro, não uma regra ambígua. Escrever 40 parsers é chato, mas é determinístico e testável.",
+      "precisa": "Um parser por parceiro, versionado, com um teste por formato",
+      "frequencia": "~40 por mês",
+      "custo_erro": "baixo — quebra alto e visível" },
+
+    { "id": "n4", "tipo": "acao", "label": "Padronizar nomes de coluna",
+      "classe": "ia",
+      "porque": "Aqui a entrada é linguagem: 'valor', 'vlr_total', 'Valor Bruto' são o mesmo campo escrito de formas que ninguém enumerou. Verificar o mapeamento proposto é muito mais barato que fazê-lo na mão.",
+      "precisa": "Saída com schema fixo (lista de campos permitidos), limiar de confiança, e um de-para versionado que a IA só complementa — o que já foi resolvido uma vez vira regra fixa",
+      "frequencia": "~40 por mês",
+      "custo_erro": "médio — coluna trocada contamina toda a conciliação" },
+
+    { "id": "n5", "tipo": "acao", "label": "Consolidar numa planilha",
+      "classe": "automacao",
+      "porque": "Concatenação de tabelas já padronizadas. É a definição de trabalho para script.",
+      "precisa": "Nada além do passo anterior",
+      "frequencia": "1 por mês",
+      "custo_erro": "baixo" },
+
+    { "id": "n6", "tipo": "acao", "label": "Comparar com o sistema",
+      "classe": "automacao",
+      "porque": "Comparação de valores entre duas bases pela chave do parceiro. Regra fixa.",
+      "precisa": "Consulta ao sistema por API ou banco",
+      "frequencia": "1 por mês",
+      "custo_erro": "alto se a comparação estiver errada, mas é testável com casos conhecidos" },
+
+    { "id": "n7", "tipo": "decisao", "label": "A diferença é maior que arredondamento?",
+      "regra": "|diferença| > R$ 0,05",
+      "classe": "automacao",
+      "porque": "Comparação numérica contra um limite. Parece decisão de análise e é um if.",
+      "pergunta": "O limite de centavos é fixo ou proporcional ao valor da linha?" },
+
+    { "id": "n8", "tipo": "acao", "label": "Investigar a divergência no extrato",
+      "classe": "indefinido",
+      "porque": "A descrição diz 'tento entender', sem dizer o que é olhado nem em que ordem. Pode ser uma sequência de checagens fixas (automação) ou leitura de texto livre do extrato (IA) — são caminhos muito diferentes.",
+      "pergunta": "Quando você abre o extrato, o que você olha primeiro? Dá para listar as três causas mais comuns?",
+      "frequencia": "só as linhas que não batem",
+      "custo_erro": "alto" },
+
+    { "id": "n9", "tipo": "decisao", "label": "Dá para explicar a causa?",
+      "regra": "sem regra escrita — hoje é julgamento do analista",
+      "classe": "indefinido",
+      "porque": "É o losango central do processo e ninguém escreveu a regra dele. Sem isso não dá para dizer se a etapa seguinte é automatizável.",
+      "pergunta": "O que faz você concluir que é erro do parceiro em vez de mandar para o coordenador?" },
+
+    { "id": "n10", "tipo": "acao", "label": "Escrever e-mail ao parceiro",
+      "classe": "ia",
+      "porque": "Texto que varia pouco entre casos e é conferido antes de sair. A pessoa continua lendo antes de enviar, então o erro é barato.",
+      "precisa": "Modelo de e-mail, os dados da divergência estruturados, e o envio só depois da revisão",
+      "frequencia": "algumas por mês",
+      "custo_erro": "médio — vai para fora da empresa, mas é revisado" },
+
+    { "id": "n11", "tipo": "acao", "label": "Coordenador decide aceitar ou contestar",
+      "classe": "humano",
+      "porque": "Valor alto e caminho sem volta: contestar depois vira briga com o parceiro. É exatamente o tipo de decisão que se mantém humana de propósito.",
+      "precisa": "A IA pode preparar o dossiê da divergência; a decisão continua sendo do coordenador",
+      "frequencia": "poucas por mês",
+      "custo_erro": "alto e irreversível" },
+
+    { "id": "n12", "tipo": "acao", "label": "Marcar mês como fechado",
+      "classe": "ainda_nao",
+      "porque": "Tecnicamente é uma chamada de API trivial. Mas o processo inteiro só descobre um erro no fechamento trimestral, pela auditoria — automatizar o fechamento transforma um erro visível em um erro silencioso por três meses.",
+      "precisa": "Uma conferência antes do fechamento: totais por parceiro comparados com o mês anterior, com alerta quando a variação sai da faixa",
+      "frequencia": "1 por mês",
+      "custo_erro": "alto, e hoje só aparece no trimestre" },
+
+    { "id": "n13", "tipo": "acao", "label": "Enviar resumo à contabilidade",
+      "classe": "automacao",
+      "porque": "Relatório com formato fixo a partir de dados já consolidados.",
+      "precisa": "Um template de relatório e o disparo por e-mail",
+      "frequencia": "1 por mês",
+      "custo_erro": "baixo" },
+
+    { "id": "n14", "tipo": "fim", "label": "Mês fechado" }
+  ],
+  "edges": [
+    { "from": "n1", "to": "n2" },
+    { "from": "n2", "to": "n3" },
+    { "from": "n3", "to": "n4" },
+    { "from": "n4", "to": "n5" },
+    { "from": "n5", "to": "n6" },
+    { "from": "n6", "to": "n7" },
+    { "from": "n7", "to": "n8", "label": "sim" },
+    { "from": "n7", "to": "n12", "label": "não" },
+    { "from": "n8", "to": "n9" },
+    { "from": "n9", "to": "n10", "label": "sim" },
+    { "from": "n9", "to": "n11", "label": "não" },
+    { "from": "n10", "to": "n12" },
+    { "from": "n11", "to": "n12" },
+    { "from": "n12", "to": "n13" },
+    { "from": "n13", "to": "n14" }
+  ],
+  "flows": [
+    { "nome": "Bateu de primeira", "steps": ["n1","n2","n3","n4","n5","n6","n7","n12","n13","n14"] },
+    { "nome": "Divergência explicada", "steps": ["n1","n2","n3","n4","n5","n6","n7","n8","n9","n10","n12","n13","n14"] },
+    { "nome": "Foi para o coordenador", "steps": ["n1","n2","n3","n4","n5","n6","n7","n8","n9","n11","n12","n13","n14"] }
+  ],
+  "placar": { "automacao": 7, "ia": 2, "humano": 1, "ainda_nao": 1, "indefinido": 2 },
+  "perguntas_abertas": [
+    "Quando você abre o extrato para investigar, o que olha primeiro? Dá para listar as três causas mais comuns de divergência?",
+    "O que faz você concluir que é erro do parceiro, em vez de mandar para o coordenador?",
+    "O limite de centavos para ignorar diferença é fixo (R$ 0,05) ou proporcional ao valor?",
+    "Existe alguma conferência entre marcar o mês como fechado e a auditoria trimestral? Se não, essa é a primeira coisa a criar."
+  ]
+}
