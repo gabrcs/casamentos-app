@@ -8,11 +8,15 @@
 :root{
   --bg:#0F1117; --panel:#171A23; --panel-2:#1E222E; --line:#2A2F3D;
   --ink:#E8E9EF; --ink-soft:#9BA1B4; --ink-dim:#6B7186;
-  --auto:#5B9BE8; --auto-bg:rgba(91,155,232,.14); --auto-dim:rgba(91,155,232,.5);
-  --ia:#FF5CA8; --ia-bg:rgba(255,92,168,.14); --ia-dim:rgba(255,92,168,.5);
-  --hum:#B77BE0; --hum-bg:rgba(183,123,224,.14); --hum-dim:rgba(183,123,224,.5);
-  --wait:#E8A33D; --wait-bg:rgba(232,163,61,.14); --wait-dim:rgba(232,163,61,.5);
-  --und:#7D8397; --und-bg:rgba(125,131,151,.14); --und-dim:rgba(125,131,151,.5);
+  /* Classificação escolhida por medição sob protanopia e deuteranopia.
+     Cor sozinha não separa três categorias em tinta clara, então a IA leva
+     hachura e as duas classes pendentes levam borda tracejada/pontilhada:
+     quem não distingue vermelho lê o padrão, não o tom. */
+  --auto:#5B9BE8; --auto-bg:rgba(91,155,232,.26);
+  --ia:#FF5CA8;   --ia-bg:repeating-linear-gradient(45deg,rgba(255,92,168,.08) 0 3px,rgba(255,92,168,.34) 3px 6px);
+  --hum:#E0952F;  --hum-bg:rgba(224,149,47,.24);
+  --wait:#9BA1B4; --wait-bg:rgba(155,161,180,.16);
+  --und:#6B7186;  --und-bg:rgba(107,113,134,.14);
   --term:#3A3F52; --term-bg:#232838;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -87,8 +91,8 @@ svg{display:block;width:100%;height:auto;margin:0 auto}
 .chip.automacao{background:var(--auto-bg);color:var(--auto)}
 .chip.ia{background:var(--ia-bg);color:var(--ia)}
 .chip.humano{background:var(--hum-bg);color:var(--hum)}
-.chip.ainda_nao{background:var(--wait-bg);color:var(--wait)}
-.chip.indefinido{background:var(--und-bg);color:var(--und)}
+.chip.ainda_nao{background:var(--wait-bg);color:#C7CDDD;border:1px dashed var(--wait)}
+.chip.indefinido{background:var(--und-bg);color:#A9AEC0;border:1px dotted var(--und)}
 .det dl{margin-top:16px;display:flex;flex-direction:column;gap:14px}
 .det dt{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
 .det dd{font-size:14px;line-height:1.5;color:var(--ink-soft)}
@@ -101,8 +105,8 @@ svg{display:block;width:100%;height:auto;margin:0 auto}
 .lg .sw.automacao{background:var(--auto-bg);border-color:var(--auto)}
 .lg .sw.ia{background:var(--ia-bg);border-color:var(--ia)}
 .lg .sw.humano{background:var(--hum-bg);border-color:var(--hum)}
-.lg .sw.ainda_nao{background:var(--wait-bg);border-color:var(--wait)}
-.lg .sw.indefinido{background:var(--und-bg);border-color:var(--und)}
+.lg .sw.ainda_nao{background:var(--wait-bg);border-color:var(--wait);border-style:dashed}
+.lg .sw.indefinido{background:var(--und-bg);border-color:var(--und);border-style:dotted}
 .lg b{color:var(--ink);font-weight:600}
 
 .perg{margin-top:28px}
@@ -133,10 +137,10 @@ svg{display:block;width:100%;height:auto;margin:0 auto}
         <h2>Como ler</h2>
         <div class="legend">
           <div class="lg"><span class="sw automacao"></span><span><b>Automação tradicional</b> — regra fixa, entrada estruturada. Python, SQL, API, regex.</span></div>
-          <div class="lg"><span class="sw ia"></span><span><b>IA</b> — entrada em linguagem, regra ambígua, verificar custa menos que fazer.</span></div>
+          <div class="lg"><span class="sw ia"></span><span><b>IA</b> (hachurada) — entrada em linguagem, regra ambígua, verificar custa menos que fazer.</span></div>
           <div class="lg"><span class="sw humano"></span><span><b>Humano</b> — o erro é caro e irreversível, ou a regra ainda não existe.</span></div>
-          <div class="lg"><span class="sw ainda_nao"></span><span><b>Ainda não automatize</b> — não há como detectar a falha. Torne verificável primeiro.</span></div>
-          <div class="lg"><span class="sw indefinido"></span><span><b>Falta informação</b> — a descrição não diz o suficiente para classificar.</span></div>
+          <div class="lg"><span class="sw ainda_nao"></span><span><b>Ainda não automatize</b> (borda tracejada) — não há como detectar a falha. Torne verificável primeiro.</span></div>
+          <div class="lg"><span class="sw indefinido"></span><span><b>Falta informação</b> (borda pontilhada) — a descrição não diz o suficiente para classificar.</span></div>
         </div>
       </div>
     </aside>
@@ -152,11 +156,11 @@ const DATA = {"processo": "Onboarding de fornecedor novo", "resumo": "Cadastro d
 const CLS = ["automacao","ia","humano","ainda_nao","indefinido"];
 const NOME = {automacao:"Automação",ia:"IA",humano:"Humano",ainda_nao:"Ainda não",indefinido:"Falta info"};
 const COR = {
-  automacao:{s:"#5B9BE8",f:"rgba(91,155,232,.14)"},
-  ia:{s:"#FF5CA8",f:"rgba(255,92,168,.14)"},
-  humano:{s:"#B77BE0",f:"rgba(183,123,224,.14)"},
-  ainda_nao:{s:"#E8A33D",f:"rgba(232,163,61,.14)"},
-  indefinido:{s:"#7D8397",f:"rgba(125,131,151,.14)"},
+  automacao:{s:"#5B9BE8",f:"rgba(91,155,232,.26)"},
+  ia:{s:"#FF5CA8",f:"url(#hachuraIA)"},
+  humano:{s:"#E0952F",f:"rgba(224,149,47,.24)"},
+  ainda_nao:{s:"#9BA1B4",f:"rgba(155,161,180,.16)",d:"7 5"},
+  indefinido:{s:"#6B7186",f:"rgba(107,113,134,.14)",d:"2 4"},
   terminal:{s:"#3A3F52",f:"#232838"}
 };
 
@@ -238,7 +242,12 @@ const SVGW = GUT + 16, SVGH = y - GAPY + PAD;
 const svg = document.getElementById("svg");
 svg.setAttribute("viewBox", `0 0 ${SVGW} ${SVGH}`);
 svg.style.maxWidth = SVGW + "px";
-svg.innerHTML = `<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
+svg.innerHTML = `<defs>
+  <pattern id="hachuraIA" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="9" height="9" fill="rgba(255,92,168,.08)"/>
+    <rect width="3.4" height="9" fill="rgba(255,92,168,.34)"/>
+  </pattern>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5"
   markerWidth="6" markerHeight="6" orient="auto-start-reverse">
   <path d="M0 0 L10 5 L0 10 z" fill="#454B60"/></marker>
   <marker id="ahh" viewBox="0 0 10 10" refX="9" refY="5"
@@ -307,6 +316,7 @@ N.forEach(n => {
   }
   shape.setAttribute("class","box");
   shape.setAttribute("fill", c.f); shape.setAttribute("stroke", c.s);
+  if (c.d) shape.setAttribute("stroke-dasharray", c.d);
   g.appendChild(shape);
 
   const words = String(n.label).split(" ");

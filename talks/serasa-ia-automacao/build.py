@@ -21,6 +21,8 @@ ASSETS = HERE / "assets"
 PHOTO_STEM = "bruno"
 PHOTO_EXTS = (".jpg", ".jpeg", ".png", ".webp")
 PREVIEW = "skill-preview.png"   # a saída da skill, mostrada no slide 13
+QR = "kit-qr.png"               # gerado por qa/make_qr.py
+QR_LINK = "kit-link.txt"
 
 LATIN = (
     "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,"
@@ -50,6 +52,14 @@ def find_photo():
             return f
     return None
 
+
+QR_PLACEHOLDER = (
+    ".kqr{display:block;border:1.5px dashed #E80070;background:#FEF6FA;"
+    "border-radius:1.2cqw;padding:1.2cqw 1.6cqw}"
+    ".qrimg{display:none}"
+    ".qrlab::after{content:' — a definir'}"
+    ".qrurl{font-style:italic;color:#A08BAA}"
+)
 
 PREVIEW_PLACEHOLDER = (
     ".kshot{border-style:dashed;border-color:#E80070;background:#FEF6FA;min-height:18cqw}"
@@ -111,6 +121,20 @@ def main():
         out = out.replace("__PREVIEW__", "")
         out = out.replace("/*PREVIEW*/", PREVIEW_PLACEHOLDER)
         print("preview: AUSENTE — rode node qa/make_preview.mjs")
+
+    qr = ASSETS / QR
+    link = (ASSETS / QR_LINK).read_text().strip() if (ASSETS / QR_LINK).exists() else ""
+    if qr.exists() and link:
+        data = base64.b64encode(qr.read_bytes()).decode()
+        out = out.replace("__QR__", f"data:image/png;base64,{data}")
+        out = out.replace("__KITLINK__", link.splitlines()[0].strip())
+        out = out.replace("/*QR*/", "")
+        print(f"qr: {link.splitlines()[0].strip()}")
+    else:
+        out = out.replace("__QR__", "")
+        out = out.replace("__KITLINK__", "o link do kit entra aqui")
+        out = out.replace("/*QR*/", QR_PLACEHOLDER)
+        print("qr: AUSENTE — escreva a URL em assets/kit-link.txt e rode qa/make_qr.py")
 
     (HERE / "deck.html").write_text(out)
     print(f"deck.html: {len(out) / 1024:.0f} KB")

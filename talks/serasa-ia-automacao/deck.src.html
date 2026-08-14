@@ -16,6 +16,12 @@
   --stage:#DDD6E6;
   --ok:#1F7A5C;
   --warn:#B4620A;
+  /* Classificação: azul / magenta / âmbar. Escolhidas por medição de
+     contraste sob protanopia e deuteranopia — o roxo antigo colidia com o
+     azul (ΔE 11,7) e ficava ilegível para quem não distingue vermelho. */
+  --hum:#B4620A;
+  --hum-bg:#FBEEDF;
+  --hum-chip:#F4DFC4;
 
   /* Espaçamento — grade de 8px sobre um palco de 1280px (1cqw = 12,8px).
      Toda distância no deck sai daqui: nenhum valor é chutado. */
@@ -272,15 +278,15 @@ strong{font-weight:700;color:var(--ink)}
 }
 .box3 p{font-size:1.1cqw;line-height:1.48;letter-spacing:var(--tr-small)}
 .box3 .say{font-size:1.08cqw;line-height:1.48;letter-spacing:var(--tr-small);color:var(--ink);font-style:italic}
-.box3.py{background:#F2F7FC;border-color:var(--navy)}
+.box3.py{background:#D6E6F8;border-color:var(--navy)}
 .box3.py .bt,.box3.py .lab{color:var(--navy)}
-.box3.py .stack span{background:#DCE8F6;color:var(--navy)}
-.box3.ia{background:#FEF4F9;border-color:var(--magenta)}
+.box3.py .stack span{background:#C6DAF4;color:var(--navy)}
+.box3.ia{background:repeating-linear-gradient(45deg,#FDEDF6 0 11px,#FADFEC 11px 22px);border-color:var(--magenta)}
 .box3.ia .bt,.box3.ia .lab{color:var(--magenta)}
 .box3.ia .stack span{background:#FBDCEC;color:var(--magenta)}
-.box3.hu{background:var(--lavender);border-color:var(--purple)}
-.box3.hu .bt,.box3.hu .lab{color:var(--purple)}
-.box3.hu .stack span{background:#E6D8EE;color:var(--purple)}
+.box3.hu{background:#F9E8CD;border-color:var(--hum)}
+.box3.hu .bt,.box3.hu .lab{color:var(--hum)}
+.box3.hu .stack span{background:#EDD1A2;color:var(--hum)}
 
 /* ---------- a ordem de perguntar (slide 08) ---------- */
 .order{
@@ -417,6 +423,18 @@ td.k{color:var(--ink);font-weight:500}
   font-size:1cqw;color:var(--ink);background:var(--lavender);
   padding:.5cqw .9cqw;border-radius:.6cqw;display:inline-block;line-height:1.4;
 }
+.kqr{display:grid;grid-template-columns:auto 1fr;gap:var(--s2);align-items:center;margin-top:var(--s1h)}
+.qrimg{
+  width:9.5cqw;height:9.5cqw;display:block;border-radius:.7cqw;
+  background:#fff;padding:.45cqw;border:1px solid var(--line);
+}
+.qrlab{
+  font-family:'Roboto Mono',monospace;font-size:.88cqw;font-weight:700;
+  letter-spacing:var(--tr-micro);text-transform:uppercase;color:var(--magenta);
+}
+.qrurl{font-size:1.05cqw;line-height:1.45;color:var(--ink-soft);word-break:break-all;margin-top:var(--s1)}
+/*QR*/
+
 .kshot{
   border-radius:1.2cqw;overflow:hidden;background:#0F1117;
   border:1px solid #2A2F3D;box-shadow:0 1cqw 3cqw rgba(22,34,78,.22);
@@ -451,12 +469,12 @@ td.k{color:var(--ink);font-weight:500}
 .fc .etxt{font-size:15px;font-weight:700;fill:#6E6684}
 .fc .tag{font-size:14px;font-weight:700;text-anchor:middle;letter-spacing:.06em}
 .fc .tag.r{text-anchor:start}
-.fc .code .box{fill:#E4EDF8;stroke:var(--navy)}
+.fc .code .box{fill:#9CC0EA;stroke:var(--navy)}
 .fc .code .tag{fill:var(--navy)}
-.fc .ia .box{fill:#FBE0EE;stroke:var(--magenta)}
+.fc .ia .box{fill:url(#hachuraIA);stroke:var(--magenta)}
 .fc .ia .tag{fill:var(--magenta)}
-.fc .hum .box{fill:#EEE3F4;stroke:var(--purple)}
-.fc .hum .tag{fill:var(--purple)}
+.fc .hum .box{fill:#EFCB8F;stroke:var(--hum)}
+.fc .hum .tag{fill:var(--hum)}
 .fc .todo .box{fill:#FEF6FA;stroke:var(--magenta);stroke-dasharray:7 5}
 .fc .todo .lbl{fill:#A08BAA;font-style:italic}
 
@@ -466,9 +484,9 @@ td.k{color:var(--ink);font-weight:500}
 .legend{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
 .legend .li{display:flex;gap:var(--s1);align-items:center;font-size:1.05cqw;letter-spacing:var(--tr-small);color:var(--ink-soft)}
 .legend .sw{width:1.05cqw;height:1.05cqw;border-radius:.25cqw;flex:none;border:1.5px solid}
-.legend .sw.code{background:#E4EDF8;border-color:var(--navy)}
-.legend .sw.ia{background:#FBE0EE;border-color:var(--magenta)}
-.legend .sw.hum{background:#EEE3F4;border-color:var(--purple)}
+.legend .sw.code{background:#9CC0EA;border-color:var(--navy)}
+.legend .sw.ia{background:repeating-linear-gradient(45deg,#FDEDF6 0 3px,#F0A9CD 3px 6px);border-color:var(--magenta)}
+.legend .sw.hum{background:#EFCB8F;border-color:var(--hum)}
 
 /* ---------- bloco de código ---------- */
 .code-blk{
@@ -899,6 +917,10 @@ td.k{color:var(--ink);font-weight:500}
     <div style="display:flex;flex-direction:column;min-height:0">
       <svg class="fc flowbox" viewBox="0 0 690 570" preserveAspectRatio="xMidYMid meet" role="img" aria-label="O mesmo fluxograma com cada etapa classificada como Python, IA ou humano">
         <defs>
+          <pattern id="hachuraIA" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="9" height="9" fill="#FDEDF6"/>
+            <rect width="3.4" height="9" fill="#F0A9CD"/>
+          </pattern>
           <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
             <path d="M0 0 L10 5 L0 10 z" fill="#8E86A0"/>
           </marker>
@@ -941,13 +963,13 @@ td.k{color:var(--ink);font-weight:500}
     <div style="display:flex;flex-direction:column;gap:var(--s1h);justify-content:center">
       <div class="card" style="padding:var(--s2) var(--s3);gap:var(--s1)">
         <h3 style="font-size:1.5cqw;color:var(--magenta)">O placar</h3>
-        <p style="font-size:1.28cqw"><strong>5 ações + 1 decisão</strong> &rarr; 3 viram <strong style="color:var(--navy)">Python</strong>, 2 viram <strong style="color:var(--magenta)">IA</strong>, 1 continua <strong style="color:var(--purple)">humana</strong>.</p>
+        <p style="font-size:1.28cqw"><strong>5 ações + 1 decisão</strong> &rarr; 3 viram <strong style="color:var(--navy)">Python</strong>, 2 viram <strong style="color:var(--magenta)">IA</strong>, 1 continua <strong style="color:var(--hum)">humana</strong>.</p>
         <p style="font-size:1.12cqw">Metade do processo foi resolvida sem IA nenhuma. Isso é bom sinal, não fracasso.</p>
       </div>
       <div class="card tint" style="padding:var(--s2) var(--s3);gap:var(--s1)">
         <h3 style="font-size:1.4cqw;color:var(--purple)">Como ler o desenho</h3>
-        <p style="font-size:1.12cqw">As duas rosas são <strong>decisão ambígua em alto volume, com erro tolerável</strong> — é ali que a IA se paga.</p>
-        <p style="font-size:1.12cqw">A lavanda são <strong>poucos julgamentos, todos irreversíveis</strong>: continua humana, e é barato que continue.</p>
+        <p style="font-size:1.12cqw">As duas caixas de <strong style="color:var(--magenta)">IA</strong> são <strong>decisão ambígua em alto volume, com erro tolerável</strong> — é ali que ela se paga.</p>
+        <p style="font-size:1.12cqw">A caixa <strong style="color:var(--hum)">humana</strong> são <strong>poucos julgamentos, todos irreversíveis</strong>: continua assim, e é barato que continue.</p>
         <p style="font-size:1.12cqw">O losango <em>parece</em> decisão de IA e não é — é <span class="mono">if desconto &gt; 0.10</span>.</p>
       </div>
       <div class="legend" style="padding-left:.2cqw">
@@ -1118,9 +1140,12 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
         <span class="klab">Instalar</span>
         <span class="kval mono kcmd">cp -r mapear-processo ~/.claude/skills/</span>
       </div>
-      <div class="ph" style="margin-top:var(--s1h);flex-direction:row;align-items:center;gap:var(--s3)">
-        <div class="lab" style="flex:none">Link / QR</div>
-        <p class="hint" style="margin:0">O endereço do repositório entra aqui antes da palestra.</p>
+      <div class="kqr">
+        <img class="qrimg" alt="QR code para baixar a skill" src="__QR__">
+        <div>
+          <div class="qrlab">Aponte a câmera</div>
+          <div class="qrurl mono">__KITLINK__</div>
+        </div>
       </div>
     </div>
     <div class="kshot"><img alt="Exemplo de saída da skill: fluxograma classificado" src="__PREVIEW__"></div>

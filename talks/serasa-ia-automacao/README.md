@@ -25,6 +25,8 @@ faça com um `if`; se o erro é caro e irreversível, é humano; o que sobra é 
 | `qa/check_html.mjs` | Renderiza os 14 slides no Chromium e checa overflow, sangramento e texto recortado. |
 | `qa/check_pptx.py` | Checagem geométrica do `.pptx` com métricas de fonte reais. |
 | `qa/measure_rhythm.mjs` | Mede o vão entre blocos e a folga antes do rodapé, slide a slide. |
+| `qa/simulate_cvd.py` | Simula protanopia e deuteranopia num PNG, para conferir a classificação. |
+| `qa/make_qr.py` | Gera o QR do kit a partir de `assets/kit-link.txt`. |
 
 ```bash
 python3 build.py            # reconstrói deck.html
@@ -33,6 +35,8 @@ node qa/check_html.mjs      # QA do HTML (gera qa/shots/*.png)
 python3 qa/check_pptx.py deck.pptx
 node qa/measure_rhythm.mjs   # ritmo vertical
 node qa/make_preview.mjs     # recaptura o print da skill do slide 13
+python3 qa/make_qr.py        # gera o QR (precisa de assets/kit-link.txt)
+python3 qa/simulate_cvd.py qa/shots/s09.png   # confere as cores no daltonismo
 ```
 
 ## Apresentar o deck HTML
@@ -82,8 +86,9 @@ alto e o que amarra o resto.
 
 Os pontos abertos estão marcados em rosa tracejado no deck e nas notas do apresentador.
 
-**Slide 13 — o link do kit.** A skill está pronta em `kit/`, mas falta publicar o
-repositório e trocar a caixa tracejada por link + QR.
+**Slide 13 — o link do kit.** A skill está pronta em `kit/`. Falta publicar e apontar o
+QR: escreva a URL em `assets/kit-link.txt`, rode `python3 qa/make_qr.py`, e depois os dois
+builds. Sem o arquivo, o slide mostra um espaço tracejado e o build avisa.
 
 **A foto do slide 2.** Salve em `assets/bruno.jpg` e rode `python3 build.py` e
 `node make_pptx.js`. Os dois formatos recortam em quadrado sozinhos; enquanto o arquivo
@@ -128,7 +133,8 @@ Baseada no site e no manual de marca da Experian.
 | Navy profundo | `#16224E` | Títulos e texto principal |
 | Azul corporativo | `#1D4F91` | Faixa superior, &ldquo;Python&rdquo; nos fluxos |
 | Magenta | `#E80070` | Acento único: eyebrow, badge, palavra destacada, &ldquo;IA&rdquo; nos fluxos |
-| Roxo | `#6D2077` | Metadados, &ldquo;humano&rdquo; nos fluxos |
+| Roxo | `#6D2077` | Metadados e decoração — **não** classifica mais nada |
+| Âmbar | `#B4620A` | &ldquo;Humano&rdquo; nos fluxos e no slide 8 |
 | Roxo escuro | `#77127B` / `#4E0E62` | Fundo dos slides de pontuação (capa, hook, fecho) |
 | Lavanda | `#F4F0F9` | Painéis de conclusão e tinta de fundo |
 
@@ -171,8 +177,31 @@ Dispositivos de marca reproduzidos do site: eyebrow rosa em caixa alta acima do 
 título em navy com **uma palavra em magenta**, cartões brancos com badge circular,
 painéis de tinta lavanda.
 
-**Código de cor dos fluxogramas** (consistente nos slides 6, 9 e 12):
-azul = Python/automação tradicional · rosa = IA · lavanda = humano · roxo claro = início/fim.
+### Classificação: cor não é o único sinal
+
+O apresentador é daltônico, e o esquema antigo (azul / rosa / **roxo**) era ilegível
+para ele: sob protanopia, azul e roxo ficam a **ΔE 11,7** — praticamente a mesma cor.
+Pior, o problema real estava nos **preenchimentos**, não nas bordas: as tintas claras
+originais ficavam a ΔE 3,1.
+
+O esquema atual foi escolhido por medição, não por gosto:
+
+| Classe | Borda | Preenchimento | Sinal redundante |
+|---|---|---|---|
+| Automação tradicional | `#1D4F91` | `#9CC0EA` | — |
+| IA | `#E80070` | `#FDEDF6` | **hachura diagonal** |
+| Humano | `#B4620A` | `#EFCB8F` | — |
+
+Pior par sob protanopia e deuteranopia: **ΔE 26,7**. A hachura existe porque tinta clara
+não separa três categorias por cor sozinha — quem não distingue vermelho lê o padrão.
+Pelo mesmo motivo, **nenhum texto do deck descreve conteúdo por cor**: em vez de "as duas
+rosas", o slide 9 diz "as duas caixas de IA".
+
+`qa/simulate_cvd.py` gera as versões simuladas de qualquer print para conferir.
+
+O `.pptx` não tem preenchimento hachurado, então lá a separação é só por luminosidade —
+por isso os tons são mais fortes que o instinto pediria. Os fluxogramas dos slides 6, 9 e
+12 seguem o mesmo código; início e fim continuam em roxo claro, que não é classificação.
 
 O `.pptx` usa **Arial** em vez de Roboto — Roboto não está garantida em máquina de
 terceiros e o PowerPoint substituiria por algo imprevisível. Arial é o grotesco seguro

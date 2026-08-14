@@ -44,11 +44,18 @@ const C = {
   paper: "FFFFFF",
   pink: "FF8FC0",
   edge: "8E86A0",
-  pinkBg: "FBE0EE",
+  pinkBg: "FDEDF6",
   pinkTint: "FEF6FA",
-  blueBg: "E4EDF8",
-  blueTint: "F2F7FC",
-  humBg: "EEE3F4",
+  blueBg: "9CC0EA",
+  blueTint: "D6E6F8",
+  // Classificação medida sob protanopia/deuteranopia: o roxo antigo do
+  // "humano" colidia com o azul (ΔE 11,7). Âmbar separa dos dois. O .pptx
+  // não tem preenchimento hachurado como o HTML, então a separação aqui é
+  // por luminosidade — ΔE 26,7 no pior par.
+  hum: "B4620A",
+  humBg: "EFCB8F",
+  humTint: "F9E8CD",
+  humChip: "EDD1A2",
   mute: "9A93AC",
   hint: "A08BAA",
   // bloco de código
@@ -218,7 +225,7 @@ const NODE_STYLE = {
   term: { fill: "EFEAF5", line: "CFC3DE", txt: C.purple },
   code: { fill: C.blueBg, line: C.navy, txt: C.ink },
   ia: { fill: C.pinkBg, line: C.magenta, txt: C.ink },
-  hum: { fill: C.humBg, line: C.purple, txt: C.ink },
+  hum: { fill: C.humBg, line: C.hum, txt: C.ink },
 };
 
 /** caixa do fluxo, em coordenadas do viewBox */
@@ -329,7 +336,7 @@ function triagem(slide, F, painted) {
     ftag(slide, F, 262, 114, "PYTHON · API do sistema", C.navy);
     ftag(slide, F, 262, 198, "IA · alto volume", C.magenta);
     ftag(slide, F, 262, 282, "IA · alto volume + revisão", C.magenta);
-    ftag(slide, F, 518, 392, "HUMANO · baixo volume", C.purple, 210);
+    ftag(slide, F, 518, 392, "HUMANO · baixo volume", C.hum, 210);
     ftag(slide, F, 20, 547, "PYTHON", C.navy, 100);
   } else {
     ftext(slide, F, 20, 557, "A REGRA DO LOSANGO, ESCRITA:", { bold: true, size: 16, color: C.magenta, w: 330 });
@@ -847,7 +854,7 @@ function triagem(slide, F, painted) {
 
   const BOXES = [
     {
-      title: "Automação tradicional", accent: C.navy, fill: C.blueTint, chipBg: "DCE8F6",
+      title: "Automação tradicional", accent: C.navy, fill: C.blueTint, chipBg: "BFD8F2",
       stack: ["Python", "SQL", "API", "regex", "cron"],
       when: "A regra é fixa, a entrada é estruturada e a saída é sempre a mesma.",
       say: "“eu copio daqui pra lá” · “rodo esse relatório toda segunda”",
@@ -856,7 +863,7 @@ function triagem(slide, F, painted) {
              { text: "Um if você testa uma vez e confia pra sempre.", options: { bold: true, color: C.ink } }],
     },
     {
-      title: "IA", accent: C.magenta, fill: C.pinkTint, chipBg: "FBDCEC",
+      title: "IA", accent: C.magenta, fill: C.pinkBg, chipBg: "F8D3E7",
       stack: ["LLM + schema", "limiar", "eval"],
       when: "A entrada é linguagem, a regra é ambígua, e verificar custa menos que fazer.",
       say: "“depende do que tá escrito” · “eu leio e decido na hora”",
@@ -864,7 +871,7 @@ function triagem(slide, F, painted) {
       last: [{ text: "Não é determinística. Sem casos de teste, limiar e um caminho de “não sei”, você trocou trabalho por risco." }],
     },
     {
-      title: "Humano", accent: C.purple, fill: C.lavender, chipBg: "E6D8EE",
+      title: "Humano", accent: C.hum, fill: C.humTint, chipBg: C.humChip,
       stack: ["julgamento"],
       when: "O erro é caro e irreversível — ou a regra ainda nem existe.",
       say: "“isso aí eu levo pro meu gestor” · “cada caso é um caso”",
@@ -1000,7 +1007,7 @@ function triagem(slide, F, painted) {
       { text: ", 2 viram ", options: { color: C.inkSoft } },
       { text: "IA", options: { bold: true, color: C.magenta } },
       { text: ", 1 continua ", options: { color: C.inkSoft } },
-      { text: "humana", options: { bold: true, color: C.purple } },
+      { text: "humana", options: { bold: true, color: C.hum } },
       { text: ".", options: { color: C.inkSoft } },
     ],
     { x: 7.58, y: 2.68, w: 4.8, h: 0.56, margin: 0, valign: "top", fontFace: FONT, fontSize: 12.5, lineSpacing: 19 }
@@ -1032,7 +1039,7 @@ function triagem(slide, F, painted) {
   );
 
   // legenda
-  const LEG = [["Python", C.blueBg, C.navy], ["IA", C.pinkBg, C.magenta], ["humano", C.humBg, C.purple]];
+  const LEG = [["Python", C.blueBg, C.navy], ["IA", C.pinkBg, C.magenta], ["humano", C.humBg, C.hum]];
   const LEGX = [7.32, 8.72, 9.92];
   LEG.forEach(([t, fill, ln], i) => {
     s.addShape(pres.ShapeType.roundRect, {
