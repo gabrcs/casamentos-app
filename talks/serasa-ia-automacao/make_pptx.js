@@ -401,13 +401,15 @@ function triagem(slide, F, painted) {
       sizing: { type: "cover", w: ph.w, h: ph.h },
     });
   } else {
-    s.addText("foto: salve em\nassets/bruno.jpg", {
+    // espaço neutro para inserir a foto à mão no PowerPoint ou no Slides:
+    // selecione o quadrado e troque por "Imagem"
+    s.addText("FOTO", {
       shape: pres.ShapeType.roundRect, rectRadius: 0.12,
       x: ph.x, y: ph.y, w: ph.w, h: ph.h,
-      fill: { color: C.pinkTint },
-      line: { color: C.magenta, width: 1.25, dashType: "dash" },
+      fill: { color: C.lavender },
+      line: { color: "EAE3F3", width: 1 },
       align: "center", valign: "middle", margin: 0,
-      fontFace: MONO, fontSize: 9.5, italic: true, color: C.hint, lineSpacing: 14,
+      fontFace: MONO, fontSize: 11, color: "B9AFC9", charSpacing: 1.6,
     });
   }
   const IDX = ph.x + ph.w + 0.55;
@@ -461,7 +463,7 @@ function triagem(slide, F, painted) {
   s.addNotes(
     "Credencial em 30 segundos, não currículo. A frase do painel escuro é a tese da palestra inteira: " +
       "script / IA / pessoa. Ela volta no slide 8. ~1 min." +
-      (PHOTO ? "" : "\n\nPENDENTE: salvar a foto em assets/bruno.jpg e rodar node make_pptx.js de novo.")
+      (PHOTO ? "" : "\n\nA FOTO ENTRA À MÃO: selecione o quadrado lavanda e substitua por Imagem. Ou salve em assets/bruno.jpg e rode node make_pptx.js.")
   );
 }
 

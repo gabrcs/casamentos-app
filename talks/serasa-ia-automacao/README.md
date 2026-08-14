@@ -86,20 +86,15 @@ alto e o que amarra o resto.
 
 Os pontos abertos estão marcados em rosa tracejado no deck e nas notas do apresentador.
 
-**Slide 13 — o link do kit.** A skill está pronta em `kit/`. Falta publicar e apontar o
-QR: escreva a URL em `assets/kit-link.txt`, rode `python3 qa/make_qr.py`, e depois os dois
-builds. Sem o arquivo, o slide mostra um espaço tracejado e o build avisa.
+**A foto do slide 2.** O deck traz um quadrado lavanda escrito `FOTO` no lugar dela.
+Ela entra à mão: no PowerPoint ou no Google Apresentações, selecione o quadrado e
+substitua por Imagem. Se preferir embutir pelo build, salve em `assets/bruno.jpg` e rode
+`python3 build.py && node make_pptx.js` — o corte quadrado é automático.
 
-**A foto do slide 2.** Salve em `assets/bruno.jpg` e rode `python3 build.py` e
-`node make_pptx.js`. Os dois formatos recortam em quadrado sozinhos; enquanto o arquivo
-não existir, aparece um espaço tracejado com a instrução e o build avisa no terminal.
-Detalhes em `assets/README.md`.
-
-**Slide 13 — o kit.** Os sete arquivos estão listados, mas falta publicar e trocar a
-caixa tracejada por link + QR. Falta decidir também se vai junto uma versão instalável
-como skills (mais impressionante ao vivo, exclui quem não usa a ferramenta) ou só os
-arquivos em Markdown (funcionam com qualquer coisa). Dá pra fazer os dois: Markdown como
-base, skills como camada.
+**O QR do kit** aponta para a pasta do Drive definida em `assets/kit-link.txt`. Para
+trocar o destino, edite esse arquivo e rode `python3 qa/make_qr.py` seguido dos dois
+builds. O script confere a leitura do QR gerado quando `pyzbar` está disponível — um QR
+errado num slide só aparece na frente da plateia.
 
 ## Exemplo usado no deck
 

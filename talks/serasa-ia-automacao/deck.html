@@ -148,7 +148,7 @@ strong{font-weight:700;color:var(--ink)}
   box-shadow:0 .8cqw 2.4cqw rgba(22,34,78,.16);
 }
 .bio-photo img{width:100%;height:100%;object-fit:cover;object-position:52% 16%;display:block}
-.bio-photo{border:1.5px dashed var(--magenta);background:#FEF6FA}.bio-photo img{display:none}.bio-photo::after{content:'foto: salve em assets/bruno.jpg';position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:2cqw;font-family:'Roboto Mono',monospace;font-size:.95cqw;line-height:1.5;color:#A08BAA;font-style:italic}
+.bio-photo{background:var(--lavender);border:1px solid var(--lavender-2)}.bio-photo img{display:none}.bio-photo::after{content:'foto';position:absolute;inset:0;display:grid;place-items:center;font-family:'Roboto Mono',monospace;font-size:1.1cqw;letter-spacing:.14em;text-transform:uppercase;color:#B9AFC9}
 .bio-name{font-size:4.2cqw;font-weight:700;line-height:1.02;letter-spacing:var(--tr-display);color:var(--ink)}
 .bio-role{font-size:1.75cqw;font-weight:300;letter-spacing:var(--tr-head);color:var(--ink-soft);margin-top:var(--s1h)}
 .chips{display:flex;flex-wrap:wrap;gap:var(--s1);margin-top:var(--s3)}
@@ -436,7 +436,7 @@ td.k{color:var(--ink);font-weight:500}
   letter-spacing:var(--tr-micro);text-transform:uppercase;color:var(--magenta);
 }
 .qrurl{font-size:1.05cqw;line-height:1.45;color:var(--ink-soft);word-break:break-all;margin-top:var(--s1)}
-.kqr{display:block;border:1.5px dashed #E80070;background:#FEF6FA;border-radius:1.2cqw;padding:1.2cqw 1.6cqw}.qrimg{display:none}.qrlab::after{content:' — a definir'}.qrurl{font-style:italic;color:#A08BAA}
+
 
 .kshot{
   border-radius:1.2cqw;overflow:hidden;background:#0F1117;
@@ -1144,10 +1144,10 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
         <span class="kval mono kcmd">cp -r mapear-processo ~/.claude/skills/</span>
       </div>
       <div class="kqr">
-        <img class="qrimg" alt="QR code para baixar a skill" src="">
+        <img class="qrimg" alt="QR code para baixar a skill" src="data:image/png;base64,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">
         <div>
           <div class="qrlab">Aponte a câmera</div>
-          <div class="qrurl mono">o link do kit entra aqui</div>
+          <div class="qrurl mono">https://drive.google.com/drive/folders/1tFn7zTcDXmNHBKhRMjuybEFbbIjzGb3G</div>
         </div>
       </div>
     </div>

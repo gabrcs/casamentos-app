@@ -71,13 +71,15 @@ PREVIEW_PLACEHOLDER = (
 )
 
 PLACEHOLDER = (
-    ".bio-photo{border:1.5px dashed var(--magenta);background:#FEF6FA}"
+    # espaço neutro, para inserir a foto à mão no PowerPoint/Slides —
+    # apresentável mesmo se ficar assim, e óbvio de substituir
+    ".bio-photo{background:var(--lavender);border:1px solid var(--lavender-2)}"
     ".bio-photo img{display:none}"
     ".bio-photo::after{"
-    "content:'foto: salve em assets/bruno.jpg';"
-    "position:absolute;inset:0;display:grid;place-items:center;text-align:center;"
-    "padding:2cqw;font-family:'Roboto Mono',monospace;font-size:.95cqw;"
-    "line-height:1.5;color:#A08BAA;font-style:italic}"
+    "content:'foto';"
+    "position:absolute;inset:0;display:grid;place-items:center;"
+    "font-family:'Roboto Mono',monospace;font-size:1.1cqw;letter-spacing:.14em;"
+    "text-transform:uppercase;color:#B9AFC9}"
 )
 
 

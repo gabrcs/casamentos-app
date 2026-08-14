@@ -35,6 +35,23 @@ def main():
     img = qr.make_image(fill_color="#16224E", back_color="white").convert("RGB")
     img.save(SAIDA)
     print(f"{SAIDA.relative_to(HERE)}: {img.size[0]}px  →  {url}")
+
+    # conferir a leitura importa mais que gerar: um QR errado num slide só
+    # aparece na frente da plateia
+    try:
+        from pyzbar.pyzbar import decode
+        from PIL import Image
+
+        lido = decode(Image.open(SAIDA))
+        if not lido:
+            print("AVISO: não consegui ler o QR gerado — confira antes de apresentar")
+            return 1
+        if lido[0].data.decode() != url:
+            print(f"AVISO: o QR leu outra coisa: {lido[0].data.decode()}")
+            return 1
+        print("leitura conferida: bate com a URL")
+    except ImportError:
+        print("(sem pyzbar/libzbar aqui — escaneie uma vez com o celular antes de apresentar)")
     return 0
 
 
