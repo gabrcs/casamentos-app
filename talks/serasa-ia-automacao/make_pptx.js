@@ -27,6 +27,10 @@ function findPhoto() {
   return null;
 }
 const PHOTO = findPhoto();
+const PREVIEW = (() => {
+  const f = path.join(__dirname, "assets", "skill-preview.png");
+  return fs.existsSync(f) ? f : null;
+})();
 
 const C = {
   ink: "16224E",
@@ -1199,105 +1203,175 @@ function triagem(slide, F, painted) {
   );
 }
 
-/* ================= 12 · O CASO (a preencher) ================= */
+/* ================= 12 · COMO EU FAÇO NA PRÁTICA ================= */
 {
   const s = pres.addSlide();
   topbar(s);
-  header(s, "Passo 5 · o caso", [
-    { text: "Um processo real, " },
-    { text: "na mesma notação", options: { color: C.magenta } },
-  ], { size: 28, titleH: 0.65 });
+  header(s, "Passo 5 · na prática", [
+    { text: "Como eu monto um projeto desses, " },
+    { text: "na ordem", options: { color: C.magenta } },
+  ], { size: 29, titleH: 0.65 });
 
-  const PH = [
-    ["O processo e a conversa", "Qual era o processo, quem executava, com que frequência acontecia.",
-      "Uma frase literal de quem executava — a fala que virou losango. É o que amarra este slide ao slide 6."],
-    ["O fluxo pintado + o placar", "O mesmo desenho do slide 9, com as caixas reais.",
-      "“N caixas → X Python · Y IA · Z humano”. Se a maioria virou Python, diga isso em voz alta: é o ponto da palestra."],
-    ["O que quebrou", "Um número de antes → depois que você defenda no Q&A.",
-      "E a falha: de preferência uma em que o modelo errou com confiança e você só descobriu depois. Como detectou e qual guarda-corpo entrou."],
+  const FASES = [
+    ["01", "Entender", false, [
+      [{ text: "Mapeio o processo " }, { text: "como é feito hoje", options: { bold: true, color: C.ink } }],
+      [{ text: "Defino " }, { text: "de onde a informação vem", options: { bold: true, color: C.ink } },
+       { text: " — planilha, ferramenta, base de dados, Slack" }],
+    ]],
+    ["02", "Montar", false, [
+      [{ text: "Crio o " }, { text: "repositório", options: { bold: true, color: C.ink } }],
+      [{ text: "Escrevo o código que " }, { text: "pluga a fonte", options: { bold: true, color: C.ink } },
+       { text: " da informação" }],
+    ]],
+    ["03", "Dividir o trabalho", true, [
+      [{ text: "Codo as " }, { text: "decisões determinísticas", options: { bold: true, color: C.magenta } },
+       { text: " — as de sim/não, conforme o fluxo se comporta" }],
+      [{ text: "Uso " }, { text: "IA", options: { bold: true, color: C.magenta } },
+       { text: " só onde precisa interpretação e saída qualitativa" }],
+      [{ text: "Defino o " }, { text: "formato e o lugar", options: { bold: true, color: C.magenta } },
+       { text: " do output" }],
+    ]],
+    ["04", "Fechar o ciclo", false, [
+      [{ text: "Implemento e " }, { text: "testo", options: { bold: true, color: C.ink } }],
+      [{ text: "Apresento e pego feedback", options: { bold: true, color: C.ink } },
+       { text: ": resolve mesmo a necessidade?" }],
+      [{ text: "Ajusto se precisar" }],
+    ]],
   ];
-  const pw = (W - 2 * M - 0.6) / 3;
-  PH.forEach(([lab, line, hint], i) => {
-    const x = M + i * (pw + 0.3);
-    dashCard(s, x, 2.15, pw, 2.5);
-    s.addText(lab.toUpperCase(), {
-      x: x + 0.28, y: 2.38, w: pw - 0.56, h: 0.22,
-      margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.magenta, charSpacing: 1,
+
+  const fw = (W - 2 * M - 3 * 0.28) / 4;
+  FASES.forEach(([n, titulo, key, itens], i) => {
+    const x = M + i * (fw + 0.28);
+    card(s, x, 2.05, fw, 3.5, key ? C.pinkTint : C.paper, key ? C.magenta : C.line);
+    s.addText(n, {
+      x: x + 0.28, y: 2.28, w: 0.6, h: 0.22,
+      margin: 0, fontFace: MONO, fontSize: 9.5, bold: true,
+      color: key ? C.magenta : "B9AFC9", charSpacing: 0.6,
     });
-    s.addText(line, {
-      x: x + 0.28, y: 2.66, w: pw - 0.56, h: 0.6,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 11.5, color: C.inkSoft, lineSpacing: 17,
+    s.addText(titulo, {
+      x: x + 0.28, y: 2.56, w: fw - 0.56, h: 0.32,
+      margin: 0, fontFace: FONT, fontSize: 14, bold: true, charSpacing: -0.14, color: C.ink,
     });
-    s.addText(hint, {
-      x: x + 0.28, y: 3.3, w: pw - 0.56, h: 1.2,
-      margin: 0, valign: "top", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 14.5,
+    let y = 3.02;
+    itens.forEach((runs) => {
+      s.addShape(pres.ShapeType.ellipse, {
+        x: x + 0.3, y: y + 0.07, w: 0.07, h: 0.07,
+        fill: { color: key ? C.magenta : "C3BBD2" }, line: { width: 0 },
+      });
+      s.addText(runs, {
+        x: x + 0.48, y, w: fw - 0.76, h: 0.88,
+        margin: 0, valign: "top", fontFace: FONT, fontSize: 10.5, color: C.inkSoft, lineSpacing: 15.5,
+      });
+      y += 0.9;
     });
   });
 
   callout(
-    s, "Ainda a preencher",
+    s, "A ordem dentro da fase 3 não é acaso",
     [
-      { text: "Este slide vira " }, { text: "dois ou três", options: { bold: true } },
-      { text: " quando o caso estiver definido: um do processo e da conversa, um do fluxo pintado, um do resultado e das cicatrizes. A estrutura já está de pé — falta o conteúdo." },
+      { text: "O determinístico vem " }, { text: "antes", options: { bold: true } },
+      { text: " da IA. É a mesma cascata do slide 8, agora com as mãos no teclado: eu escrevo os if primeiro e só depois olho o que sobrou. O que sobra costuma ser bem menos do que parecia no começo." },
     ],
-    5.3, 0.94
+    5.82, 0.94
   );
-  footer(s, "05 · O caso");
+  footer(s, "05 · Na prática");
   s.addNotes(
-    "PENDENTE: substituir pelos slides do caso real. Três blocos, na ordem: processo + a fala que virou " +
-      "losango; o fluxo pintado com placar; o resultado e o que quebrou. ~4 min quando estiver pronto."
+    "Este é o método, não um case fechado — e é de propósito: o que dá para levar embora é a ordem. " +
+      "Pare na fase 3 e diga que o determinístico vem antes da IA porque é assim que sobra menos IA " +
+      "para escrever, testar e pagar. A fase 4 é a que mais gente pula: apresentar e pegar feedback. ~4 min."
   );
 }
 
-/* ================= 13 · O KIT ================= */
+/* ================= 13 · O KIT: A SKILL ================= */
 {
   const s = pres.addSlide();
   topbar(s);
   header(s, "Passo 6 · pra levar embora", [
-    { text: "O kit — os arquivos que eu usei " },
-    { text: "pra montar tudo isso", options: { color: C.magenta } },
-  ], { size: 28, titleH: 0.65 });
+    { text: "mapear-processo", options: { fontFace: MONO, color: C.ink } },
+    { text: " — " },
+    { text: "o método desta palestra, instalável", options: { color: C.magenta } },
+  ], { size: 25, titleH: 0.62 });
 
-  const KIT = [
-    ["7-perguntas.md", "O roteiro de entrevista", " do slide 4, com o que anotar em cada resposta."],
-    ["quadro-notacao", "O quadro de notação no Miro", " — duplica, troca os nomes das caixas, e já sai pronto pra editar junto."],
-    ["canvas.md", "Uma linha por caixa", ": entrada, saída, dono, frequência, exceções, custo do erro."],
-    ["classificar.md", "As três perguntas do slide 8", " em forma de checklist — rode uma vez por caixa."],
-    ["prompt.template.md", "As sete seções de um prompt de produção", ": papel, tarefa, dados, regras, formato de saída, quando NÃO decidir, casos de borda."],
-    ["evals/exemplo.yaml", "Vinte casos, cinco de borda", ", mais o comando que roda no CI e bloqueia o merge."],
-    ["checklist-producao.md", "Doze itens antes de ligar o fluxo.", " Item desmarcado é risco aceito, com nome e data ao lado."],
+  const LX = M, LW = 5.9;
+  s.addText(
+    [
+      { text: "Você descreve um processo em português corrido. Ela devolve o fluxo desenhado, com " },
+      { text: "cada etapa classificada", options: { bold: true, color: C.ink } },
+      { text: " e o motivo de cada classificação." },
+    ],
+    { x: LX, y: 2.05, w: LW, h: 0.84, margin: 0, valign: "top", fontFace: FONT, fontSize: 13, color: C.inkSoft, lineSpacing: 19.5 }
+  );
+
+  const LINHAS = [
+    ["ENTREGA", [
+      { text: "um " }, { text: "HTML interativo", options: { bold: true, color: C.ink } },
+      { text: " que abre sem internet · um " }, { text: "JSON", options: { bold: true, color: C.ink } },
+      { text: " pra outro agente consumir · o " }, { text: "placar", options: { bold: true, color: C.ink } },
+      { text: " do processo" }]],
+    ["NÃO FAZ", [
+      { text: "Não chuta. Quando a descrição não diz " },
+      { text: "quanto custa errar", options: { bold: true, color: C.ink } },
+      { text: " ou " }, { text: "como a falha é percebida", options: { bold: true, color: C.ink } },
+      { text: ", ela marca a etapa como indefinida e devolve a pergunta." }]],
   ];
-  let ky = 1.98;
-  const kh = 0.5;
-  KIT.forEach(([file, lead, rest]) => {
-    s.addShape(pres.ShapeType.roundRect, {
-      x: M, y: ky, w: W - 2 * M, h: kh, rectRadius: 0.07,
-      fill: { color: C.paper }, line: { color: C.line, width: 1 },
+  let ly = 3.06;
+  LINHAS.forEach(([lab, runs]) => {
+    s.addText(lab, {
+      x: LX, y: ly + 0.03, w: 1.15, h: 0.24,
+      margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.magenta, charSpacing: 1.1,
     });
-    s.addText(file, {
-      x: M + 0.28, y: ky + 0.11, w: 2.6, h: 0.28,
-      margin: 0, valign: "middle", fontFace: MONO, fontSize: 10, color: C.magenta,
+    s.addText(runs, {
+      x: LX + 1.32, y: ly, w: LW - 1.32, h: 0.78,
+      margin: 0, valign: "top", fontFace: FONT, fontSize: 11, color: C.inkSoft, lineSpacing: 16,
     });
-    s.addText(
-      [{ text: lead, options: { bold: true, color: C.ink } }, { text: rest, options: { color: C.inkSoft } }],
-      { x: M + 3.05, y: ky + 0.05, w: W - 2 * M - 3.35, h: 0.46, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10.5, lineSpacing: 15.5 }
-    );
-    ky += kh + 0.08;
+    ly += 0.9;
   });
 
-  dashCard(s, M, 6.02, W - 2 * M, 0.72);
-  s.addText("LINK / QR A DEFINIR", {
-    x: M + 0.28, y: 6.24, w: 2.3, h: 0.28,
+  s.addText("INSTALAR", {
+    x: LX, y: ly + 0.11, w: 1.15, h: 0.24,
+    margin: 0, fontFace: MONO, fontSize: 8.5, bold: true, color: C.magenta, charSpacing: 1.1,
+  });
+  s.addText("cp -r mapear-processo ~/.claude/skills/", {
+    shape: pres.ShapeType.roundRect, rectRadius: 0.06,
+    x: LX + 1.32, y: ly, w: 4.3, h: 0.42,
+    fill: { color: C.lavender }, line: { width: 0 },
+    align: "left", valign: "middle", margin: 0.1,
+    fontFace: MONO, fontSize: 10.5, color: C.ink,
+  });
+
+  dashCard(s, LX, ly + 0.62, LW, 0.62);
+  s.addText("LINK / QR", {
+    x: LX + 0.28, y: ly + 0.75, w: 1.3, h: 0.36,
     margin: 0, valign: "middle", fontFace: MONO, fontSize: 9.5, bold: true, color: C.magenta, charSpacing: 1,
   });
-  s.addText(
-    "Repositório público ou pasta compartilhada. Definir também se vai junto a versão instalável como skills, ou só os arquivos em Markdown — que funcionam com qualquer ferramenta.",
-    { x: M + 2.75, y: 6.14, w: W - 2 * M - 3.05, h: 0.5, margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, italic: true, color: C.hint, lineSpacing: 14.5 }
-  );
+  s.addText("O endereço do repositório entra aqui antes da palestra.", {
+    x: LX + 1.7, y: ly + 0.75, w: LW - 2, h: 0.36,
+    margin: 0, valign: "middle", fontFace: FONT, fontSize: 10, italic: true, color: C.hint,
+  });
+
+  // a saída da skill, cortada de propósito num pedaço legível
+  const px0 = 7.0, pw = W - M - px0, ph0 = 2.05, phh = 4.35;
+  s.addShape(pres.ShapeType.roundRect, {
+    x: px0, y: ph0, w: pw, h: phh, rectRadius: 0.09,
+    fill: { color: "0F1117" }, line: { color: "2A2F3D", width: 1 },
+  });
+  if (PREVIEW) {
+    s.addImage({
+      path: PREVIEW, x: px0 + 0.12, y: ph0 + 0.12, w: pw - 0.24, h: phh - 0.24,
+      sizing: { type: "crop", w: pw - 0.24, h: phh - 0.24, x: 0, y: 0 },
+    });
+  } else {
+    s.addText("preview: rode node qa/make_preview.mjs", {
+      x: px0, y: ph0, w: pw, h: phh, align: "center", valign: "middle", margin: 0,
+      fontFace: MONO, fontSize: 10, italic: true, color: C.hint,
+    });
+  }
+
   footer(s, "06 · O kit");
   s.addNotes(
-    "PENDENTE: publicar o repositório e trocar a caixa tracejada por link + QR. Diga que o kit é o " +
-      "motivo de ninguém precisar anotar nada durante a palestra. ~1 min."
+    "O último slide antes do fecho. Diga que a skill é o método da palestra empacotado, e que o " +
+      "que ela NÃO faz é o mais importante: ela não chuta. Mostre o print e prometa o link. " +
+      (PREVIEW ? "" : "PENDENTE: gerar o preview com node qa/make_preview.mjs. ") + "~1 min."
   );
 }
 

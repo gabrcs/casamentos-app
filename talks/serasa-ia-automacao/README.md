@@ -20,7 +20,8 @@ faça com um `if`; se o erro é caro e irreversível, é humano; o que sobra é 
 | `deck.pptx` | Versão PowerPoint editável, com notas do apresentador em todos os slides. **Gerado.** |
 | `make_pptx.js` | Gerador do `.pptx`. |
 | `fonts/` | Roboto e Roboto Mono (subsets latin/latin-ext) para embutir no HTML. |
-| `assets/` | A foto do apresentador. Veja `assets/README.md` — **não versionada**. |
+| `assets/` | Foto do apresentador (**não versionada**) e `skill-preview.png`, a saída da skill mostrada no slide 13. |
+| `kit/` | A skill `mapear-processo`, empacotada e com exemplos. Veja `kit/README.md`. |
 | `qa/check_html.mjs` | Renderiza os 14 slides no Chromium e checa overflow, sangramento e texto recortado. |
 | `qa/check_pptx.py` | Checagem geométrica do `.pptx` com métricas de fonte reais. |
 | `qa/measure_rhythm.mjs` | Mede o vão entre blocos e a folga antes do rodapé, slide a slide. |
@@ -31,6 +32,7 @@ node make_pptx.js           # reconstrói deck.pptx
 node qa/check_html.mjs      # QA do HTML (gera qa/shots/*.png)
 python3 qa/check_pptx.py deck.pptx
 node qa/measure_rhythm.mjs   # ritmo vertical
+node qa/make_preview.mjs     # recaptura o print da skill do slide 13
 ```
 
 ## Apresentar o deck HTML
@@ -64,8 +66,8 @@ Para PDF: imprimir pelo navegador em paisagem, sem margens.
 | 9 | **O mesmo fluxo, pintado** + o placar | a arquitetura | 2,5 min |
 | 10 | **Quando a IA não tem certeza, ela passa pra uma pessoa** — o código + o teste de rubber stamping | o schema + limiar | 3 min |
 | 11 | Panorama de ferramentas — 7 camadas | o mapa | 1,5 min |
-| 12 | **O caso** — *a preencher* | — | 4 min |
-| 13 | **O kit** — os arquivos pra baixar | o kit | 1 min |
+| 12 | **Como eu monto um projeto desses, na ordem** — o método em 4 fases | o método | 4 min |
+| 13 | **O kit** — a skill `mapear-processo` | a skill | 1 min |
 | 14 | Fecho: três frases + desafio de uma hora | — | 1,5 min |
 
 Total ≈ 25 min com o caso preenchido. Se precisar cortar, na ordem: slide 11 (panorama)
@@ -78,20 +80,10 @@ alto e o que amarra o resto.
 
 ## O que ainda falta
 
-Dois pontos estão marcados em rosa tracejado no deck e nas notas do apresentador.
+Os pontos abertos estão marcados em rosa tracejado no deck e nas notas do apresentador.
 
-**Slide 12 — o caso.** É o único slide sem conteúdo real. Vira **dois ou três** slides
-quando estiver definido:
-
-1. *O processo e a conversa* — qual era, quem executava, com que frequência, e uma
-   frase literal de quem executava (de preferência a que virou losango). É o que amarra
-   o caso ao slide 6.
-2. *O fluxo pintado + o placar* — o mesmo desenho do slide 9 com as caixas reais, e o
-   placar: &ldquo;N caixas → X Python · Y IA · Z humano&rdquo;. Se a maioria virou Python, diga
-   isso em voz alta — é o ponto da palestra.
-3. *O resultado e o que quebrou* — um número de antes → depois que você defenda no Q&A,
-   e a falha: de preferência uma em que o modelo errou com confiança e você só descobriu
-   depois. É o bloco que a plateia lembra; plateia técnica confia em quem mostra a cicatriz.
+**Slide 13 — o link do kit.** A skill está pronta em `kit/`, mas falta publicar o
+repositório e trocar a caixa tracejada por link + QR.
 
 **A foto do slide 2.** Salve em `assets/bruno.jpg` e rode `python3 build.py` e
 `node make_pptx.js`. Os dois formatos recortam em quadrado sozinhos; enquanto o arquivo
@@ -115,6 +107,12 @@ O slide 3 é deliberadamente **descritivo, não corretivo**: não diz que a plat
 errado, e sim que a primeira pergunta é sobre o futuro que a pessoa imagina e a segunda é
 sobre o presente que ela executa — e o presente é observável, então sai mais fiel. A ferramenta de desenho
 recomendada é o **Miro**, uma só, e é a mesma que aparece no kit.
+
+O **slide 12 não é um case**, e isso é deliberado: em vez de inventar um projeto ou
+descrever um processo interno real, ele mostra o **método de trabalho do apresentador** —
+entender, montar, dividir o trabalho, fechar o ciclo. Funciona melhor que um case
+fabricado porque é verificável (é como ele trabalha de fato) e porque a fase 3 é a tese da
+palestra aplicada com as mãos no teclado: o determinístico antes da IA.
 
 O deck **não cita volume em número** — fala em "alto volume" e "baixo volume". A escolha
 é proposital: número inventado num exemplo convida a plateia a discutir o número em vez

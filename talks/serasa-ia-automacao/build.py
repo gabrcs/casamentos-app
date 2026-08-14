@@ -20,6 +20,7 @@ FONTS = HERE / "fonts"
 ASSETS = HERE / "assets"
 PHOTO_STEM = "bruno"
 PHOTO_EXTS = (".jpg", ".jpeg", ".png", ".webp")
+PREVIEW = "skill-preview.png"   # a saída da skill, mostrada no slide 13
 
 LATIN = (
     "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,"
@@ -49,6 +50,15 @@ def find_photo():
             return f
     return None
 
+
+PREVIEW_PLACEHOLDER = (
+    ".kshot{border-style:dashed;border-color:#E80070;background:#FEF6FA;min-height:18cqw}"
+    ".kshot img{display:none}"
+    ".kshot::after{"
+    "content:'preview: gere com node qa/make_preview.mjs';"
+    "display:grid;place-items:center;min-height:18cqw;text-align:center;padding:2cqw;"
+    "font-family:'Roboto Mono',monospace;font-size:.95cqw;color:#A08BAA;font-style:italic}"
+)
 
 PLACEHOLDER = (
     ".bio-photo{border:1.5px dashed var(--magenta);background:#FEF6FA}"
@@ -90,6 +100,17 @@ def main():
         out = out.replace("__PHOTO__", "")
         out = out.replace("/*PHOTO*/", PLACEHOLDER)
         print("foto: AUSENTE — salve em assets/bruno.jpg e rode de novo")
+
+    prev = ASSETS / PREVIEW
+    if prev.exists():
+        data = base64.b64encode(prev.read_bytes()).decode()
+        out = out.replace("__PREVIEW__", f"data:image/png;base64,{data}")
+        out = out.replace("/*PREVIEW*/", "")
+        print(f"preview: {prev.name} ({prev.stat().st_size / 1024:.0f} KB)")
+    else:
+        out = out.replace("__PREVIEW__", "")
+        out = out.replace("/*PREVIEW*/", PREVIEW_PLACEHOLDER)
+        print("preview: AUSENTE — rode node qa/make_preview.mjs")
 
     (HERE / "deck.html").write_text(out)
     print(f"deck.html: {len(out) / 1024:.0f} KB")

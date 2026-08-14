@@ -378,17 +378,59 @@ td.k{color:var(--ink);font-weight:500}
 .ph p{font-size:1.12cqw;line-height:1.48;letter-spacing:var(--tr-small)}
 .ph .hint{font-size:1cqw;line-height:1.5;letter-spacing:var(--tr-small);color:#A08BAA;font-style:italic}
 
-/* ---------- kit ---------- */
-.kit{display:flex;flex-direction:column;gap:var(--s1);flex:1;justify-content:center}
-.kit-row{
-  display:grid;grid-template-columns:17cqw 1fr;gap:var(--s3);align-items:baseline;
-  border:1px solid var(--line);border-radius:.9cqw;padding:var(--s1h) var(--s2);background:var(--paper);
+/* ---------- fases do método (slide 12) ---------- */
+.fases{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);flex:1;min-height:0;align-content:center}
+.fase{
+  background:var(--paper);border:1px solid var(--line);border-radius:1.2cqw;
+  padding:var(--s3) var(--s2);display:flex;flex-direction:column;gap:var(--s1);
 }
-.kit-row .f{font-family:'Roboto Mono',monospace;font-size:1.02cqw;font-weight:500;color:var(--magenta)}
-.kit-row .d{font-size:1.12cqw;line-height:1.45;letter-spacing:var(--tr-small);color:var(--ink-soft)}
-.kit-row .d b{color:var(--ink);font-weight:700}
+.fase .fn{
+  font-family:'Roboto Mono',monospace;font-size:1cqw;font-weight:700;
+  letter-spacing:.06em;color:#B9AFC9;
+}
+.fase .ft{font-size:1.42cqw;font-weight:700;line-height:1.2;letter-spacing:var(--tr-head);color:var(--ink)}
+.fase ul{list-style:none;display:flex;flex-direction:column;gap:var(--s1h);margin-top:var(--s1)}
+.fase li{
+  font-size:1.06cqw;line-height:1.45;letter-spacing:var(--tr-small);color:var(--ink-soft);
+  padding-left:1.1cqw;position:relative;
+}
+.fase li::before{content:"";position:absolute;left:0;top:.62cqw;width:.38cqw;height:.38cqw;border-radius:50%;background:#C3BBD2}
+.fase li b{color:var(--ink);font-weight:700}
+.fase.key{background:#FEF6FA;border-color:var(--magenta)}
+.fase.key .fn{color:var(--magenta)}
+.fase.key li::before{background:var(--magenta)}
+.fase.key li b{color:var(--magenta)}
 
-/* ---------- close ---------- */
+/* ---------- o kit, só a skill (slide 13) ---------- */
+.kitname{font-size:2.7cqw;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.kit2{display:grid;grid-template-columns:1fr 1.02fr;gap:var(--s5);flex:1;min-height:0;align-content:center}
+.kcol{display:flex;flex-direction:column;gap:var(--s2);min-width:0}
+.klede{font-size:1.32cqw;line-height:1.5;letter-spacing:var(--tr-body);color:var(--ink-soft)}
+.krow{display:grid;grid-template-columns:7cqw 1fr;gap:var(--s2);align-items:baseline}
+.krow .klab{
+  font-family:'Roboto Mono',monospace;font-size:.88cqw;font-weight:700;letter-spacing:var(--tr-micro);
+  text-transform:uppercase;color:var(--magenta);
+}
+.krow .kval{font-size:1.12cqw;line-height:1.48;letter-spacing:var(--tr-small);color:var(--ink-soft)}
+.krow .kval b{color:var(--ink);font-weight:700}
+.krow .kcmd{
+  font-size:1cqw;color:var(--ink);background:var(--lavender);
+  padding:.5cqw .9cqw;border-radius:.6cqw;display:inline-block;line-height:1.4;
+}
+.kshot{
+  border-radius:1.2cqw;overflow:hidden;background:#0F1117;
+  border:1px solid #2A2F3D;box-shadow:0 1cqw 3cqw rgba(22,34,78,.22);
+}
+.kshot img{
+  display:block;width:100%;height:auto;
+  /* o corte de baixo é proposital: mostra um pedaço legível do fluxo real
+     em vez da página inteira em miniatura */
+  -webkit-mask-image:linear-gradient(to bottom,#000 84%,transparent 100%);
+          mask-image:linear-gradient(to bottom,#000 84%,transparent 100%);
+}
+/*PREVIEW*/
+
+/* ---------- close ---------- *//* ---------- close ---------- */
 .close .three{display:flex;flex-direction:column;gap:var(--s3);margin-top:var(--s2)}
 .close .three .t{display:flex;gap:var(--s2);align-items:flex-start}
 .close .three .t .n{
@@ -1004,77 +1046,84 @@ r = <span class="w">classificar</span>(chamado)  <span class="c"># saída estrut
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">04 · Ferramentas</span></div>
 </section>
 
-<!-- 12 O CASO -->
-<section class="slide" data-sec="05 O caso">
+<!-- 12 COMO EU FAÇO NA PRÁTICA -->
+<section class="slide" data-sec="05 Na prática">
   <div class="topbar"></div>
   <div class="head">
-    <div class="eyebrow">Passo 5 · o caso</div>
-    <h2 style="font-size:3.05cqw">Um processo real, <em class="hl">na mesma notação</em></h2>
+    <div class="eyebrow">Passo 5 · na prática</div>
+    <h2 style="font-size:3.05cqw;max-width:56ch">Como eu monto um projeto desses, <em class="hl">na ordem</em></h2>
   </div>
-  <div class="g3 fill" style="align-content:center">
-    <div class="ph">
-      <div class="lab">O processo e a conversa</div>
-      <p>Qual era o processo, quem executava, com que frequência acontecia.</p>
-      <p class="hint">Uma frase literal de quem executava — a fala que virou losango. É o que amarra este slide ao slide 6.</p>
+  <div class="fases">
+    <div class="fase">
+      <div class="fn">01</div>
+      <div class="ft">Entender</div>
+      <ul>
+        <li>Mapeio o processo <b>como é feito hoje</b></li>
+        <li>Defino <b>de onde a informação vem</b> — planilha, ferramenta, base de dados, Slack</li>
+      </ul>
     </div>
-    <div class="ph">
-      <div class="lab">O fluxo pintado + o placar</div>
-      <p>O mesmo desenho do slide 9, com as caixas reais.</p>
-      <p class="hint">&ldquo;N caixas → X Python · Y IA · Z humano&rdquo;. Se a maioria virou Python, diga isso em voz alta: é o ponto da palestra.</p>
+    <div class="fase">
+      <div class="fn">02</div>
+      <div class="ft">Montar</div>
+      <ul>
+        <li>Crio o <b>repositório</b></li>
+        <li>Escrevo o código que <b>pluga a fonte</b> da informação</li>
+      </ul>
     </div>
-    <div class="ph">
-      <div class="lab">O que quebrou</div>
-      <p>Um número de antes → depois que você defenda no Q&amp;A.</p>
-      <p class="hint">E a falha: de preferência uma em que o modelo errou com confiança e você só descobriu depois. Como detectou e qual guarda-corpo entrou. É o bloco que a plateia lembra.</p>
+    <div class="fase key">
+      <div class="fn">03</div>
+      <div class="ft">Dividir o trabalho</div>
+      <ul>
+        <li>Codo as <b>decisões determinísticas</b> — as de sim/não, conforme o fluxo se comporta</li>
+        <li>Uso <b>IA</b> só onde precisa interpretação e saída qualitativa</li>
+        <li>Defino o <b>formato e o lugar</b> do output</li>
+      </ul>
+    </div>
+    <div class="fase">
+      <div class="fn">04</div>
+      <div class="ft">Fechar o ciclo</div>
+      <ul>
+        <li>Implemento e <b>testo</b></li>
+        <li><b>Apresento e pego feedback</b>: resolve mesmo a necessidade?</li>
+        <li>Ajusto se precisar</li>
+      </ul>
     </div>
   </div>
-  <div class="callout">
-    <div class="lab">Ainda a preencher</div>
-    <p>Este slide vira <strong>dois ou três</strong> quando o caso estiver definido: um do processo e da conversa, um do fluxo pintado, um do resultado e das cicatrizes. A estrutura já está de pé &mdash; falta o conteúdo.</p>
+  <div class="callout" style="margin-top:var(--s3);padding:var(--s1h) var(--s3)">
+    <div class="lab">A ordem dentro da fase 3 não é acaso</div>
+    <p>O determinístico vem <strong>antes</strong> da IA. É a mesma cascata do slide 8, agora com as mãos no teclado: eu escrevo os <span class="mono">if</span> primeiro e só depois olho o que sobrou. O que sobra costuma ser bem menos do que parecia no começo.</p>
   </div>
-  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">05 · O caso</span></div>
+  <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">05 · Na prática</span></div>
 </section>
 
-<!-- 13 O KIT -->
+<!-- 13 O KIT: A SKILL -->
 <section class="slide" data-sec="06 O kit">
   <div class="topbar"></div>
   <div class="head">
     <div class="eyebrow">Passo 6 · pra levar embora</div>
-    <h2 style="font-size:3.05cqw">O kit &mdash; os arquivos que eu usei <em class="hl">pra montar tudo isso</em></h2>
+    <h2 style="font-size:3.05cqw;max-width:56ch"><span class="mono kitname">mapear-processo</span> &mdash; <em class="hl">o método desta palestra, instalável</em></h2>
   </div>
-  <div class="kit">
-    <div class="kit-row">
-      <span class="f">7-perguntas.md</span>
-      <span class="d"><b>O roteiro de entrevista</b> do slide 4, com o que anotar em cada resposta.</span>
+  <div class="kit2">
+    <div class="kcol">
+      <p class="klede">Você descreve um processo em português corrido. Ela devolve o fluxo desenhado, com <strong>cada etapa classificada</strong> e o motivo de cada classificação.</p>
+      <div class="krow">
+        <span class="klab">Entrega</span>
+        <span class="kval">um <b>HTML interativo</b> que abre sem internet · um <b>JSON</b> pra outro agente consumir · o <b>placar</b> do processo</span>
+      </div>
+      <div class="krow">
+        <span class="klab">Não faz</span>
+        <span class="kval">Não chuta. Quando a descrição não diz <b>quanto custa errar</b> ou <b>como a falha é percebida</b>, ela marca a etapa como indefinida e devolve a pergunta.</span>
+      </div>
+      <div class="krow">
+        <span class="klab">Instalar</span>
+        <span class="kval mono kcmd">cp -r mapear-processo ~/.claude/skills/</span>
+      </div>
+      <div class="ph" style="margin-top:var(--s1h);flex-direction:row;align-items:center;gap:var(--s3)">
+        <div class="lab" style="flex:none">Link / QR</div>
+        <p class="hint" style="margin:0">O endereço do repositório entra aqui antes da palestra.</p>
+      </div>
     </div>
-    <div class="kit-row">
-      <span class="f">quadro-notacao</span>
-      <span class="d"><b>O quadro de notação no Miro</b> — duplica, troca os nomes das caixas, e já sai pronto pra editar junto.</span>
-    </div>
-    <div class="kit-row">
-      <span class="f">canvas.md</span>
-      <span class="d"><b>Uma linha por caixa</b>: entrada, saída, dono, frequência, exceções, custo do erro.</span>
-    </div>
-    <div class="kit-row">
-      <span class="f">classificar.md</span>
-      <span class="d"><b>As três perguntas do slide 8</b> em forma de checklist — rode uma vez por caixa.</span>
-    </div>
-    <div class="kit-row">
-      <span class="f">prompt.template.md</span>
-      <span class="d"><b>As sete seções de um prompt de produção</b>: papel, tarefa, dados, regras, formato de saída, quando NÃO decidir, casos de borda.</span>
-    </div>
-    <div class="kit-row">
-      <span class="f">evals/exemplo.yaml</span>
-      <span class="d"><b>Vinte casos, cinco de borda</b>, mais o comando que roda no CI e bloqueia o merge.</span>
-    </div>
-    <div class="kit-row">
-      <span class="f">checklist-producao.md</span>
-      <span class="d"><b>Doze itens antes de ligar o fluxo.</b> Item desmarcado é risco aceito, com nome e data ao lado.</span>
-    </div>
-  </div>
-  <div class="ph" style="margin-top:var(--s3);flex-direction:row;align-items:center;gap:var(--s3)">
-    <div class="lab" style="flex:none">Link / QR a definir</div>
-    <p class="hint" style="margin:0">Repositório público ou pasta compartilhada. Definir também se vai junto a versão instalável como skills, ou só os arquivos em Markdown — que funcionam com qualquer ferramenta.</p>
+    <div class="kshot"><img alt="Exemplo de saída da skill: fluxograma classificado" src="__PREVIEW__"></div>
   </div>
   <div class="foot"><span class="brand">Automação de processos com IA</span><span class="sec">06 · O kit</span></div>
 </section>
